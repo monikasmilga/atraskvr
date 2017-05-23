@@ -8,7 +8,7 @@
 
 namespace App\Console\Commands;
 
-use App\models\DTUsers;
+use App\Models\VRUsers;
 use Illuminate\Console\Command;
 use Ramsey\Uuid\Uuid;
 
