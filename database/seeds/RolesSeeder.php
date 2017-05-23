@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\VRRoles;
 use Illuminate\Database\Seeder;
 
 class RolesSeeder extends Seeder
@@ -25,9 +26,9 @@ class RolesSeeder extends Seeder
         DB::beginTransaction();
         try {
             foreach ($list as $single) {
-                $record = DTRoles::find($single['id']);
+                $record = VRRoles::find($single['id']);
                 if(!$record) {
-                    DTRoles::create($single);
+                    VRRoles::create($single);
                 }
             }
         } catch(Exception $e) {
