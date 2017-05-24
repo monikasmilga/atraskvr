@@ -5,7 +5,7 @@ namespace App\Models;
 
 class VRReservations extends CoreModel
 {
-    protected $table = 'vr_reservation';
+    protected $table = 'vr_reservations';
 
-    protected $fillable = ['id', 'orders_id', 'pages_id'];
+    protected $fillable = ['id', 'time', 'orders_id', 'pages_id'];
 }
