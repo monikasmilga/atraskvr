@@ -7,5 +7,5 @@ class VRMenu extends CoreModel
 {
     protected $table = 'vr_menu';
 
-    protected $fillable = ['id', 'parent_id', 'name', 'url'];
+    protected $fillable = ['id', 'parent_id', 'name'];
 }
