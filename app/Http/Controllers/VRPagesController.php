@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\VRPages;
+use App\Models\VRPagesCategories;
 use Illuminate\Http\Request;
 
 class VRPagesController extends Controller
