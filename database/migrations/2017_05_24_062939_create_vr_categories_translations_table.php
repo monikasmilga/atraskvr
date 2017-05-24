@@ -20,7 +20,8 @@ class CreateVrCategoriesTranslationsTable extends Migration {
 			$table->softDeletes();
 			$table->string('categories_id', 36)->index('fk_vr_categories_translations_vr_pages_categories1_idx');
 			$table->string('languages_id', 36)->index('fk_vr_categories_translations_vr_languages1_idx');
-			$table->string('title');
+			$table->string('name');
+			$table->string('slug')->nullable();
 		});
 	}
 

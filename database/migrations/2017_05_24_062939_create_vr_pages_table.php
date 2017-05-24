@@ -3,7 +3,7 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 
-class CreateVrOrderTable extends Migration {
+class CreateVrPagesTable extends Migration {
 
 	/**
 	 * Run the migrations.
@@ -12,13 +12,14 @@ class CreateVrOrderTable extends Migration {
 	 */
 	public function up()
 	{
-		Schema::create('vr_order', function(Blueprint $table)
+		Schema::create('vr_pages', function(Blueprint $table)
 		{
 			$table->integer('count', true);
 			$table->string('id', 36)->unique('id_UNIQUE');
 			$table->timestamps();
 			$table->softDeletes();
-			$table->enum('status', array('reserved','canceled','active'))->nullable();
+			$table->string('pages_categories_id', 36)->index('fk_vr_pages_vr_pages_categories_idx');
+			$table->string('cover_image_id', 36)->nullable()->index('fk_vr_pages_vr_resources1_idx');
 		});
 	}
 
@@ -30,7 +31,7 @@ class CreateVrOrderTable extends Migration {
 	 */
 	public function down()
 	{
-		Schema::drop('vr_order');
+		Schema::drop('vr_pages');
 	}
 
 }
