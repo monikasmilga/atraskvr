@@ -14,7 +14,7 @@ class AddForeignKeysToVrUsersOrdersConnectionsTable extends Migration {
 	{
 		Schema::table('vr_users_orders_connections', function(Blueprint $table)
 		{
-			$table->foreign('orders_id', 'fk_vr_pages_resources_connections_copy1_vr_order1')->references('id')->on('vr_order')->onUpdate('NO ACTION')->onDelete('NO ACTION');
+			$table->foreign('orders_id', 'fk_vr_pages_resources_connections_copy1_vr_order1')->references('id')->on('vr_orders')->onUpdate('NO ACTION')->onDelete('NO ACTION');
 			$table->foreign('users_id', 'fk_vr_pages_resources_connections_copy1_vr_users1')->references('id')->on('vr_users')->onUpdate('NO ACTION')->onDelete('NO ACTION');
 		});
 	}

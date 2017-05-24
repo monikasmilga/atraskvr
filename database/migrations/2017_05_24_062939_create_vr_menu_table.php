@@ -3,7 +3,7 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 
-class CreateVrPagesCategoriesConnectionsTable extends Migration {
+class CreateVrMenuTable extends Migration {
 
 	/**
 	 * Run the migrations.
@@ -12,12 +12,14 @@ class CreateVrPagesCategoriesConnectionsTable extends Migration {
 	 */
 	public function up()
 	{
-		Schema::create('vr_pages_categories_connections', function(Blueprint $table)
+		Schema::create('vr_menu', function(Blueprint $table)
 		{
 			$table->integer('count', true);
+			$table->string('id', 36)->unique('id_UNIQUE');
 			$table->timestamps();
-			$table->string('pages_id', 36);
-			$table->string('categories_id', 36);
+			$table->softDeletes();
+			$table->string('parent_id', 36)->nullable();
+			$table->string('name');
 		});
 	}
 
@@ -29,7 +31,7 @@ class CreateVrPagesCategoriesConnectionsTable extends Migration {
 	 */
 	public function down()
 	{
-		Schema::drop('vr_pages_categories_connections');
+		Schema::drop('vr_menu');
 	}
 
 }
