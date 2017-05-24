@@ -11,5 +11,13 @@ namespace App\Http\Traits;
 
 trait TableNameTrait
 {
+    /**
+     * Adds model function to generate clean model name for use in controller, blade route name and page title
+     */
 
+    public function getTableName()
+    {
+        $tableName = substr($this->table, 3);
+        return $tableName;
+    }
 }

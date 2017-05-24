@@ -11,5 +11,14 @@ namespace App\Http\Traits;
 
 trait FillableTrait
 {
+    /**
+     * Generates list of fillable model columns without first item (id) for use in controller and blade
+     */
 
+    public function getFillable() {
+
+        unset($this->fillable[0]);
+        return $this->fillable;
+
+    }
 }
