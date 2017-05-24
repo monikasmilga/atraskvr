@@ -17,5 +17,16 @@ class CoreModel extends Model
     use SoftDeletes;
     use UuidTrait;
 
+    public function getFillable()
+    {
+        unset($this->fillable[0]);
+        return $this->fillable;
+    }
+
+    public function getTableName()
+    {
+        $tableName = substr($this->table, 3);
+        return $tableName;
+    }
 
 }
