@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\VRMenu;
 use Illuminate\Http\Request;
 
 class VRMenuController extends Controller
