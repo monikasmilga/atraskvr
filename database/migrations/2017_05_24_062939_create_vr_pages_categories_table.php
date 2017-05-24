@@ -18,7 +18,6 @@ class CreateVrPagesCategoriesTable extends Migration {
 			$table->string('id', 36)->unique('id_UNIQUE');
 			$table->timestamps();
 			$table->softDeletes();
-            $table->string('name');
 		});
 	}
 

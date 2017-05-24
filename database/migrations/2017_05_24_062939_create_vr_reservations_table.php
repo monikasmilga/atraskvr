@@ -3,7 +3,7 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 
-class CreateVrMenuTable extends Migration {
+class CreateVrReservationsTable extends Migration {
 
 	/**
 	 * Run the migrations.
@@ -12,15 +12,15 @@ class CreateVrMenuTable extends Migration {
 	 */
 	public function up()
 	{
-		Schema::create('vr_menu', function(Blueprint $table)
+		Schema::create('vr_reservations', function(Blueprint $table)
 		{
 			$table->integer('count', true);
 			$table->string('id', 36)->unique('id_UNIQUE');
 			$table->timestamps();
 			$table->softDeletes();
-			$table->string('parent_id', 36)->nullable();
-			$table->string('name');
-			$table->string('url');
+			$table->string('time')->nullable();
+			$table->string('orders_id', 36)->index('fk_vr_reservation_vr_order1_idx');
+			$table->string('pages_id', 36)->index('fk_vr_reservation_vr_pages1_idx');
 		});
 	}
 
@@ -32,7 +32,7 @@ class CreateVrMenuTable extends Migration {
 	 */
 	public function down()
 	{
-		Schema::drop('vr_menu');
+		Schema::drop('vr_reservations');
 	}
 
 }
