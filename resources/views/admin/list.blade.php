@@ -12,8 +12,8 @@
             <table class="table">
                 <thead>
                 <tr>
-                    @foreach($list[0] as $key => $value)
-                        <th>{{$key}}</th>
+                    @foreach($fields as $key => $value)
+                    <th>{{$value}}</th>
                     @endforeach
                     <th>View</th>
                     <th>Edit</th>
@@ -21,26 +21,25 @@
                 </tr>
                 </thead>
                 <tbody>
-
-                @foreach($list as $key => $record)
+                @foreach($list_data as $key => $record)
                     <tr id="{{$record['id']}}">
-                        @foreach($record as $key => $value)
-
-                            <td>{{$value}}</td>
-
+                        @foreach($record as $key_data => $value_data)
+                            @foreach($fields as $key => $value)
+                                @if($key_data == $value)
+                                <td>{{$value_data}}</td>
+                                @endif
+                            @endforeach
                         @endforeach
                         <td><a class="btn btn-primary btn-sm" href="{{route('app.' . $tableName . '.show', $record['id'])}}">View</a></td>
                         <td><a class="btn btn-success btn-sm" href="{{route('app.' . $tableName . '.edit', $record['id'])}}">Edit</a></td>
                         <td><a id="del" onclick="deleteItem('{{route('app.' . $tableName . '.delete', $record['id'])}}')" class="btn btn-danger btn-sm" >Delete</a></td>
                     </tr>
                 @endforeach
-
                 </tbody>
             </table>
         @endif
         <a style="margin-bottom: 50px" class="btn btn-primary btn-sm" href="{{ route('app.' . $tableName . '.create') }}">Create new {{substr($tableName, 0, -1)}}</a>
     </div>
-
 
 @endsection
 

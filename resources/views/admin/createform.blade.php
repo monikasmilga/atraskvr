@@ -26,8 +26,6 @@
 
 				@if($field == 'user_id')
 
-				@elseif($field == 'calories' and $tableName == 'pizzas')
-
 				@elseif(isset($dropdown) and substr($field, -3) == '_id')
 					<div class="form-group">
 						{!! Form::label($field, 'Choose ' . ucfirst(substr($field, 0, -4) . ':')) !!}
@@ -38,8 +36,7 @@
 					{!! Form::label($field, 'Pick ' . ucfirst($field . ':')) !!}<br/>
 					@foreach($checkbox[$field] as $key => $checkboxItem)
 							{{Form::checkbox($field.'[]', $key)}}
-						<span @if($key == $cache) style="font-weight:700" @endif>
-							{{Form::label($checkboxItem, $checkboxItem)}}</span><br/>
+							{{Form::label($checkboxItem, $checkboxItem)}}<br/>
 					@endforeach<br/>
 
 				@elseif($field == 'password')

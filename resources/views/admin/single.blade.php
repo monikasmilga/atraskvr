@@ -13,18 +13,14 @@
 
             </thead>
             <tbody>
-
-                @foreach($record as $key => $value)
-                    <tr>
-                        <td>{{$key}}</td>
-                        @if($key == 'resources_id' and $tableName == 'ingredients')
-                            <td><img src={{asset($ingredientImage)}}/></td>
-                        @else
-                        <td>{{$value}}</td>
+                @foreach($record as $key_data => $value_data)
+                    @foreach($fields as $key => $value)
+                        @if($key_data == $value)
+                            <td>{{$key_data}}</td>
+                            <td>{{$value_data}}</td>
                         @endif
-                    </tr>
+                    @endforeach
                 @endforeach
-
             </tbody>
         </table>
 
