@@ -1,7 +1,6 @@
 @extends ('admin.main')
 
 @section('content')
-    Laaabas
 
     <div class="container">
         <div class="col-md-12">
@@ -47,6 +46,12 @@
                     <div class="form-group">
                         {!! Form::label($field, 'Enter ' . ucfirst($field . ':')) !!}
                         {!! Form::password($field, ['class' => 'form-control'])!!}<br/>
+                    </div>
+
+                @elseif($field == 'description_long' || $field == 'description_short')
+                    <div class="form-group">
+                        {!! Form::label($field, 'Enter ' . ucfirst($field . ':')) !!}
+                        {!! Form::textarea($field, '', ['class' => 'form-control'])!!}<br/>
                     </div>
 
                 @elseif($field)

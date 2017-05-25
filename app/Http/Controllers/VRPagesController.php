@@ -1,6 +1,9 @@
 <?php namespace App\Http\Controllers;
 
+use App\Models\VRLanguages;
 use App\Models\VRPages;
+use App\Models\VRPagesCategories;
+use App\Models\VRResources;
 use Illuminate\Routing\Controller;
 
 class VRPagesController extends Controller {
@@ -40,6 +43,20 @@ class VRPagesController extends Controller {
         $configuration['fields'] = $dataFromModel->getFillable();
         $configuration['tableName'] = $dataFromModel->getTableName();
         //$configuration['list'] = VRPages::get()->toArray;
+
+        $configuration['dropdown']['languages_id'] = VRLanguages::all()->pluck( 'name', 'id')->toArray();
+        array_push ($configuration['fields'],'title') ;
+        array_push ($configuration['fields'],'slug') ;
+        $configuration['dropdown']['pages_categories_id'] = VRPagesCategories::all()->pluck('id')->toArray();
+        $configuration['dropdown']['cover_image_id'] = VRResources::all()->pluck('id')->toArray();
+
+
+        array_push ($configuration['fields'],'languages_id') ;  //     dd( $configuration['dropdown']['languages_id']);
+
+
+
+        array_push ($configuration['fields'],'description_short') ;
+        array_push ($configuration['fields'],'description_long') ;
 
         return view ('admin.pageform', $configuration);
     }
