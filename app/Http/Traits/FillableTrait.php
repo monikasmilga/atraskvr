@@ -17,7 +17,9 @@ trait FillableTrait
 
     public function getFillable() {
 
-        unset($this->fillable[0]);
+        if(!sizeof($this->fillable < 2)) {
+            unset($this->fillable[0]);
+        }
         return $this->fillable;
 
     }

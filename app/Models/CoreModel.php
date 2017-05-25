@@ -21,5 +21,4 @@ class CoreModel extends Model
     use FillableTrait;
     use TableNameTrait;
 
-
 }
