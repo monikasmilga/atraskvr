@@ -16,8 +16,19 @@ class VRPagesController extends Controller {
 	 */
 	public function index()
 	{
-		//
+
 	}
+
+    /**
+     * Display a listing of the resource.
+     * GET /vrpages
+     *
+     * @return Response
+     */
+    public function adminIndex()
+    {
+        return view ('admin.index');
+    }
 
 	/**
 	 * Show the form for creating a new resource.
@@ -44,16 +55,14 @@ class VRPagesController extends Controller {
         $configuration['tableName'] = $dataFromModel->getTableName();
         //$configuration['list'] = VRPages::get()->toArray;
 
-        $configuration['dropdown']['languages_id'] = VRLanguages::all()->pluck( 'name', 'id')->toArray();
-        array_push ($configuration['fields'],'title') ;
-        array_push ($configuration['fields'],'slug') ;
         $configuration['dropdown']['pages_categories_id'] = VRPagesCategories::all()->pluck('id')->toArray();
         $configuration['dropdown']['cover_image_id'] = VRResources::all()->pluck('id')->toArray();
 
+        array_push ($configuration['fields'],'title') ;
+        array_push ($configuration['fields'],'slug') ;
 
-        array_push ($configuration['fields'],'languages_id') ;  //     dd( $configuration['dropdown']['languages_id']);
-
-
+        $configuration['dropdown']['languages_id'] = VRLanguages::all()->pluck( 'name', 'id')->toArray();
+        array_push ($configuration['fields'],'languages_id');
 
         array_push ($configuration['fields'],'description_short') ;
         array_push ($configuration['fields'],'description_long') ;
@@ -69,8 +78,19 @@ class VRPagesController extends Controller {
 	 */
 	public function store()
 	{
-		//
+
 	}
+
+    /**
+     * Store a newly created resource in storage.
+     * POST /vrpages
+     *
+     * @return Response
+     */
+    public function adminStore()
+    {
+        //
+    }
 
 	/**
 	 * Display the specified resource.

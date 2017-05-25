@@ -24,11 +24,7 @@
 
             @foreach($fields as $field)
 
-                @if($field == 'user_id')
-
-                @elseif($field == 'calories' and $tableName == 'pizzas')
-
-                @elseif(isset($dropdown) and substr($field, -3) == '_id')
+                @if(isset($dropdown) and substr($field, -3) == '_id')
                     <div class="form-group">
                         {!! Form::label($field, 'Choose ' . ucfirst(substr($field, 0, -4) . ':')) !!}
                         {{Form::select($field ,$dropdown[$field], '', ['class' => 'form-control'])}}<br/>
