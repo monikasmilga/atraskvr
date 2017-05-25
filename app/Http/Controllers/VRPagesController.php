@@ -78,7 +78,7 @@ class VRPagesController extends Controller {
 	 */
 	public function store()
 	{
-
+        //
 	}
 
     /**
@@ -89,7 +89,27 @@ class VRPagesController extends Controller {
      */
     public function adminStore()
     {
-        //
+        $data = request()->all();
+        $dataFromModel = new VRPages();
+        $configuration['fields'] = $dataFromModel->getFillable();
+        $configuration['tableName'] = $dataFromModel->getTableName();
+
+        $configuration['dropdown']['pages_categories_id'] = VRPagesCategories::all()->pluck('id')->toArray();
+        $configuration['dropdown']['cover_image_id'] = VRResources::all()->pluck('id')->toArray();
+        array_push ($configuration['fields'],'title') ;
+        array_push ($configuration['fields'],'slug') ;
+
+        $configuration['dropdown']['languages_id'] = VRLanguages::all()->pluck( 'name', 'id')->toArray();
+        array_push ($configuration['fields'],'languages_id');
+
+        array_push ($configuration['fields'],'description_short') ;
+        array_push ($configuration['fields'],'description_long') ;
+
+
+        $record = VRPages::create($data);
+        $record->connection()->sync($data['languages']);
+        $configuration['comment'] = ['message' => trans(substr($configuration['tableName'], 0, -1) . ' added successfully')];
+        return view('admin.createform',  $configuration);
     }
 
 	/**
