@@ -113,8 +113,6 @@ class VRPagesCategoriesController extends Controller
     {
         $data = request()->all();
 
-//        dd($data);
-
         $dataFromModel = new VRCategoriesTranslations();
         $fields = $dataFromModel->getFillable();
 
@@ -134,12 +132,6 @@ class VRPagesCategoriesController extends Controller
             $record['categories_id'] = $id;
             $record['languages_id'] = $language_id;
 
-//            $recordExist = DB::table('vr_categories_translations')
-//                ->whereCategories_idAndLanguages_id($id, $language_id)
-//                ->first();
-//
-//            dd($recordExist);
-
             DB::beginTransaction();
             try {
                 $recordExist = DB::table('vr_categories_translations')
@@ -148,6 +140,10 @@ class VRPagesCategoriesController extends Controller
 
                     if(!$recordExist) {
                         VRCategoriesTranslations::create($record);
+                    } else {
+                        DB::table('vr_categories_translations')
+                            ->whereCategories_idAndLanguages_id($id, $language_id)
+                            ->update($record);
                     }
 
             } catch(Exception $e) {
@@ -155,13 +151,6 @@ class VRPagesCategoriesController extends Controller
                 throw new Exception($e);
             }
             DB::commit();
-
-
-
-
-//            VRCategoriesTranslations::create($record);
-//
-//            dd($record);
 
         }
     }
