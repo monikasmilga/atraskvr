@@ -9,7 +9,7 @@
             <tr>
                 <th>key</th>
                 <th>value</th>
-                @foreach($languages as $key => $value)
+                @foreach($languages_names as $key => $value)
                     <th>{{$value}}</th>
                 @endforeach
             </tr>
@@ -54,15 +54,18 @@
                     @endforeach
 
                     @if(!(count($languages) == count($translations)))
-                        @for($i = 1; $i <= (count($languages) - count($translations)); $i++)
+                        @for($i = count($translations); $i < count($languages); $i++)
+                                {{--@foreach($languages as $key => $value)--}}
+                                    {{--<th>{{$value}}</th>--}}
+                                {{--@endforeach--}}
                         <td>
                             <div class="form-group">
-                                {{--{!! Form::text($field_value . '_' . $translation['languages_id'], $value_translation, ['class' => 'form-control'])!!}<br/>--}}
-                                {!! Form::text($field_value . '_' . $languages['languages_id'], 'value_translation', ['class' => 'form-control'])!!}<br/>
+                                {!! Form::text($field_value . '_' . $languages[$i], 'value_translation', ['class' => 'form-control'])!!}<br/>
                             </div>
                         </td>
                         @endfor
                     @endif
+
                     </tr>
                 @endforeach
             </tbody>
@@ -72,10 +75,6 @@
         <a class="btn btn-primary" href="{{ route('app.' . $tableName . '.index') }}">{{ucfirst($tableName)}} list</a>
 
         {!! Form::close() !!}
-
-        {{--<a class="btn btn-sm btn-primary" href="{{route('app.' . $tableName . '.index')}}">Back</a>--}}
-        {{--<a class="btn btn-success btn-sm" href="{{route('app.' . $tableName . '.edit', $record['id'])}}">Edit</a>--}}
-        {{--<a onclick="deleteItem('{{route('app.' . $tableName . '.delete', $record['id'])}}')" class="btn btn-danger btn-sm" href="{{route('app.' . $tableName . '.index')}}">Delete</a>--}}
 
     </div>
 

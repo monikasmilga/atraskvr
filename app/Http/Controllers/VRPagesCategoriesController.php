@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\VRCategoriesTranslations;
 use App\Models\VRLanguages;
 use App\Models\VRPagesCategories;
+use App\Models\VRPagesTranslations;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -75,20 +76,18 @@ class VRPagesCategoriesController extends Controller
 
         $configuration['translations'] = VRCategoriesTranslations::all()->where('categories_id', '=', $categories_id)->toArray();
 
-        $configuration['languages'] = VRLanguages::all()->pluck('name', 'id')->toArray();
-
-//        dd(count($configuration['languages']));
-//        dd($configuration);
-
-
-//        $resourcesTable_id = VRPagesCategories::find($id)->resources_id;
-//        $configuration['ingredientImage'] = DTResources::find($resourcesTable_id)->path;
+        $configuration['languages_names'] = VRLanguages::all()->pluck('name', 'id')->toArray();
+        $configuration['languages'] = VRLanguages::all()->pluck('id')->toArray();
 
         return view('admin.single', $configuration);
     }
 
     public function adminEdit($id)
     {
+        $data = request()->all();
+
+        dd($data);
+
 //        $dataFromModel = new VRPagesCategories();
 //        $configuration['fields'] = $dataFromModel->getFillable();
 //        $configuration['tableName'] = $dataFromModel->getTableName();
@@ -108,5 +107,44 @@ class VRPagesCategoriesController extends Controller
 //
 //        return view('admin.editform', $configuration);
 //
+    }
+
+    public function adminUpdate($id)
+    {
+        $data = request()->all();
+
+//        dd($data);
+
+        $dataFromModel = new VRCategoriesTranslations();
+        $fields = $dataFromModel->getFillable();
+
+        unset($fields[1]);
+        unset($fields[2]);
+
+        $languages = VRLanguages::all()->pluck('name', 'id')->toArray();
+
+        foreach ($languages as $language_id => $name)
+        {
+            foreach ($fields as $field)
+            {
+                $key = $field . "_" . $language_id;
+                $record[$field] = $data[$key];
+            }
+
+            $record['categories_id'] = $id;
+            $record['languages_id'] = $language_id;
+
+            VRCategoriesTranslations::create($record);
+
+            dd($record);
+
+        }
+
+
+//        $record = VRPagesTranslations::create([
+//            'id' => Uuid::uuid4(),
+//        ]);
+
+
     }
 }
