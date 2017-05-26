@@ -61,7 +61,6 @@ class VRPagesController extends Controller {
         $configuration['dropdown']['cover_image_id'] = VRResources::all()->pluck('path', 'id')->toArray();
 
         array_push ($configuration['fields'],'title') ;
-        array_push ($configuration['fields'],'slug') ;
 
         $configuration['dropdown']['languages_id'] = VRLanguages::all()->pluck( 'name', 'id')->toArray();
         array_push ($configuration['fields'],'languages_id');
@@ -84,7 +83,8 @@ class VRPagesController extends Controller {
 	}
 
     /**
-     * Store a newly created resource in storage.
+     * Store a newly created page in data base.
+     * Creates slug automatically out of title given in form
      * POST /vrpages
      *
      * @return Response
@@ -101,7 +101,6 @@ class VRPagesController extends Controller {
         $configuration['dropdown']['pages_categories_id'] = VRPagesCategories::all()->pluck('count', 'id')->toArray();
 
         array_push ($configuration['fields'],'title') ;
-        array_push ($configuration['fields'],'slug') ;
         $configuration['dropdown']['languages_id'] = VRLanguages::all()->pluck( 'name', 'id')->toArray();
         array_push ($configuration['fields'],'languages_id');
         array_push ($configuration['fields'],'description_short') ;
@@ -110,7 +109,10 @@ class VRPagesController extends Controller {
         $record = VRPages::create($data);
 
         $data['pages_id']=$record['id'];
- //       dd($data);
+
+        $titile = $data['title'];
+        $data['slug']=str_slug($titile, '-');
+
         VRPagesTranslations::create($data);
 
         $configuration['comment'] = ['message' => trans(substr($configuration['tableName'], 0, -1) . ' added successfully')];
