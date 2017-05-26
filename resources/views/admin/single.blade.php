@@ -3,9 +3,12 @@
 @section('content')
 
     <div class="container">
+        <div class="col-md-12"><br>
+
+            <h3>Create & update {{$tableName . ' translations'}}</h3><br>
         <table class="table">
 
-            <thead>
+            <thead class="thead-default">
             <tr>
                 <th>key</th>
                 <th>value</th>
@@ -29,10 +32,11 @@
                     <tr>
                     <td>{{$field_value}}</td>
                     <td></td>
-                    @foreach($translations as $translation)
-                        @foreach($translation as $key_translation => $value_translation)
 
-                            {!! Form::open(['url' => route('app.' . $tableName . '.update', $record['id'])]) !!}
+                        {!! Form::open(['url' => route('app.' . $tableName . '.update', $record['id'])]) !!}
+
+                        @foreach($translations as $translation)
+                            @foreach($translation as $key_translation => $value_translation)
 
                                 @if($field_value == $key_translation)
 
@@ -40,9 +44,9 @@
 
                                         @if($field_value)
                                             <td>
-                                            <div class="form-group">
-                                            {!! Form::text($field_value . '_' . $translation['languages_id'], $value_translation, ['class' => 'form-control'])!!}<br/>
-                                            </div>
+                                                <div class="form-group">
+                                                    {!! Form::text($field_value . '_' . $translation['languages_id'], $value_translation, ['class' => 'form-control'])!!}<br/>
+                                                </div>
                                             </td>
                                         @endif
 
@@ -50,17 +54,14 @@
 
                                 @endif
 
+                            @endforeach
                         @endforeach
-                    @endforeach
 
                     @if(!(count($languages) == count($translations)))
                         @for($i = count($translations); $i < count($languages); $i++)
-                                {{--@foreach($languages as $key => $value)--}}
-                                    {{--<th>{{$value}}</th>--}}
-                                {{--@endforeach--}}
                         <td>
                             <div class="form-group">
-                                {!! Form::text($field_value . '_' . $languages[$i], 'value_translation', ['class' => 'form-control'])!!}<br/>
+                                {!! Form::text($field_value . '_' . $languages[$i], 'translation value', ['class' => 'form-control'])!!}<br/>
                             </div>
                         </td>
                         @endfor
@@ -75,7 +76,7 @@
         <a class="btn btn-primary" href="{{ route('app.' . $tableName . '.index') }}">{{ucfirst($tableName)}} list</a>
 
         {!! Form::close() !!}
-
+        </div>
     </div>
 
 @endsection
