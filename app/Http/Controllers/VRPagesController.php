@@ -58,7 +58,7 @@ class VRPagesController extends Controller {
         //$configuration['list'] = VRPages::get()->toArray;
 
         $configuration['dropdown']['pages_categories_id'] = VRPagesCategories::all()->pluck('count', 'id')->toArray();
-        $configuration['dropdown']['cover_image_id'] = VRResources::all()->pluck('id')->toArray();
+        $configuration['dropdown']['cover_image_id'] = VRResources::all()->pluck('path', 'id')->toArray();
 
         array_push ($configuration['fields'],'title') ;
         array_push ($configuration['fields'],'slug') ;
@@ -97,41 +97,25 @@ class VRPagesController extends Controller {
         $configuration['tableName'] = $dataFromModel->getTableName();
 
 
-        $configuration['dropdown']['cover_image_id'] = VRResources::all()->pluck('id')->toArray();
-        $configuration['dropdown']['pages_categories_id'] = VRPagesCategories::all()->pluck('id')->toArray();
+        $configuration['dropdown']['cover_image_id'] = VRResources::all()->pluck('path', 'id')->toArray();
+        $configuration['dropdown']['pages_categories_id'] = VRPagesCategories::all()->pluck('count', 'id')->toArray();
 
         array_push ($configuration['fields'],'title') ;
         array_push ($configuration['fields'],'slug') ;
-
         $configuration['dropdown']['languages_id'] = VRLanguages::all()->pluck( 'name', 'id')->toArray();
         array_push ($configuration['fields'],'languages_id');
-
         array_push ($configuration['fields'],'description_short') ;
         array_push ($configuration['fields'],'description_long') ;
 
         $record = VRPages::create($data);
 
-  //      $data['id']=Uuid::uuid4();
+        $data['pages_id']=$record['id'];
+ //       dd($data);
+        VRPagesTranslations::create($data);
 
- $data['fields']['id']='asEsuID';
-
-        //TODO Create VRPagesTranslation record [pages_id, languages_id, title, description_long, description_short, slug]
-      dd($data);
-        $rec = VRPagesTranslations::create($data);
-
-
-
-        $rec['pages_id']=$data['id'];
-        $rec['languages_id']=$data['languages_id'];
-        $rec['title']=$data['title'];
-        $rec['description_long']=$data['description_long'];
-        $rec['description_short']=$data['description_short'];
-        $rec['slug']=$data['slug'];
-
-
-        $record->pagesCategories();
         $configuration['comment'] = ['message' => trans(substr($configuration['tableName'], 0, -1) . ' added successfully')];
-        return view('admin.createform',  $configuration, $rec);
+
+        return view('admin.pageform',  $configuration);
     }
 
 	/**
