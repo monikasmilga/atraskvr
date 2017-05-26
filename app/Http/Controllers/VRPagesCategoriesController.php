@@ -127,10 +127,16 @@ class VRPagesCategoriesController extends Controller
             {
                 $key = $field . "_" . $language_id;
                 $record[$field] = $data[$key];
+                if(!$record[$field]){
+                    $error[$name] = $name . 'nesuvesti duomenys';
+                }
             }
 
             $record['categories_id'] = $id;
             $record['languages_id'] = $language_id;
+
+            if(!isset($error[$name]))
+            {
 
             DB::beginTransaction();
             try {
@@ -140,7 +146,7 @@ class VRPagesCategoriesController extends Controller
 
                     if(!$recordExist) {
                         VRCategoriesTranslations::create($record);
-                    } else {
+                    } elseif ($recordExist) {
                         DB::table('vr_categories_translations')
                             ->whereCategories_idAndLanguages_id($id, $language_id)
                             ->update($record);
@@ -152,6 +158,10 @@ class VRPagesCategoriesController extends Controller
             }
             DB::commit();
 
+            }
+
         }
+
+        dd($error);
     }
 }
