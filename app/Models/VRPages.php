@@ -19,10 +19,14 @@ class VRPages extends CoreModel
         return $this->belongsToMany(VRLanguages::class, 'vr_pages_translations');
     }
 
-    public function languageConnections()
+    public function languageConnection()
     {
-        return $this->hasMany(VRPagesTranslations::class, 'pages_id', 'id')
-            ->with(['language']);
+        return $this->hasMany(VRPagesTranslations::class, 'pages_id', 'id')->with(['language']);
+    }
+
+    public function pagesCategories()
+    {
+        return $this->hasOne(VRPagesCategories::class, 'id', 'pages_categories_id');
     }
 }
 

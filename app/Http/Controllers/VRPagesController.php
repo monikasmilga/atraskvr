@@ -3,8 +3,10 @@
 use App\Models\VRLanguages;
 use App\Models\VRPages;
 use App\Models\VRPagesCategories;
+use App\Models\VRPagesTranslations;
 use App\Models\VRResources;
 use Illuminate\Routing\Controller;
+use Ramsey\Uuid\Uuid;
 
 class VRPagesController extends Controller {
 
@@ -55,7 +57,7 @@ class VRPagesController extends Controller {
         $configuration['tableName'] = $dataFromModel->getTableName();
         //$configuration['list'] = VRPages::get()->toArray;
 
-        $configuration['dropdown']['pages_categories_id'] = VRPagesCategories::all()->pluck('id')->toArray();
+        $configuration['dropdown']['pages_categories_id'] = VRPagesCategories::all()->pluck('count', 'id')->toArray();
         $configuration['dropdown']['cover_image_id'] = VRResources::all()->pluck('id')->toArray();
 
         array_push ($configuration['fields'],'title') ;
@@ -94,8 +96,10 @@ class VRPagesController extends Controller {
         $configuration['fields'] = $dataFromModel->getFillable();
         $configuration['tableName'] = $dataFromModel->getTableName();
 
-        $configuration['dropdown']['pages_categories_id'] = VRPagesCategories::all()->pluck('id')->toArray();
+
         $configuration['dropdown']['cover_image_id'] = VRResources::all()->pluck('id')->toArray();
+        $configuration['dropdown']['pages_categories_id'] = VRPagesCategories::all()->pluck('id')->toArray();
+
         array_push ($configuration['fields'],'title') ;
         array_push ($configuration['fields'],'slug') ;
 
@@ -105,11 +109,29 @@ class VRPagesController extends Controller {
         array_push ($configuration['fields'],'description_short') ;
         array_push ($configuration['fields'],'description_long') ;
 
-
         $record = VRPages::create($data);
-        $record->connection()->sync($data['languages']);
+
+  //      $data['id']=Uuid::uuid4();
+
+ $data['fields']['id']='asEsuID';
+
+        //TODO Create VRPagesTranslation record [pages_id, languages_id, title, description_long, description_short, slug]
+      dd($data);
+        $rec = VRPagesTranslations::create($data);
+
+
+
+        $rec['pages_id']=$data['id'];
+        $rec['languages_id']=$data['languages_id'];
+        $rec['title']=$data['title'];
+        $rec['description_long']=$data['description_long'];
+        $rec['description_short']=$data['description_short'];
+        $rec['slug']=$data['slug'];
+
+
+        $record->pagesCategories();
         $configuration['comment'] = ['message' => trans(substr($configuration['tableName'], 0, -1) . ' added successfully')];
-        return view('admin.createform',  $configuration);
+        return view('admin.createform',  $configuration, $rec);
     }
 
 	/**
@@ -146,6 +168,9 @@ class VRPagesController extends Controller {
 	public function update($id)
 	{
 		//
+        //TODO find from VRPagesTranslations find record by $record->id && $data->languages_id
+        //TODO if exists -> update
+        //TODO if not exists -> create translation
 	}
 
 	/**
