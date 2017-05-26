@@ -134,17 +134,22 @@ class VRPagesCategoriesController extends Controller
             $record['categories_id'] = $id;
             $record['languages_id'] = $language_id;
 
-
-
+//            $recordExist = DB::table('vr_categories_translations')
+//                ->whereCategories_idAndLanguages_id($id, $language_id)
+//                ->first();
+//
+//            dd($recordExist);
 
             DB::beginTransaction();
             try {
-                foreach ($list as $single) {
-                    $record = VRPagesCategories::find($single['id']);
-                    if(!$record) {
-                        VRPagesCategories::create($single);
+                $recordExist = DB::table('vr_categories_translations')
+                    ->whereCategories_idAndLanguages_id($id, $language_id)
+                    ->first();
+
+                    if(!$recordExist) {
+                        VRCategoriesTranslations::create($record);
                     }
-                }
+
             } catch(Exception $e) {
                 DB::rollback();
                 throw new Exception($e);
@@ -154,17 +159,10 @@ class VRPagesCategoriesController extends Controller
 
 
 
-            VRCategoriesTranslations::create($record);
-
-            dd($record);
+//            VRCategoriesTranslations::create($record);
+//
+//            dd($record);
 
         }
-
-
-//        $record = VRPagesTranslations::create([
-//            'id' => Uuid::uuid4(),
-//        ]);
-
-
     }
 }

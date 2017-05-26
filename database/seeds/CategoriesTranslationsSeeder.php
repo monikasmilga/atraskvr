@@ -2,6 +2,7 @@
 
 use App\Models\VRCategoriesTranslations;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
 
 class CategoriesTranslationsSeeder extends Seeder
 {
