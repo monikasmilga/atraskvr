@@ -134,6 +134,26 @@ class VRPagesCategoriesController extends Controller
             $record['categories_id'] = $id;
             $record['languages_id'] = $language_id;
 
+
+
+
+            DB::beginTransaction();
+            try {
+                foreach ($list as $single) {
+                    $record = VRPagesCategories::find($single['id']);
+                    if(!$record) {
+                        VRPagesCategories::create($single);
+                    }
+                }
+            } catch(Exception $e) {
+                DB::rollback();
+                throw new Exception($e);
+            }
+            DB::commit();
+
+
+
+
             VRCategoriesTranslations::create($record);
 
             dd($record);
