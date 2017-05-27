@@ -6,25 +6,25 @@
         <div class="col-md-12"><br>
 
             <h3>Create & update {{$tableName . ' translations'}}</h3><br>
-        <table class="table">
+            <table class="table">
 
-            <thead class="thead-default">
-            <tr>
-                <th>key</th>
-                <th>value</th>
-                @foreach($languages_names as $key => $value)
-                    <th>{{$value}}</th>
-                @endforeach
-            </tr>
+                <thead class="thead-default">
+                <tr>
+                    <th>key</th>
+                    <th>value</th>
+                    @foreach($languages_names as $key => $value)
+                        <th>{{$value}}</th>
+                    @endforeach
+                </tr>
 
-            </thead>
-            <tbody>
+                </thead>
+                <tbody>
                 @foreach($record as $key_data => $value_data)
                     @foreach($fields as $key => $value)
                         @if($key_data == $value)
                             <tr>
-                            <td>{{$key_data}}</td>
-                            <td>{{$value_data}}</td>
+                                <td>{{$key_data}}</td>
+                                <td>{{$value_data}}</td>
                             </tr>
                         @endif
                     @endforeach
@@ -32,49 +32,67 @@
 
                 @foreach($fields_translations as $key => $field_value)
                     <tr>
-                    <td>{{$field_value}}</td>
-                    <td></td>
+                        <td>{{$field_value}}</td>
+                        <td></td>
 
                         {!! Form::open(['url' => route('app.' . $tableName . '.update', $record['id'])]) !!}
 
-                        @foreach($translations as $translation)
-                            @foreach($translation as $key_translation => $value_translation)
+                        @foreach($languages as $key => $language)
 
-                            @if($translation['languages_id'] == $languages_names)
+                            @if(count($translations) == 0)
+                                    <td>
+                                        <div class="form-group">
+                                            {!! Form::text($field_value . '_' . $language, 'translation value', ['class' => 'form-control'])!!}<br/>
+                                        </div>
+                                    </td>
+                            @endif
 
+                            @foreach($translations as $translation)
 
+                                @if($translation['languages_id'] == $language)
 
-                                @if($field_value == $key_translation)
+                                    @foreach($translation as $key_translation => $value_translation)
 
-                                        @if($field_value)
-                                            <td>
-                                                <div class="form-group">
-                                                    {!! Form::text($field_value . '_' . $translation['languages_id'], $value_translation, ['class' => 'form-control'])!!}<br/>
-                                                </div>
-                                            </td>
+                                        @if($field_value == $key_translation)
+
+                                            @if($field_value)
+                                                <td>
+                                                    <div class="form-group">
+                                                        {!! Form::text($field_value . '_' . $translation['languages_id'], $value_translation, ['class' => 'form-control'])!!}<br/>
+                                                    </div>
+                                                </td>
+                                            @endif
+
                                         @endif
+
+                                    @endforeach
+
+                                    @break
+
+                                @else
+
+                                    @if(end($translations) == $translation)
+
+                                    @if($field_value)
+                                        <td>
+                                            <div class="form-group">
+                                                {!! Form::text($field_value . '_' . $language, 'translation value', ['class' => 'form-control'])!!}<br/>
+                                            </div>
+                                        </td>
+                                    @endif
+
+                                    @endif
 
                                 @endif
 
-                            @endif
-
                             @endforeach
-                        @endforeach
 
-                    @if(!(count($languages) == count($translations)))
-                        @for($i = count($translations); $i < count($languages); $i++)
-                        <td>
-                            <div class="form-group">
-                                {!! Form::text($field_value . '_' . $languages[$i], 'translation value', ['class' => 'form-control'])!!}<br/>
-                            </div>
-                        </td>
-                        @endfor
-                    @endif
+                        @endforeach
 
                     </tr>
                 @endforeach
-            </tbody>
-        </table>
+                </tbody>
+            </table>
 
         {!! Form::submit('Create / Update' , ['class' => 'btn btn-success']) !!}
         <a class="btn btn-primary" href="{{ route('app.' . $tableName . '.index') }}">{{ucfirst($tableName)}} list</a>
