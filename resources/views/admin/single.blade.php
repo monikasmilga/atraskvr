@@ -22,8 +22,10 @@
                 @foreach($record as $key_data => $value_data)
                     @foreach($fields as $key => $value)
                         @if($key_data == $value)
+                            <tr>
                             <td>{{$key_data}}</td>
                             <td>{{$value_data}}</td>
+                            </tr>
                         @endif
                     @endforeach
                 @endforeach
@@ -38,9 +40,13 @@
                         @foreach($translations as $translation)
                             @foreach($translation as $key_translation => $value_translation)
 
+                            @if($translation['languages_id'] == $languages_names)
+
+
+
                                 @if($field_value == $key_translation)
 
-                                    @if($value_translation != null)
+                                    {{--@if($value_translation != null)--}}
 
                                         @if($field_value)
                                             <td>
@@ -50,9 +56,13 @@
                                             </td>
                                         @endif
 
-                                    @endif
+                                    {{--@endif--}}
 
                                 @endif
+
+
+
+                            @endif
 
                             @endforeach
                         @endforeach
@@ -72,7 +82,7 @@
             </tbody>
         </table>
 
-        {!! Form::submit('Update' , ['class' => 'btn btn-success']) !!}
+        {!! Form::submit('Create / Update' , ['class' => 'btn btn-success']) !!}
         <a class="btn btn-primary" href="{{ route('app.' . $tableName . '.index') }}">{{ucfirst($tableName)}} list</a>
 
         {!! Form::close() !!}

@@ -79,6 +79,8 @@ class VRPagesCategoriesController extends Controller
         $configuration['languages_names'] = VRLanguages::all()->pluck('name', 'id')->toArray();
         $configuration['languages'] = VRLanguages::all()->pluck('id')->toArray();
 
+//        dd($configuration);
+
         return view('admin.single', $configuration);
     }
 
@@ -121,6 +123,8 @@ class VRPagesCategoriesController extends Controller
 
         $languages = VRLanguages::all()->pluck('name', 'id')->toArray();
 
+        $fullComment = '';
+
         foreach ($languages as $language_id => $name)
         {
             foreach ($fields as $field)
@@ -128,14 +132,14 @@ class VRPagesCategoriesController extends Controller
                 $key = $field . "_" . $language_id;
                 $record[$field] = $data[$key];
                 if(!$record[$field]){
-                    $error[$name] = $name . 'nesuvesti duomenys';
+                    $comment[$name] = $name . ' translation fields not full filed, the operation aborted';
                 }
             }
 
             $record['categories_id'] = $id;
             $record['languages_id'] = $language_id;
 
-            if(!isset($error[$name]))
+            if(!isset($comment[$name]))
             {
 
             DB::beginTransaction();
@@ -146,10 +150,12 @@ class VRPagesCategoriesController extends Controller
 
                     if(!$recordExist) {
                         VRCategoriesTranslations::create($record);
+                        $comment[$name] = $name . ' translation added to the table';
                     } elseif ($recordExist) {
                         DB::table('vr_categories_translations')
                             ->whereCategories_idAndLanguages_id($id, $language_id)
                             ->update($record);
+                        $comment[$name] = $name . ' translation updated';
                     }
 
             } catch(Exception $e) {
@@ -160,8 +166,10 @@ class VRPagesCategoriesController extends Controller
 
             }
 
+            $fullComment = $fullComment . '<br>' . $comment[$name];
+
         }
 
-        dd($error);
+        dd($fullComment);
     }
 }
