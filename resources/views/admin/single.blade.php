@@ -46,8 +46,6 @@
 
                                 @if($field_value == $key_translation)
 
-                                    {{--@if($value_translation != null)--}}
-
                                         @if($field_value)
                                             <td>
                                                 <div class="form-group">
@@ -56,11 +54,7 @@
                                             </td>
                                         @endif
 
-                                    {{--@endif--}}
-
                                 @endif
-
-
 
                             @endif
 

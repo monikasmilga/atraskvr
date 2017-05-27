@@ -81,7 +81,7 @@ class VRPagesCategoriesController extends Controller
 
 //        dd($configuration);
 
-        return view('admin.single', $configuration);
+        return view('admin.single2', $configuration);
     }
 
     public function adminEdit($id)
