@@ -35,7 +35,7 @@
                         <td>{{$field_value}}</td>
                         <td></td>
 
-                        {!! Form::open(['url' => route('app.' . $tableName . '.update', $record['id'])]) !!}
+                        {!! Form::open(['url' => route('app.' . $tableName . '.translations', $record['id'])]) !!}
 
                         @foreach($languages as $key => $language)
 
@@ -101,41 +101,4 @@
         </div>
     </div>
 
-@endsection
-
-@section('script')
-    <script>
-
-
-
-        $.ajaxSetup({
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            }
-        });
-
-        function deleteItem(route) {
-
-
-
-
-            $.ajax({
-
-                url: route,
-                type: 'DELETE',
-                data: {},
-                dataType: 'json',
-                success: function () {
-                    alert('DELETED')
-
-                },
-                error: function () {
-                    alert('Error');
-                }
-
-            });
-
-        }
-
-    </script>
 @endsection

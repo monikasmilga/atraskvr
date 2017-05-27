@@ -47,18 +47,32 @@ class VRPagesCategoriesController extends Controller
     {
         $data = request()->all();
 
-        VRPagesCategories::create([
-            'id' => $data['id']
-    ]);
-
         $dataFromModel = new VRPagesCategories();
         $configuration['fields'] = $dataFromModel->getFillable();
         $configuration['tableName'] = $dataFromModel->getTableName();
 
+        $missingValues= '';
+        foreach($configuration['fields'] as $key=> $value) {
+            if (!isset($data[$value])) {
+                $missingValues = $missingValues . ' ' . $value . ',';
+            }
+        }
+        if ($missingValues != ''){
+            $missingValues = substr($missingValues, 1, -1);
+            $configuration['error'] = ['message' => trans('Please enter ' . $missingValues)];
+            return view('admin.createform2', $configuration);
+        }
+
+        VRPagesCategories::create([
+            'id' => $data['id']
+        ]);
+
+        $configuration['comment'] = ['message' => trans('Record added successfully')];
+
         return view('admin.createform2', $configuration);
     }
 
-    public function adminShow($id)
+    public function adminCreateTranslations($id)
     {
         $dataFromModel = new VRPagesCategories();
         $configuration['fields'] = $dataFromModel->getFillable();
@@ -66,52 +80,20 @@ class VRPagesCategoriesController extends Controller
 
         $configuration['record'] = VRPagesCategories::find($id)->toArray();
 
-
         $dataFromModel2 = new VRCategoriesTranslations();
         $configuration['fields_translations'] = $dataFromModel2->getFillable();
         unset($configuration['fields_translations'][1]);
         unset($configuration['fields_translations'][2]);
 
-        $categories_id = $id;
-
-        $configuration['translations'] = VRCategoriesTranslations::all()->where('categories_id', '=', $categories_id)->toArray();
+        $configuration['translations'] = VRCategoriesTranslations::all()->where('categories_id', '=', $id)->toArray();
 
         $configuration['languages_names'] = VRLanguages::all()->pluck('name', 'id')->toArray();
         $configuration['languages'] = VRLanguages::all()->pluck('id')->toArray();
 
-//        dd($configuration);
-
-        return view('admin.single', $configuration);
+        return view('admin.translate', $configuration);
     }
 
-    public function adminEdit($id)
-    {
-        $data = request()->all();
-
-        dd($data);
-
-//        $dataFromModel = new VRPagesCategories();
-//        $configuration['fields'] = $dataFromModel->getFillable();
-//        $configuration['tableName'] = $dataFromModel->getTableName();
-//
-//        $configuration['dropdown']['pads_id']=DTPads::all()->pluck('name', 'id')->toArray();
-//        $configuration['dropdown']['cheeses_id']=DTCheeses::all()->pluck('name', 'id')->toArray();
-//        $configuration['checkbox']['ingredients']=DTIngredients::all()->pluck('name', 'id')->toArray();
-//
-//        $configuration['record'] = VRPages::find($id)->toArray();
-//        $configuration['pizza'] = VRPages::find($id);
-//
-//        $configuration['pizzas_ingredients']= $configuration['pizza']->pizzasConnections->pluck('ingredients_id')->toArray();
-//
-//        unset($configuration['fields'][6]);
-//        array_push($configuration['fields'], "ingredients");
-//        array_push($configuration['fields'], "comment");
-//
-//        return view('admin.editform', $configuration);
-//
-    }
-
-    public function adminUpdate($id)
+    public function adminStoreTranslations($id)
     {
         $data = request()->all();
 
@@ -141,16 +123,15 @@ class VRPagesCategoriesController extends Controller
 
             if(!isset($comment[$name]))
             {
-
-            DB::beginTransaction();
-            try {
-                $recordExist = DB::table('vr_categories_translations')
-                    ->whereCategories_idAndLanguages_id($id, $language_id)
-                    ->first();
+                DB::beginTransaction();
+                try {
+                    $recordExist = DB::table('vr_categories_translations')
+                        ->whereCategories_idAndLanguages_id($id, $language_id)
+                        ->first();
 
                     if(!$recordExist) {
                         VRCategoriesTranslations::create($record);
-                        $comment[$name] = $name . ' translation added to the table';
+                        $comment[$name] = $name . ' translation added to database';
                     } elseif ($recordExist) {
                         DB::table('vr_categories_translations')
                             ->whereCategories_idAndLanguages_id($id, $language_id)
@@ -158,18 +139,54 @@ class VRPagesCategoriesController extends Controller
                         $comment[$name] = $name . ' translation updated';
                     }
 
-            } catch(Exception $e) {
-                DB::rollback();
-                throw new Exception($e);
+                } catch(Exception $e) {
+                    DB::rollback();
+                    throw new Exception($e);
+                }
+                DB::commit();
             }
-            DB::commit();
-
-            }
-
-            $fullComment = $fullComment . '<br>' . $comment[$name];
-
+            $fullComment = $fullComment . $comment[$name] .'. ';
         }
 
-        dd($fullComment);
+        $dataFromModel = new VRPagesCategories();
+        $configuration['fields'] = $dataFromModel->getFillable();
+        $configuration['tableName'] = $dataFromModel->getTableName();
+
+        $configuration['list_data'] = VRPagesCategories::get()->toArray();
+
+        $configuration['fullComment'] = $fullComment;
+
+        return view('admin.list', $configuration);
+
+    }
+
+    public function adminShow($id)
+    {
+        return('adminShow');
+
+    }
+
+    public function adminEdit($id)
+    {
+        return('adminEdit');
+
+    }
+
+    public function adminUpdate($id)
+    {
+        return('adminUpdate');
+
+    }
+
+    public function destroy($id)
+    {
+
+    }
+
+    public function adminDestroy($id)
+    {
+        if (DTIngredients::destroy($id)) {
+            return json_encode(["success" => true, "id" => $id]);
+        }
     }
 }

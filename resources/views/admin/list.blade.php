@@ -9,12 +9,18 @@
             </div>
         @endif
         @if(!isset($error))
+                @if(isset($fullComment))
+                    <div class="alert alert-warning">
+                        <strong>{{ $fullComment }}</strong>
+                    </div>
+                @endif
             <table class="table">
                 <thead>
                 <tr>
                     @foreach($fields as $key => $value)
                     <th>{{$value}}</th>
                     @endforeach
+                    <th>Translate</th>
                     <th>View</th>
                     <th>Edit</th>
                     <th>Delete</th>
@@ -30,6 +36,7 @@
                                 @endif
                             @endforeach
                         @endforeach
+                        <td><a class="btn btn-info btn-sm" href="{{route('app.' . $tableName . '.translations', $record['id'])}}">Translate</a></td>
                         <td><a class="btn btn-primary btn-sm" href="{{route('app.' . $tableName . '.show', $record['id'])}}">View</a></td>
                         <td><a class="btn btn-success btn-sm" href="{{route('app.' . $tableName . '.edit', $record['id'])}}">Edit</a></td>
                         <td><a id="del" onclick="deleteItem('{{route('app.' . $tableName . '.delete', $record['id'])}}')" class="btn btn-danger btn-sm" >Delete</a></td>

@@ -135,6 +135,9 @@ Route::group(['prefix' => 'admin'], function () {
 
         Route::group(['prefix' => '{id}'], function () {
 
+            Route::get('translations/create/', ['as' => 'app.pages_categories.translations','uses' => 'VRPagesCategoriesController@adminCreateTranslations']);
+            Route::post('translations/create/', ['as' => 'app.pages_categories.translations', 'uses' => 'VRPagesCategoriesController@adminStoreTranslations']);
+
             Route::get('/edit', ['as' => 'app.pages_categories.edit', 'uses' => 'VRPagesCategoriesController@adminEdit']);
             Route::post('/edit', ['as' => 'app.pages_categories.update', 'uses' => 'VRPagesCategoriesController@adminUpdate']);
 
