@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateVrPagesCategoriesTable extends Migration {
+class CreateVrResourcesTable extends Migration {
 
 	/**
 	 * Run the migrations.
@@ -13,14 +13,18 @@ class CreateVrPagesCategoriesTable extends Migration {
 	 */
 	public function up()
 	{
-		Schema::create('vr_pages_categories', function(Blueprint $table)
+		Schema::create('vr_resources', function(Blueprint $table)
 		{
 			$table->integer('count', true);
 			$table->string('id', 36)->unique('id_UNIQUE');
 			$table->timestamps();
 			$table->softDeletes();
-            $table->string('name');
-        });
+			$table->string('mime_type');
+			$table->string('path');
+			$table->integer('width')->nullable();
+			$table->integer('height')->nullable();
+			$table->integer('size')->nullable();
+		});
 	}
 
 
@@ -31,7 +35,7 @@ class CreateVrPagesCategoriesTable extends Migration {
 	 */
 	public function down()
 	{
-		Schema::drop('vr_pages_categories');
+		Schema::drop('vr_resources');
 	}
 
 }

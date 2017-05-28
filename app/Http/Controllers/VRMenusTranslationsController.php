@@ -84,14 +84,17 @@ class VRMenusTranslationsController extends Controller
                 }
                 DB::commit();
             }
+
             $fullComment = $fullComment . $comment[$name] .'. ';
+
+            $configuration['comment'] = ['message' => $fullComment];
         }
 
         $dataFromModel = new VRMenus();
         $configuration['fields'] = $dataFromModel->getFillable();
         $configuration['tableName'] = $dataFromModel->getTableName();
 
-        $configuration['list_data'] = VRMenus::get()->toArray();
+        $configuration['list_data'] = VRMenus::get()->where('deleted_at', '=', null)->toArray();
 
         $configuration['fullComment'] = $fullComment;
 

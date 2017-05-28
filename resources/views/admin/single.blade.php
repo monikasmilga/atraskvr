@@ -17,12 +17,16 @@
             <tbody>
 
                 @foreach($record as $key => $value)
-                    <tr>
-                        <td>{{$key}}</td>
-                        @if($key == 'resources_id' and $tableName == 'ingredients')
-                            <td><img src={{asset($ingredientImage)}}/></td>
+                    <tr id="{{$record['id']}}">
+                        @if($key == 'cover_image_id' and $tableName == 'pages')
+                            <td>cover image</td>
+                            <td><img src={{asset($coverImage)}}/></td>
+                        {{--@elseif($key == 'pages_categories_id')--}}
+                            {{--<td>pages category</td>--}}
+                            {{--<td>{{$record['category']['name']}}/></td>--}}
                         @else
-                        <td>{{$value}}</td>
+                            <td>{{$key}}</td>
+                            <td>{{$value}}</td>
                         @endif
                     </tr>
                 @endforeach

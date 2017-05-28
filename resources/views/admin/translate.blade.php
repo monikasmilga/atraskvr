@@ -45,7 +45,7 @@
                             @if(count($translations) == 0)
                                     <td>
                                         <div class="form-group">
-                                            {!! Form::text($field_value . '_' . $language, 'translation value', ['class' => 'form-control'])!!}<br/>
+                                            {!! Form::textarea($field_value . '_' . $language, 'translation value', ['class' => 'form-control', 'rows'=>"3"])!!}<br/>
                                         </div>
                                     </td>
                             @endif
@@ -61,7 +61,7 @@
                                             @if($field_value)
                                                 <td>
                                                     <div class="form-group">
-                                                        {!! Form::textarea($field_value . '_' . $translation['languages_id'], $value_translation, ['class' => 'form-control'])!!}<br/>
+                                                        {!! Form::textarea($field_value . '_' . $translation['languages_id'], $value_translation, ['class' => 'form-control', 'rows'=>"3"])!!}<br/>
                                                     </div>
                                                 </td>
                                             @endif
@@ -78,8 +78,8 @@
 
                                     @if($field_value)
                                         <td>
-                                            <div class="form-group mx-auto">
-                                                {!! Form::textarea($field_value . '_' . $language, 'translation value', ['class' => 'form-control'])!!}<br/>
+                                            <div class="form-group">
+                                                {!! Form::textarea($field_value . '_' . $language, 'translation value', ['class' => 'form-control', 'rows'=>"3"])!!}<br/>
                                             </div>
                                         </td>
                                     @endif

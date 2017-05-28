@@ -23,7 +23,7 @@ class VRMenusController extends Controller
         $configuration['fields'] = $dataFromModel->getFillable();
         $configuration['tableName'] = $dataFromModel->getTableName();
 
-        $configuration['list_data'] = VRMenus::get()->toArray();
+        $configuration['list_data'] = VRMenus::get()->where('deleted_at', '=', null)->toArray();
 
         if ($configuration['list_data'] == []) {
             $configuration['error'] = ['message' => trans("List is empty. Please create some " . $configuration['tableName'] . ", then check list again")];
@@ -85,17 +85,61 @@ class VRMenusController extends Controller
 
     public function adminEdit($id)
     {
-        return('adminEdit');
+        $dataFromModel = new VRMenus();
+        $configuration['fields'] = $dataFromModel->getFillable();
+        $configuration['tableName'] = $dataFromModel->getTableName();
+
+        $configuration['record'] = VRMenus::find($id)->toArray();
+
+        return view('admin.editform', $configuration);
     }
 
     public function adminUpdate($id)
     {
-        return('adminUpdate');
+        $data = request()->all();
+
+        $dataFromModel = new VRMenus();
+        $configuration['fields'] = $dataFromModel->getFillable();
+        $configuration['tableName'] = $dataFromModel->getTableName();
+
+        $missingValues= '';
+        foreach($configuration['fields'] as $key=> $value) {
+            if ($value == 'parent_id'){}
+
+            elseif (!isset($data[$value])) {
+                $missingValues = $missingValues . ' ' . $value . ',';
+            }
+        }
+        if ($missingValues != ''){
+            $missingValues = substr($missingValues, 1, -1);
+            $configuration['error'] = ['message' => trans('Please enter ' . $missingValues)];
+            $configuration['record'] = VRMenus::find($id)->toArray();
+            return view('admin.editform', $configuration);
+        }
+
+        $record = VRMenus::find($id);
+
+        $record->update($data);
+
+        $dataFromModel = new VRMenus();
+        $configuration['fields'] = $dataFromModel->getFillable();
+        $configuration['tableName'] = $dataFromModel->getTableName();
+
+        $configuration['list_data'] = VRMenus::get()->toArray();
+
+        if(Route::has('app.' . $configuration['tableName'] . '_translations.create')){
+            $configuration[ 'translationExist' ] = true;
+        }
+
+        $configuration['fullComment'] = 'Record updated successfully';
+
+        return view('admin.list', $configuration);
     }
 
     public function adminDestroy($id)
     {
-        if (VRMenus::destroy( $id)) {
+        if(VRMenus::destroy($id) and VRMenusTranslations::where('menus_id', '=', $id)->delete())
+        {
             return json_encode(["success" => true, "id" => $id]);
         }
     }

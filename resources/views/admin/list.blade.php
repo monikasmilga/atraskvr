@@ -9,13 +9,16 @@
                 <strong>{{ $error['message'] }}</strong>
             </div>
             <a style="margin-bottom: 50px" class="btn btn-primary btn-sm" href="{{ route('app.' . $tableName . '.create') }}">Create new {{substr($tableName, 0, -1)}}</a>
-
+            <br>
+            <a class="btn btn-warning btn-md float-right" href="http://atraskvr.dev/admin/">Admin home page</a>
         @endif
         @if(!isset($error))
-                @if(isset($fullComment))
+                @if(isset($comment))
+                    @if(sizeof($comment['message'] > 0))
                     <div class="alert alert-warning">
-                        <strong>{{ $fullComment }}</strong>
+                        <strong>{{ $comment['message'] }}</strong>
                     </div>
+                    @endif
                 @endif
                     <h3>{{$tableName . ' list'}}</h3><br>
                     <a style="margin-bottom: 50px" class="btn btn-primary btn-sm" href="{{ route('app.' . $tableName . '.create') }}">Create new {{substr($tableName, 0, -1)}}</a>
@@ -53,6 +56,8 @@
                 @endforeach
                 </tbody>
             </table>
+                    <br>
+                    <a class="btn btn-warning btn-md float-right" href="http://atraskvr.dev/admin/">Admin home page</a>
         @endif
     </div>
 

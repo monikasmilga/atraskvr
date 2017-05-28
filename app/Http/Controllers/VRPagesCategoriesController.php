@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\VRCategoriesTranslations;
 use App\Models\VRLanguages;
 use App\Models\VRPagesCategories;
+use App\Models\VRPagesCategoriesTranslations;
 use App\Models\VRPagesTranslations;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -24,7 +25,7 @@ class VRPagesCategoriesController extends Controller
         $configuration['fields'] = $dataFromModel->getFillable();
         $configuration['tableName'] = $dataFromModel->getTableName();
 
-        $configuration['list_data'] = VRPagesCategories::get()->toArray();
+        $configuration['list_data'] = VRPagesCategories::get()->where('deleted_at', '=', null)->toArray();
 
         if ($configuration['list_data'] == []) {
             $configuration['error'] = ['message' => trans("List is empty. Please create some " . $configuration['tableName'] . ", then check list again")];
@@ -87,17 +88,59 @@ class VRPagesCategoriesController extends Controller
 
     public function adminEdit($id)
     {
-        return('adminEdit');
+        $dataFromModel = new VRPagesCategories();
+        $configuration['fields'] = $dataFromModel->getFillable();
+        $configuration['tableName'] = $dataFromModel->getTableName();
+
+        $configuration['record'] = VRPagesCategories::find($id)->toArray();
+
+        return view('admin.editform', $configuration);
     }
 
     public function adminUpdate($id)
     {
-        return('adminUpdate');
+        $data = request()->all();
+
+        $dataFromModel = new VRPagesCategories();
+        $configuration['fields'] = $dataFromModel->getFillable();
+        $configuration['tableName'] = $dataFromModel->getTableName();
+
+        $missingValues= '';
+        foreach($configuration['fields'] as $key=> $value) {
+            if (!isset($data[$value])) {
+                $missingValues = $missingValues . ' ' . $value . ',';
+            }
+        }
+        if ($missingValues != ''){
+            $missingValues = substr($missingValues, 1, -1);
+            $configuration['error'] = ['message' => trans('Please enter ' . $missingValues)];
+            $configuration['record'] = VRPagesCategories::find($id)->toArray();
+            return view('admin.editform', $configuration);
+        }
+
+        $record = VRPagesCategories::find($id);
+
+        $record->update($data);
+
+        $dataFromModel = new VRPagesCategories();
+        $configuration['fields'] = $dataFromModel->getFillable();
+        $configuration['tableName'] = $dataFromModel->getTableName();
+
+        $configuration['list_data'] = VRPagesCategories::get()->toArray();
+
+        if(Route::has('app.' . $configuration['tableName'] . '_translations.create')){
+            $configuration[ 'translationExist' ] = true;
+        }
+
+        $configuration['fullComment'] = 'Record updated successfully';
+
+        return view('admin.list', $configuration);
     }
 
     public function adminDestroy($id)
     {
-        if (VRPagesCategories::destroy($id)) {
+        if (VRPagesCategories::destroy($id) and VRPagesCategoriesTranslations::where('categories_id', '=', $id)->delete())
+        {
             return json_encode(["success" => true, "id" => $id]);
         }
     }

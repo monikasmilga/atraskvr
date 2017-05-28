@@ -11,7 +11,9 @@
 |
 */
 
-Route::get('/', function () {
+use Illuminate\Support\Facades\Route;
+
+Route::get( '/', function () {
     return view('welcome');
 });
 
@@ -141,9 +143,6 @@ Route::group(['prefix' => 'admin'], function () {
 
         Route::group(['prefix' => '{id}'], function () {
 
-            Route::get('translations/create/', ['as' => 'app.pages_categories.translations','uses' => 'VRPagesCategoriesController@adminCreateTranslations']);
-            Route::post('translations/create/', ['as' => 'app.pages_categories.translations', 'uses' => 'VRPagesCategoriesController@adminStoreTranslations']);
-
             Route::get('/edit', ['as' => 'app.pages_categories.edit', 'uses' => 'VRPagesCategoriesController@adminEdit']);
             Route::post('/edit', ['as' => 'app.pages_categories.update', 'uses' => 'VRPagesCategoriesController@adminUpdate']);
 
@@ -157,10 +156,10 @@ Route::group(['prefix' => 'admin'], function () {
 
         Route::get('/', ['as' => 'app.pages_translations.index','uses' => 'VRPagesTranslationsController@adminIndex']);
 
-        Route::get('/create', ['as' => 'app.pages_translations.create','uses' => 'VRPagesTranslationsController@adminCreate']);
-        Route::post('/create', ['as' => 'app.pages_translations.store', 'uses' => 'VRPagesTranslationsController@adminStore']);
-
         Route::group(['prefix' => '{id}'], function () {
+
+            Route::get('/create', ['as' => 'app.pages_translations.create','uses' => 'VRPagesTranslationsController@adminCreate']);
+            Route::post('/create', ['as' => 'app.pages_translations.store', 'uses' => 'VRPagesTranslationsController@adminStore']);
 
             Route::get('/edit', ['as' => 'app.pages_translations.edit', 'uses' => 'VRPagesTranslationsController@adminEdit']);
             Route::post('/edit', ['as' => 'app.pages_translations.update', 'uses' => 'VRPagesTranslationsController@adminUpdate']);

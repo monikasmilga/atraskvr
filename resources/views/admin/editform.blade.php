@@ -26,7 +26,10 @@
 
                 @if($field == 'user_id')
 
-                @elseif($field == 'calories' and $tableName == 'pizzas')
+                @elseif($field == 'cover_image_id' and $tableName == 'pages')
+                    <div class="form-group">
+                        {!! Form::file('image', ['class' => 'form-control'])!!}<br/>
+                    </div>
 
                 @elseif(isset($dropdown) and substr($field, -3) == '_id')
                     <div class="form-group">

@@ -26,10 +26,15 @@
 
 				@if($field == 'user_id')
 
+				@elseif($field == 'cover_image_id' and $tableName == 'pages')
+					<div class="form-group">
+						{!! Form::file('image', ['class' => 'form-control'])!!}<br/>
+					</div>
+
 				@elseif(isset($dropdown) and substr($field, -3) == '_id')
 					<div class="form-group">
 						{!! Form::label($field, 'Choose ' . ucfirst(substr($field, 0, -4) . ':')) !!}
-						{{Form::select($field ,$dropdown[$field], '', ['class' => 'form-control'])}}<br/>
+						{{Form::select($field, $dropdown[$field], '', ['class' => 'form-control'])}}<br/>
 					</div>
 
 				@elseif(isset($checkbox[$field]))
@@ -45,10 +50,7 @@
 						{!! Form::password($field, ['class' => 'form-control'])!!}<br/>
 					</div>
 
-				@elseif($field == 'resources_id' and $tableName == 'ingredients')
-					<div class="form-group">
-						{!! Form::file('image', ['class' => 'form-control'])!!}<br/>
-					</div>
+
 
 				@elseif($field)
 					<div class="form-group">

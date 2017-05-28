@@ -16,8 +16,8 @@ class PagesCategoriesTranslationsSeeder extends Seeder
     {
         {
             $list = [
-                ["id" => "vr_id_lt", "categories_id" => "virtualus_kambariai_id", "languages_id" => "lt", "name" => "Virtualus kambariai", "slug" => "vrkambariai"],
-                ["id" => "vr_id_en", "categories_id" => "virtualus_kambariai_id", "languages_id" => "en", "name" => "Virtual rooms", "slug" => "vrrooms"],
+                ["id" => "vr_id_lt", "categories_id" => "vr_categories_id", "languages_id" => "lt", "name" => "Virtualus kambariai", "slug" => "vrkambariai"],
+                ["id" => "vr_id_en", "categories_id" => "vr_categories_id", "languages_id" => "en", "name" => "Virtual rooms", "slug" => "vrrooms"],
 
             ];
             DB::beginTransaction();

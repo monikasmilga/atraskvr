@@ -3,28 +3,28 @@
 namespace App\Http\Controllers;
 
 use App\Models\VRLanguages;
-use App\Models\VRPagesCategories;
-use App\Models\VRPagesCategoriesTranslations;
+use App\Models\VRPages;
+use App\Models\VRPagesTranslations;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
 
-class VRPagesCategoriesTranslationsController extends Controller
+class VRPagesTranslationsController extends Controller
 {
     public function adminCreate($id)
     {
-        $dataFromModel = new VRPagesCategories();
+        $dataFromModel = new VRPages();
         $configuration['fields'] = $dataFromModel->getFillable();
         $configuration['tableName'] = $dataFromModel->getTableName();
 
-        $configuration['record'] = VRPagesCategories::find($id)->toArray();
+        $configuration['record'] = VRPages::find($id)->toArray();
 
-        $dataFromModel2 = new VRPagesCategoriesTranslations();
+        $dataFromModel2 = new VRPagesTranslations();
         $configuration['fields_translations'] = $dataFromModel2->getFillable();
         unset($configuration['fields_translations'][1]);
         unset($configuration['fields_translations'][2]);
 
-        $configuration['translations'] = VRPagesCategoriesTranslations::all()->where('categories_id', '=', $id)->toArray();
+        $configuration['translations'] = VRPagesTranslations::all()->where('menus_id', '=', $id)->toArray();
 
         $configuration['languages_names'] = VRLanguages::all()->pluck('name', 'id')->toArray();
         $configuration['languages'] = VRLanguages::all()->pluck('id')->toArray();
@@ -36,7 +36,7 @@ class VRPagesCategoriesTranslationsController extends Controller
     {
         $data = request()->all();
 
-        $dataFromModel = new VRPagesCategoriesTranslations();
+        $dataFromModel = new VRPagesTranslations();
         $fields = $dataFromModel->getFillable();
 
         unset($fields[1]);
@@ -57,23 +57,23 @@ class VRPagesCategoriesTranslationsController extends Controller
                 }
             }
 
-            $record['categories_id'] = $id;
+            $record['menus_id'] = $id;
             $record['languages_id'] = $language_id;
 
             if(!isset($comment[$name]))
             {
                 DB::beginTransaction();
                 try {
-                    $recordExist = DB::table('vr_pages_categories_translations')
-                        ->whereCategories_idAndLanguages_id($id, $language_id)
+                    $recordExist = DB::table('vr_menus_translations')
+                        ->whereMenus_idAndLanguages_id($id, $language_id)
                         ->first();
 
                     if(!$recordExist) {
-                        VRPagesCategoriesTranslations::create($record);
+                        VRPagesTranslations::create($record);
                         $comment[$name] = $name . ' translation added to database';
                     } elseif ($recordExist) {
-                        DB::table('vr_pages_categories_translations')
-                            ->whereCategories_idAndLanguages_id($id, $language_id)
+                        DB::table('vr_menus_translations')
+                            ->whereMenus_idAndLanguages_id($id, $language_id)
                             ->update($record);
                         $comment[$name] = $name . ' translation updated';
                     }
@@ -84,19 +84,21 @@ class VRPagesCategoriesTranslationsController extends Controller
                 }
                 DB::commit();
             }
+
             $fullComment = $fullComment . $comment[$name] .'. ';
 
-            $configuration['comment'] = ['message' => $fullComment];        }
+            $configuration['comment'] = ['message' => $fullComment];
+        }
 
-        $dataFromModel = new VRPagesCategories();
+        $dataFromModel = new VRPages();
         $configuration['fields'] = $dataFromModel->getFillable();
         $configuration['tableName'] = $dataFromModel->getTableName();
 
-        $configuration['list_data'] = VRPagesCategories::get()->where('deleted_at', '=', null)->toArray();
+        $configuration['list_data'] = VRPages::get()->where('deleted_at', '=', null)->toArray();
 
         $configuration['fullComment'] = $fullComment;
 
-        if(Route::has('app.' . $configuration['tableName'] . '_translations.create')){
+        if(Route::has('app.' . $configuration['tableName'] . '_translations.create')) {
             $configuration[ 'translationExist' ] = true;
         }
 
