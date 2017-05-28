@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateVrPagesTranslationsTable extends Migration {
+class CreateVrPagesCategoriesTranslationsTable extends Migration {
 
 	/**
 	 * Run the migrations.
@@ -13,17 +13,15 @@ class CreateVrPagesTranslationsTable extends Migration {
 	 */
 	public function up()
 	{
-		Schema::create('vr_pages_translations', function(Blueprint $table)
+		Schema::create('vr_pages_categories_translations', function(Blueprint $table)
 		{
 			$table->integer('count', true);
 			$table->string('id', 36)->unique('id_UNIQUE');
 			$table->timestamps();
 			$table->softDeletes();
-			$table->string('pages_id', 36)->index('fk_vr_pages_translations_vr_pages1_idx');
-			$table->string('languages_id', 36)->index('fk_vr_pages_translations_vr_languages1_idx');
-			$table->string('title');
-			$table->text('description_long', 65535);
-			$table->text('description_short', 65535);
+			$table->string('categories_id', 36)->index('fk_vr_pages_categories_translations_vr_pages_categories1_idx');
+			$table->string('languages_id', 36)->index('fk_vr_pages_categories_translations_vr_languages1_idx');
+			$table->string('name');
 			$table->string('slug')->nullable();
 		});
 	}
@@ -36,7 +34,7 @@ class CreateVrPagesTranslationsTable extends Migration {
 	 */
 	public function down()
 	{
-		Schema::drop('vr_pages_translations');
+		Schema::drop('vr_pages_categories_translations');
 	}
 
 }

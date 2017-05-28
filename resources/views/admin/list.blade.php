@@ -8,6 +8,8 @@
             <div class="alert alert-danger">
                 <strong>{{ $error['message'] }}</strong>
             </div>
+            <a style="margin-bottom: 50px" class="btn btn-primary btn-sm" href="{{ route('app.' . $tableName . '.create') }}">Create new {{substr($tableName, 0, -1)}}</a>
+
         @endif
         @if(!isset($error))
                 @if(isset($fullComment))
@@ -42,7 +44,7 @@
                             @endforeach
                         @endforeach
                             @if(isset($translationExist))
-                            <td><a class="btn btn-info btn-sm" href="{{route('app.' . $tableName . '._translations', $record['id'])}}">Translate</a></td>
+                            <td><a class="btn btn-info btn-sm" href="{{route('app.' . $tableName . '_translations.create', $record['id'])}}">Translate</a></td>
                             @endif
                         <td><a class="btn btn-primary btn-sm" href="{{route('app.' . $tableName . '.show', $record['id'])}}">View</a></td>
                         <td><a class="btn btn-success btn-sm" href="{{route('app.' . $tableName . '.edit', $record['id'])}}">Edit</a></td>

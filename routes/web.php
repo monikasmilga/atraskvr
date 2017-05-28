@@ -25,10 +25,10 @@ Route::group(['prefix' => 'admin'], function () {
 
         Route::get('/', ['as' => 'app.pages_categories_translations.index','uses' => 'VRPagesCategoriesTranslationsController@adminIndex']);
 
-        Route::get('/create', ['as' => 'app.pages_categories_translations.create','uses' => 'VRPagesCategoriesTranslationsController@adminCreate']);
-        Route::post('/create', ['as' => 'app.pages_categories_translations.store', 'uses' => 'VRPagesCategoriesTranslationsController@adminStore']);
-
         Route::group(['prefix' => '{id}'], function () {
+
+            Route::get('/create', ['as' => 'app.pages_categories_translations.create','uses' => 'VRPagesCategoriesTranslationsController@adminCreate']);
+            Route::post('/create', ['as' => 'app.pages_categories_translations.store', 'uses' => 'VRPagesCategoriesTranslationsController@adminStore']);
 
             Route::get('/edit', ['as' => 'app.pages_categories_translations.edit', 'uses' => 'VRPagesCategoriesTranslationsController@adminEdit']);
             Route::post('/edit', ['as' => 'app.pages_categories_translations.update', 'uses' => 'VRPagesCategoriesTranslationsController@adminUpdate']);
@@ -83,6 +83,9 @@ Route::group(['prefix' => 'admin'], function () {
         Route::post('/create', ['as' => 'app.menus_translations.store', 'uses' => 'VRMenusTranslationsController@adminStore']);
 
         Route::group(['prefix' => '{id}'], function () {
+
+            Route::get('/create', ['as' => 'app.menus_translations.create','uses' => 'VRMenusTranslationsController@adminCreate']);
+            Route::post('/create', ['as' => 'app.menus_translations.store', 'uses' => 'VRMenusTranslationsController@adminStore']);
 
             Route::get('/edit', ['as' => 'app.menus_translations.edit', 'uses' => 'VRMenusTranslationsController@adminEdit']);
             Route::post('/edit', ['as' => 'app.menus_translations.update', 'uses' => 'VRMenusTranslationsController@adminUpdate']);

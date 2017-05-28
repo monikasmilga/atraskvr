@@ -10,10 +10,10 @@
 
                 <thead class="thead-default">
                 <tr>
-                    <th>key</th>
-                    <th>value</th>
+                    <th>Key</th>
+                    <th>General value</th>
                     @foreach($languages_names as $key => $value)
-                        <th>{{$value}}</th>
+                        <th>{{$value}} value</th>
                     @endforeach
                 </tr>
 
@@ -23,8 +23,11 @@
                     @foreach($fields as $key => $value)
                         @if($key_data == $value)
                             <tr>
-                                <td>{{$key_data}}</td>
+                                <td class="td-default">{{$key_data}}</td>
                                 <td>{{$value_data}}</td>
+                                @for($i = 0; $i  < count($languages); $i++)
+                                    <td></td>
+                                @endfor
                             </tr>
                         @endif
                     @endforeach
@@ -35,7 +38,7 @@
                         <td>{{$field_value}}</td>
                         <td></td>
 
-                        {!! Form::open(['url' => route('app.' . $tableName . '._translations', $record['id'])]) !!}
+                        {!! Form::open(['url' => route('app.' . $tableName . '_translations.create', $record['id'])]) !!}
 
                         @foreach($languages as $key => $language)
 
@@ -58,7 +61,7 @@
                                             @if($field_value)
                                                 <td>
                                                     <div class="form-group">
-                                                        {!! Form::text($field_value . '_' . $translation['languages_id'], $value_translation, ['class' => 'form-control'])!!}<br/>
+                                                        {!! Form::textarea($field_value . '_' . $translation['languages_id'], $value_translation, ['class' => 'form-control'])!!}<br/>
                                                     </div>
                                                 </td>
                                             @endif
@@ -75,8 +78,8 @@
 
                                     @if($field_value)
                                         <td>
-                                            <div class="form-group">
-                                                {!! Form::text($field_value . '_' . $language, 'translation value', ['class' => 'form-control'])!!}<br/>
+                                            <div class="form-group mx-auto">
+                                                {!! Form::textarea($field_value . '_' . $language, 'translation value', ['class' => 'form-control'])!!}<br/>
                                             </div>
                                         </td>
                                     @endif

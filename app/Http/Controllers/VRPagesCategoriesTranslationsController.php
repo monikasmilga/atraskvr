@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\VRCategoriesTranslations;
 use App\Models\VRLanguages;
 use App\Models\VRPagesCategories;
+use App\Models\VRPagesCategoriesTranslations;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
@@ -19,12 +19,12 @@ class VRPagesCategoriesTranslationsController extends Controller
 
         $configuration['record'] = VRPagesCategories::find($id)->toArray();
 
-        $dataFromModel2 = new VRCategoriesTranslations();
+        $dataFromModel2 = new VRPagesCategoriesTranslations();
         $configuration['fields_translations'] = $dataFromModel2->getFillable();
         unset($configuration['fields_translations'][1]);
         unset($configuration['fields_translations'][2]);
 
-        $configuration['translations'] = VRCategoriesTranslations::all()->where('categories_id', '=', $id)->toArray();
+        $configuration['translations'] = VRPagesCategoriesTranslations::all()->where('categories_id', '=', $id)->toArray();
 
         $configuration['languages_names'] = VRLanguages::all()->pluck('name', 'id')->toArray();
         $configuration['languages'] = VRLanguages::all()->pluck('id')->toArray();
@@ -36,7 +36,7 @@ class VRPagesCategoriesTranslationsController extends Controller
     {
         $data = request()->all();
 
-        $dataFromModel = new VRCategoriesTranslations();
+        $dataFromModel = new VRPagesCategoriesTranslations();
         $fields = $dataFromModel->getFillable();
 
         unset($fields[1]);
@@ -64,15 +64,15 @@ class VRPagesCategoriesTranslationsController extends Controller
             {
                 DB::beginTransaction();
                 try {
-                    $recordExist = DB::table('vr_categories_translations')
+                    $recordExist = DB::table('vr_pages_categories_translations')
                         ->whereCategories_idAndLanguages_id($id, $language_id)
                         ->first();
 
                     if(!$recordExist) {
-                        VRCategoriesTranslations::create($record);
+                        VRPagesCategoriesTranslations::create($record);
                         $comment[$name] = $name . ' translation added to database';
                     } elseif ($recordExist) {
-                        DB::table('vr_categories_translations')
+                        DB::table('vr_pages_categories_translations')
                             ->whereCategories_idAndLanguages_id($id, $language_id)
                             ->update($record);
                         $comment[$name] = $name . ' translation updated';
@@ -95,12 +95,10 @@ class VRPagesCategoriesTranslationsController extends Controller
 
         $configuration['fullComment'] = $fullComment;
 
-        if(Route::has('app.' . $configuration['tableName'] . '.translations')){
+        if(Route::has('app.' . $configuration['tableName'] . '_translations.create')){
             $configuration[ 'translationExist' ] = true;
         }
 
         return view('admin.list', $configuration);
-
     }
-
 }

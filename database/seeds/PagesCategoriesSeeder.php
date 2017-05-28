@@ -1,10 +1,10 @@
 <?php
 
-use App\Models\VRCategoriesTranslations;
+use App\Models\VRPagesCategories;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 
-class CategoriesTranslationsSeeder extends Seeder
+class PagesCategoriesSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -15,16 +15,15 @@ class CategoriesTranslationsSeeder extends Seeder
     {
         {
             $list = [
-                ["id" => "vr_id_lt", "categories_id" => "virtualus_kambariai_id", "languages_id" => "lt", "name" => "Virtualus kambariai", "slug" => "vrkambariai"],
-                ["id" => "vr_id_en", "categories_id" => "virtualus_kambariai_id", "languages_id" => "en", "name" => "Virtual rooms", "slug" => "vrrooms"],
+                ["id" => "virtualus_kambariai_id"],
 
             ];
             DB::beginTransaction();
             try {
                 foreach ($list as $single) {
-                    $record = VRCategoriesTranslations::find($single['id']);
+                    $record = VRPagesCategories::find($single['id']);
                     if(!$record) {
-                        VRCategoriesTranslations::create($single);
+                        VRPagesCategories::create($single);
                     }
                 }
             } catch(Exception $e) {

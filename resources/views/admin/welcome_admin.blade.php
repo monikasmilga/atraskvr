@@ -69,7 +69,7 @@
     <div class="links"><br>
         <a href="http://atraskvr.dev/admin/pages">Pages</a>
         <a href="http://atraskvr.dev/admin/pages_categories">Pages categories</a>
-        <a href="http://atraskvr.dev/admin/menu">Menus</a>
+        <a href="http://atraskvr.dev/admin/menus">Menus</a>
 
         <a href="http://atraskvr.dev/admin/orders">Orders</a>
         <a href="http://atraskvr.dev/admin/reservations">Reservations</a>

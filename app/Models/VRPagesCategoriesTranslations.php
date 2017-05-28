@@ -3,9 +3,9 @@
 namespace App\Models;
 
 
-class VRCategoriesTranslations extends CoreModel
+class VRPagesCategoriesTranslations extends CoreModel
 {
-    protected $table = 'vr_categories_translations';
+    protected $table = 'vr_pages_categories_translations';
 
     protected $fillable = ['id', 'categories_id', 'languages_id', 'name', 'slug'];
 }
