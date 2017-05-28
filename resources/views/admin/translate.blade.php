@@ -35,7 +35,7 @@
                         <td>{{$field_value}}</td>
                         <td></td>
 
-                        {!! Form::open(['url' => route('app.' . $tableName . '.translations', $record['id'])]) !!}
+                        {!! Form::open(['url' => route('app.' . $tableName . '._translations', $record['id'])]) !!}
 
                         @foreach($languages as $key => $language)
 
