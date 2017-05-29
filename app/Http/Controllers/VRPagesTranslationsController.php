@@ -43,6 +43,7 @@ class VRPagesTranslationsController extends Controller
 
         unset($fields[1]);
         unset($fields[2]);
+        unset($fields[6]);
 
         $languages = VRLanguages::all()->pluck('name', 'id')->toArray();
 
