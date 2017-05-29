@@ -41,7 +41,9 @@
                     <tr id="{{$record['id']}}">
                         @foreach($record as $key_data => $value_data)
                             @foreach($fields as $key => $value)
-                                @if($key_data == $value)
+                                @if($key_data == 'cover_image_id')
+                                        <td><img src={{asset($coverImages[$value_data])}}></td>
+                                @elseif($key_data == $value)
                                 <td>{{$value_data}}</td>
                                 @endif
                             @endforeach
