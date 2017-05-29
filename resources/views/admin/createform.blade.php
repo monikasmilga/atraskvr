@@ -50,8 +50,6 @@
 						{!! Form::password($field, ['class' => 'form-control'])!!}<br/>
 					</div>
 
-
-
 				@elseif($field)
 					<div class="form-group">
 							{!! Form::label($field, 'Enter ' . ucfirst($field . ':')) !!}
