@@ -11,27 +11,32 @@
 |
 */
 
-Route::get('/', function () {
+use Illuminate\Support\Facades\Route;
+
+Route::get( '/', function () {
     return view('welcome');
 });
 
-
 Route::group(['prefix' => 'admin'], function () {
 
-    Route::group(['prefix' => 'categories_translations'], function () {
+    Route::get('/', function () {
+        return view('admin.welcome_admin');
+    });
 
-        Route::get('/', ['as' => 'app.categories_translations.index','uses' => 'VRCategoriesTranslationsController@adminIndex']);
+    Route::group(['prefix' => 'pages_categories_translations'], function () {
 
-        Route::get('/create', ['as' => 'app.categories_translations.create','uses' => 'VRCategoriesTranslationsController@adminCreate']);
-        Route::post('/create', ['as' => 'app.categories_translations.store', 'uses' => 'VRCategoriesTranslationsController@adminStore']);
+        Route::get('/', ['as' => 'app.pages_categories_translations.index','uses' => 'VRPagesCategoriesTranslationsController@adminIndex']);
 
         Route::group(['prefix' => '{id}'], function () {
 
-            Route::get('/edit', ['as' => 'app.categories_translations.edit', 'uses' => 'VRCategoriesTranslationsController@adminEdit']);
-            Route::post('/edit', ['as' => 'app.categories_translations.update', 'uses' => 'VRCategoriesTranslationsController@adminUpdate']);
+            Route::get('/create', ['as' => 'app.pages_categories_translations.create','uses' => 'VRPagesCategoriesTranslationsController@adminCreate']);
+            Route::post('/create', ['as' => 'app.pages_categories_translations.store', 'uses' => 'VRPagesCategoriesTranslationsController@adminStore']);
 
-            Route::get('/', ['as' => 'app.categories_translations.show', 'uses' => 'VRCategoriesTranslationsController@adminShow']);
-            Route::delete('/', ['as' => 'app.categories_translations.delete', 'uses' => 'VRCategoriesTranslationsController@adminDestroy']);
+            Route::get('/edit', ['as' => 'app.pages_categories_translations.edit', 'uses' => 'VRPagesCategoriesTranslationsController@adminEdit']);
+            Route::post('/edit', ['as' => 'app.pages_categories_translations.update', 'uses' => 'VRPagesCategoriesTranslationsController@adminUpdate']);
+
+            Route::get('/', ['as' => 'app.pages_categories_translations.show', 'uses' => 'VRPagesCategoriesTranslationsController@adminShow']);
+            Route::delete('/', ['as' => 'app.pages_categories_translations.delete', 'uses' => 'VRPagesCategoriesTranslationsController@adminDestroy']);
 
         });
     });
@@ -54,38 +59,41 @@ Route::group(['prefix' => 'admin'], function () {
         });
     });
 
-    Route::group(['prefix' => 'menu'], function () {
+    Route::group(['prefix' => 'menus'], function () {
 
-        Route::get('/', ['as' => 'app.menu.index','uses' => 'VRMenuController@adminIndex']);
+        Route::get('/', ['as' => 'app.menus.index','uses' => 'VRMenusController@adminIndex']);
 
-        Route::get('/create', ['as' => 'app.menu.create','uses' => 'VRMenuController@adminCreate']);
-        Route::post('/create', ['as' => 'app.menu.store', 'uses' => 'VRMenuController@adminStore']);
+        Route::get('/create', ['as' => 'app.menus.create','uses' => 'VRMenusController@adminCreate']);
+        Route::post('/create', ['as' => 'app.menus.store', 'uses' => 'VRMenusController@adminStore']);
 
         Route::group(['prefix' => '{id}'], function () {
 
-            Route::get('/edit', ['as' => 'app.menu.edit', 'uses' => 'VRMenuController@adminEdit']);
-            Route::post('/edit', ['as' => 'app.menu.update', 'uses' => 'VRMenuController@adminUpdate']);
+            Route::get('/edit', ['as' => 'app.menus.edit', 'uses' => 'VRMenusController@adminEdit']);
+            Route::post('/edit', ['as' => 'app.menus.update', 'uses' => 'VRMenusController@adminUpdate']);
 
-            Route::get('/', ['as' => 'app.menu.show', 'uses' => 'VRMenuController@adminShow']);
-            Route::delete('/', ['as' => 'app.menu.delete', 'uses' => 'VRMenuController@adminDestroy']);
+            Route::get('/', ['as' => 'app.menus.show', 'uses' => 'VRMenusController@adminShow']);
+            Route::delete('/', ['as' => 'app.menus.delete', 'uses' => 'VRMenusController@adminDestroy']);
 
         });
     });
 
-    Route::group(['prefix' => 'menu_translations'], function () {
+    Route::group(['prefix' => 'menus_translations'], function () {
 
-        Route::get('/', ['as' => 'app.menu_translations.index','uses' => 'VRMenuTranslationsController@adminIndex']);
+        Route::get('/', ['as' => 'app.menus_translations.index','uses' => 'VRMenusTranslationsController@adminIndex']);
 
-        Route::get('/create', ['as' => 'app.menu_translations.create','uses' => 'VRMenuTranslationsController@adminCreate']);
-        Route::post('/create', ['as' => 'app.menu_translations.store', 'uses' => 'VRMenuTranslationsController@adminStore']);
+        Route::get('/create', ['as' => 'app.menus_translations.create','uses' => 'VRMenusTranslationsController@adminCreate']);
+        Route::post('/create', ['as' => 'app.menus_translations.store', 'uses' => 'VRMenusTranslationsController@adminStore']);
 
         Route::group(['prefix' => '{id}'], function () {
 
-            Route::get('/edit', ['as' => 'app.menu_translations.edit', 'uses' => 'VRMenuTranslationsController@adminEdit']);
-            Route::post('/edit', ['as' => 'app.menu_translations.update', 'uses' => 'VRMenuTranslationsController@adminUpdate']);
+            Route::get('/create', ['as' => 'app.menus_translations.create','uses' => 'VRMenusTranslationsController@adminCreate']);
+            Route::post('/create', ['as' => 'app.menus_translations.store', 'uses' => 'VRMenusTranslationsController@adminStore']);
 
-            Route::get('/', ['as' => 'app.menu_translations.show', 'uses' => 'VRMenuTranslationsController@adminShow']);
-            Route::delete('/', ['as' => 'app.menu_translations.delete', 'uses' => 'VRMenuTranslationsController@adminDestroy']);
+            Route::get('/edit', ['as' => 'app.menus_translations.edit', 'uses' => 'VRMenusTranslationsController@adminEdit']);
+            Route::post('/edit', ['as' => 'app.menus_translations.update', 'uses' => 'VRMenusTranslationsController@adminUpdate']);
+
+            Route::get('/', ['as' => 'app.menus_translations.show', 'uses' => 'VRMenusTranslationsController@adminShow']);
+            Route::delete('/', ['as' => 'app.menus_translations.delete', 'uses' => 'VRMenusTranslationsController@adminDestroy']);
 
         });
     });
@@ -148,10 +156,10 @@ Route::group(['prefix' => 'admin'], function () {
 
         Route::get('/', ['as' => 'app.pages_translations.index','uses' => 'VRPagesTranslationsController@adminIndex']);
 
-        Route::get('/create', ['as' => 'app.pages_translations.create','uses' => 'VRPagesTranslationsController@adminCreate']);
-        Route::post('/create', ['as' => 'app.pages_translations.store', 'uses' => 'VRPagesTranslationsController@adminStore']);
-
         Route::group(['prefix' => '{id}'], function () {
+
+            Route::get('/create', ['as' => 'app.pages_translations.create','uses' => 'VRPagesTranslationsController@adminCreate']);
+            Route::post('/create', ['as' => 'app.pages_translations.store', 'uses' => 'VRPagesTranslationsController@adminStore']);
 
             Route::get('/edit', ['as' => 'app.pages_translations.edit', 'uses' => 'VRPagesTranslationsController@adminEdit']);
             Route::post('/edit', ['as' => 'app.pages_translations.update', 'uses' => 'VRPagesTranslationsController@adminUpdate']);
@@ -176,6 +184,24 @@ Route::group(['prefix' => 'admin'], function () {
 
             Route::get('/', ['as' => 'app.permissions.show', 'uses' => 'VRPermissionsController@adminShow']);
             Route::delete('/', ['as' => 'app.permissions.delete', 'uses' => 'VRPermissionsController@adminDestroy']);
+
+        });
+    });
+
+    Route::group(['prefix' => 'roles'], function () {
+
+        Route::get('/', ['as' => 'app.roles.index','uses' => 'VRRolesController@adminIndex']);
+
+        Route::get('/create', ['as' => 'app.roles.create','uses' => 'VRRolesController@adminCreate']);
+        Route::post('/create', ['as' => 'app.roles.store', 'uses' => 'VRRolesController@adminStore']);
+
+        Route::group(['prefix' => '{id}'], function () {
+
+            Route::get('/edit', ['as' => 'app.roles.edit', 'uses' => 'VRRolesController@adminEdit']);
+            Route::post('/edit', ['as' => 'app.roles.update', 'uses' => 'VRRolesController@adminUpdate']);
+
+            Route::get('/', ['as' => 'app.roles.show', 'uses' => 'VRRolesController@adminShow']);
+            Route::delete('/', ['as' => 'app.roles.delete', 'uses' => 'VRRolesController@adminDestroy']);
 
         });
     });

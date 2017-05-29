@@ -2,6 +2,7 @@
 
 use App\Models\VRLanguages;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
 
 class LanguagesSeeder extends Seeder
 {

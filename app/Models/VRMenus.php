@@ -3,9 +3,9 @@
 namespace App\Models;
 
 
-class VRMenu extends CoreModel
+class VRMenus extends CoreModel
 {
-    protected $table = 'vr_menu';
+    protected $table = 'vr_menus';
 
     protected $fillable = ['id', 'parent_id', 'name'];
 }
