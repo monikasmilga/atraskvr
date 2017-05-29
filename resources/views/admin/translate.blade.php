@@ -1,0 +1,107 @@
+@extends('admin.main')
+
+@section('content')
+
+    <div class="container">
+        <div class="col-md-12"><br>
+
+            <h3>Create & update {{$tableName . ' translations'}}</h3><br>
+            <table class="table">
+
+                <thead class="thead-default">
+                <tr>
+                    <th>Key</th>
+                    <th>General value</th>
+                    @foreach($languages_names as $key => $value)
+                        <th>{{$value}} value</th>
+                    @endforeach
+                </tr>
+
+                </thead>
+                <tbody>
+                @foreach($record as $key_data => $value_data)
+                    @foreach($fields as $key => $value)
+                        @if($key_data == $value)
+                            <tr>
+                                <td class="td-default">{{$key_data}}</td>
+                                <td>{{$value_data}}</td>
+                                @for($i = 0; $i  < count($languages); $i++)
+                                    <td></td>
+                                @endfor
+                            </tr>
+                        @endif
+                    @endforeach
+                @endforeach
+
+                @foreach($fields_translations as $key => $field_value)
+                    <tr>
+                        <td>{{$field_value}}</td>
+                        <td></td>
+
+                        {!! Form::open(['url' => route('app.' . $tableName . '_translations.create', $record['id'])]) !!}
+
+                        @foreach($languages as $key => $language)
+
+                            @if(count($translations) == 0)
+                                    <td>
+                                        <div class="form-group">
+                                            {!! Form::textarea($field_value . '_' . $language, 'translation value', ['class' => 'form-control', 'rows'=>"3"])!!}<br/>
+                                        </div>
+                                    </td>
+                            @endif
+
+                            @foreach($translations as $translation)
+
+                                @if($translation['languages_id'] == $language)
+
+                                    @foreach($translation as $key_translation => $value_translation)
+
+                                        @if($field_value == $key_translation)
+
+                                            @if($field_value)
+                                                <td>
+                                                    <div class="form-group">
+                                                        {!! Form::textarea($field_value . '_' . $translation['languages_id'], $value_translation, ['class' => 'form-control', 'rows'=>"3"])!!}<br/>
+                                                    </div>
+                                                </td>
+                                            @endif
+
+                                        @endif
+
+                                    @endforeach
+
+                                    @break
+
+                                @else
+
+                                    @if(end($translations) == $translation)
+
+                                    @if($field_value)
+                                        <td>
+                                            <div class="form-group">
+                                                {!! Form::textarea($field_value . '_' . $language, 'translation value', ['class' => 'form-control', 'rows'=>"3"])!!}<br/>
+                                            </div>
+                                        </td>
+                                    @endif
+
+                                    @endif
+
+                                @endif
+
+                            @endforeach
+
+                        @endforeach
+
+                    </tr>
+                @endforeach
+                </tbody>
+            </table>
+
+        {!! Form::submit('Create / Update' , ['class' => 'btn btn-success']) !!}
+        <a class="btn btn-primary" href="{{ route('app.' . $tableName . '.index') }}">{{ucfirst($tableName)}} list</a>
+
+        {!! Form::close() !!}
+        </div>
+    </div>
+
+@endsection
