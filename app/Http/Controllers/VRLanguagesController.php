@@ -20,7 +20,7 @@ class VRLanguagesController extends Controller
         $configuration['fields'] = $dataFromModel->getFillable();
         $configuration['tableName'] = $dataFromModel->getTableName();
 
-        $configuration['list_data'] = VRLanguages::get()->toArray();
+        $configuration['list_data'] = VRLanguages::get()->where('deleted_at', '=', null)->toArray();
 
         if ($configuration['list_data'] == []) {
             $configuration['error'] = ['message' => trans("List is empty. Please create some " . $configuration['tableName'] . ", then check list again")];

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\VRLanguages;
 use App\Models\VRPages;
 use App\Models\VRPagesTranslations;
+use App\Models\VRResources;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
@@ -57,7 +58,7 @@ class VRPagesTranslationsController extends Controller
                 }
             }
 
-            $record['menus_id'] = $id;
+            $record['pages_id'] = $id;
             $record['languages_id'] = $language_id;
 
             if(!isset($comment[$name]))
@@ -95,6 +96,8 @@ class VRPagesTranslationsController extends Controller
         $configuration['tableName'] = $dataFromModel->getTableName();
 
         $configuration['list_data'] = VRPages::get()->where('deleted_at', '=', null)->toArray();
+
+        $configuration['coverImages'] = VRResources::all()->pluck('path', 'id')->toArray();
 
         $configuration['fullComment'] = $fullComment;
 

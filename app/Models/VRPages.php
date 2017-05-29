@@ -13,4 +13,5 @@ class VRPages extends CoreModel
     {
         return $this->hasOne(VRPagesCategories::class, 'id', 'pages_categories_id');
     }
+
 }

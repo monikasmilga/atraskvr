@@ -25,7 +25,9 @@ class VRPagesController extends Controller
 
         $configuration['list_data'] = VRPages::get()->where('deleted_at', '=', null)->toArray();
 
-        //TODO take image
+        //take cover images
+        $configuration['coverImages'] = VRResources::all()->pluck('path', 'id')->toArray();
+
 
         //TODO take categories
 
