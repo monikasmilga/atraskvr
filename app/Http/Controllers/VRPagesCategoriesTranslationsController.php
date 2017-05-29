@@ -58,7 +58,6 @@ class VRPagesCategoriesTranslationsController extends Controller
                 if($record[$field] == $record['name'])
                 {
                     $record['slug'] = str_slug($record[$field], '-');
-//                    dd($record['slug']);
                 }
 
                 if(!$record[$field]){
