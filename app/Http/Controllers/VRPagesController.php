@@ -73,6 +73,7 @@ class VRPagesController extends Controller
 //                $missingValues = $missingValues . ' ' . $value . ',';
 //            }
         }
+
         if ($missingValues != '') {
             $missingValues = substr($missingValues, 0, -1);
             $configuration['error'] = ['message' => trans($missingValues)];
@@ -94,7 +95,7 @@ class VRPagesController extends Controller
     public function adminShow($id)
     {
         $dataFromModel = new VRPages();
-//      TODO take category name from categories table, not categries id from pages table
+//      TODO take categorie
 // $configuration['record'] = VRPages::find($id)->where('id', '=', $id)->with(['category'])->get()->toArray();
         $configuration['record'] = VRPages::find($id)->toArray();
         $configuration['tableName'] = $dataFromModel->getTableName();
