@@ -110,8 +110,8 @@ class VRPagesController extends Controller {
 
         $data['pages_id']=$record['id'];
 
-        $titile = $data['title'];
-        $data['slug']=str_slug($titile, '-');
+        $title = $data['title'];
+        $data['slug']=str_slug($title, '-');
 
         VRPagesTranslations::create($data);
 

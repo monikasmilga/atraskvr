@@ -1,5 +1,6 @@
 <?php namespace App\Http\Controllers;
 
+use App\Models\VRPagesResourcesConnections;
 use Illuminate\Routing\Controller;
 
 class VRResourcesController extends Controller {
@@ -46,7 +47,17 @@ class VRResourcesController extends Controller {
 	 */
 	public function store()
 	{
-		//
+        $resource = request()->file('thefile');
+
+        $resourceController = new VRResourcesController();
+
+        $record = $resourceController->upload($resource);
+
+        VRPagesResourcesConnections::create([
+            'pages_id' => ,
+            'resources_id' => ,
+
+        ]);
 	}
 
 	/**
