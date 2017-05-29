@@ -68,9 +68,11 @@ class VRPagesCategoriesController extends Controller
             return view('admin.createform', $configuration);
         }
 
-        VRPagesCategories::create([
-            'id' => $data['id']
-        ]);
+//        VRPagesCategories::create([
+//            'id' => $data['id']
+//        ]);
+
+        VRPagesCategories::create($data);
 
         $configuration['comment'] = ['message' => trans('Record added successfully')];
 
