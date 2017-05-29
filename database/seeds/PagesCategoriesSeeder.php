@@ -2,8 +2,9 @@
 
 use App\Models\VRPagesCategories;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
 
-class CategoriesSeeder extends Seeder
+class PagesCategoriesSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -14,7 +15,8 @@ class CategoriesSeeder extends Seeder
     {
         {
             $list = [
-                ["id" => "virtualus_kambariai_id"],
+                ["id" => "without_categories_id", "name" => "Does not have a category"],
+                ["id" => "vr_categories_id", "name" => "virtualus_kambariai_kategorija"],
 
             ];
             DB::beginTransaction();
