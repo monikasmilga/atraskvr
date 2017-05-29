@@ -83,11 +83,11 @@
                 </div>
 
                 <div class="links">
-                    <a href="/phpmyadmin">PHP My Admin</a>
-                    <a href="/admin/pages/create">Admin page create form</a>
+                    <a href="/phpmyadmin" target="_blank">PHP My Admin</a>
+                    <a href="/admin/pages/create" target="_blank">Admin page create form</a>
                     <a href="https://laravel-news.com">News</a>
                     <a href="https://forge.laravel.com">Forge</a>
-                    <a href="https://github.com/CodeAcademyDreamTeam/atraskvr">Dream Team GitHub</a>
+                    <a href="https://github.com/CodeAcademyDreamTeam/atraskvr" target="_blank">Dream Team GitHub</a>
                 </div>
             </div>
         </div>
