@@ -110,4 +110,6 @@ class VROrdersController extends Controller
 
         return view('admin.list', $configuration);
     }
+
+
 }
