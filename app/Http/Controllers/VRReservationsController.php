@@ -35,6 +35,7 @@ class VRReservationsController extends Controller
 
 
         $startTime = Carbon::today()->addHours(11);
+
         $endTime = Carbon::today()->addHour(22);
 
         $startDate = Carbon::today();

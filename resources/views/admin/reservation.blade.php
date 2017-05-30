@@ -4,11 +4,22 @@
 @section('content')
 
 
+    <div class="container">
+    <nav aria-label="...">
+        <ul class="pagination pagination-lg justify-content-center">
+
+
+
+
     @foreach($days as $day)
 
-        <a href="{{$day}}">{{$day}}</a><br>
+                <li class="page-item"><a class="page-link" href="{{route('app.reservations.create', $day)}}">{{$day}}</a></li>
 
     @endforeach
+
+        </ul>
+
+    </nav>
 
     <br><br>
 
@@ -22,7 +33,7 @@
 
                 @if($day == $date_from_url)
 
-                    <p>{{$day}}</p>
+                    <h1 class="display-4">{{$day}}</h1>
 
                     @foreach($experiences as $experience)
                         <div class="experience-checkbox-group">
@@ -84,6 +95,8 @@
             {{csrf_field()}}
             <input class="btn btn-sm btn-primary" type="submit">
     </form>
+
+    </div>
 
 
 @endsection
