@@ -4,9 +4,6 @@
 @section('content')
 
 
-    {{$disabled = 'disabled'}}
-
-
     @foreach($days as $day)
 
         <a href="{{$day}}">{{$day}}</a><br>
@@ -40,20 +37,22 @@
                                 @endif
                                     <input type="checkbox" name="{{$experience['id'] . '[]'}}" value="{{$day . ' ' . $value}}"
 
+                                        @if(isset($reservations))
+                                            @foreach($reservations as $reservation)
 
-                                        @foreach($reservations as $reservation)
+                                                @foreach($reservation['time'] as $time)
 
-                                            @foreach($reservation['time'] as $time)
+                                                    @if($time == $day . ' ' . $value && $experience['id'] == $reservation['pages_id'])
 
-                                                @if($time == $day . ' ' . $value && $experience['id'] == $reservation['pages_id'])
+                                                        {{'disabled'}}
 
-                                                    {{$disabled}}
+                                                    @endif
 
-                                                @endif
+                                                @endforeach
 
                                             @endforeach
 
-                                        @endforeach
+                                        @endif
 
                                     >{{$value}}
 
