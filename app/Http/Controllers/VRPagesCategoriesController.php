@@ -132,17 +132,13 @@ class VRPagesCategoriesController extends Controller
 
         $record->update($data);
 
-        $dataFromModel = new VRPagesCategories();
-        $configuration['fields'] = $dataFromModel->getFillable();
-        $configuration['tableName'] = $dataFromModel->getTableName();
-
         $configuration['list_data'] = VRPagesCategories::get()->toArray();
 
         if(Route::has('app.' . $configuration['tableName'] . '_translations.create')){
             $configuration[ 'translationExist' ] = true;
         }
 
-        $configuration['fullComment'] = 'Record updated successfully';
+        $configuration['comment'] = ['message' => trans('Record added successfully')];
 
         return view('admin.list', $configuration);
     }
