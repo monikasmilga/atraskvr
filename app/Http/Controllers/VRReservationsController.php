@@ -35,10 +35,11 @@ class VRReservationsController extends Controller
 
 
         $startTime = Carbon::today()->addHours(11);
+
         $endTime = Carbon::today()->addHour(22);
 
         $startDate = Carbon::today();
-        $endDate = Carbon::today()->addDays(5);
+        $endDate = Carbon::today()->addWeek(2);
 
 
         $configuration['date_from_url'] = $date;
