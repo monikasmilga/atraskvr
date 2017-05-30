@@ -43,6 +43,39 @@ class VROrdersController extends Controller
     }
 
     /**
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     *
+     * Function takes Order data from Order create form and stores to data base
+     */
+    public function adminStore()
+    {
+        $data = request()->all();
+
+        $dataFromModel = new VROrders();
+        $configuration['fields'] = $dataFromModel->getFillable();
+        $configuration['tableName'] = $dataFromModel->getTableName();
+
+        $missingValues= '';
+        foreach($configuration['fields'] as $key=> $value) {
+            if (!isset($data[$value])) {
+                $missingValues = $missingValues . ' ' . $value . ',';
+            }
+        }
+        if ($missingValues != ''){
+            $missingValues = substr($missingValues, 1, -1);
+            $configuration['error'] = ['message' => trans('Please enter ' . $missingValues)];
+            return view('admin.createform', $configuration);
+        }
+
+        VROrders::create($data);
+
+        $configuration['comment'] = ['message' => trans('Record added successfully')];
+
+        return view('admin.createform', $configuration);
+    }
+
+
+    /**
      * @param $id
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      *
@@ -89,13 +122,13 @@ class VROrdersController extends Controller
         $configuration['fields'] = $dataFromModel->getFillable();
         $configuration['tableName'] = $dataFromModel->getTableName();
 
-        $missingValues= '';
-        foreach($configuration['fields'] as $key=> $value) {
+        $missingValues = '';
+        foreach ($configuration['fields'] as $key => $value) {
             if (!isset($data[$value])) {
                 $missingValues = $missingValues . ' ' . $value . ',';
             }
         }
-        if ($missingValues != ''){
+        if ($missingValues != '') {
             $missingValues = substr($missingValues, 1, -1);
             $configuration['error'] = ['message' => trans('Please enter ' . $missingValues)];
             $configuration['record'] = VRPagesCategories::find($id)->toArray();
@@ -111,5 +144,11 @@ class VROrdersController extends Controller
         return view('admin.list', $configuration);
     }
 
-
+    public function adminDestroy($id)
+    {
+        if (VROrders::destroy($id))
+        {
+            return json_encode(["success" => true, "id" => $id]);
+        }
+    }
 }
