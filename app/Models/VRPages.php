@@ -13,4 +13,10 @@ class VRPages extends CoreModel
     {
         return $this->hasOne(VRPagesCategories::class, 'id', 'pages_categories_id');
     }
+
+    public function translations()
+    {
+        return $this->hasMany(VRPagesTranslations::class, 'pages_id', 'id');
+    }
+
 }

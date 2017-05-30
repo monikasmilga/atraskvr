@@ -4,39 +4,34 @@
 
     <div class="container">
         <div class="col-md-12"><br>
+            <h3>
+            @if(isset($record['name']))
+                @if($record['name']!= null)
+                    @if(isset($record['name']))
+                        {{ucfirst($record['name']) . ' translations'}}
+                    @endif
+                @endif
+            @else
+                @if($tableName == 'pages_categories')
+                    {{ucfirst(substr($tableName, 0, -3)) . 'y translations'}}
+                @else{{ucfirst(substr($tableName, 0, -1)) . ' translations'}}
+                @endif
+            @endif
+            </h3><br>
 
-            <h3>Create & update {{$tableName . ' translations'}}</h3><br>
             <table class="table">
-
                 <thead class="thead-default">
                 <tr>
                     <th>Key</th>
-                    <th>General value</th>
                     @foreach($languages_names as $key => $value)
                         <th>{{$value}} value</th>
                     @endforeach
                 </tr>
-
                 </thead>
                 <tbody>
-                @foreach($record as $key_data => $value_data)
-                    @foreach($fields as $key => $value)
-                        @if($key_data == $value)
-                            <tr>
-                                <td class="td-default">{{$key_data}}</td>
-                                <td>{{$value_data}}</td>
-                                @for($i = 0; $i  < count($languages); $i++)
-                                    <td></td>
-                                @endfor
-                            </tr>
-                        @endif
-                    @endforeach
-                @endforeach
-
                 @foreach($fields_translations as $key => $field_value)
                     <tr>
                         <td>{{$field_value}}</td>
-                        <td></td>
 
                         {!! Form::open(['url' => route('app.' . $tableName . '_translations.create', $record['id'])]) !!}
 
