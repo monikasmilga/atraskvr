@@ -13,7 +13,13 @@
 
     @foreach($days as $day)
 
-                <li class="page-item"><a class="page-link" href="{{route('app.reservations.create', $day)}}">{{$day}}</a></li>
+                <li class="page-item
+
+                @if($date_from_url == $day)
+                      {{' active'}}
+                @endif
+
+                "><a class="page-link" href="{{route('app.reservations.create', $day)}}">{{$day}}</a></li>
 
     @endforeach
 
