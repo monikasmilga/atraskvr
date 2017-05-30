@@ -23,6 +23,7 @@ class VRPagesCategoriesTranslationsController extends Controller
         $configuration['fields_translations'] = $dataFromModel2->getFillable();
         unset($configuration['fields_translations'][1]);
         unset($configuration['fields_translations'][2]);
+        unset($configuration['fields_translations'][4]);
 
         $configuration['translations'] = VRPagesCategoriesTranslations::all()->where('categories_id', '=', $id)->toArray();
 
@@ -41,6 +42,7 @@ class VRPagesCategoriesTranslationsController extends Controller
 
         unset($fields[1]);
         unset($fields[2]);
+        unset($fields[4]);
 
         $languages = VRLanguages::all()->pluck('name', 'id')->toArray();
 
@@ -52,6 +54,12 @@ class VRPagesCategoriesTranslationsController extends Controller
             {
                 $key = $field . "_" . $language_id;
                 $record[$field] = $data[$key];
+
+                if($record[$field] == $record['name'])
+                {
+                    $record['slug'] = str_slug($record[$field], '-');
+                }
+
                 if(!$record[$field]){
                     $comment[$name] = $name . ' translation fields not full filed, the operation aborted';
                 }

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\VRLanguages;
 use App\Models\VRPages;
 use App\Models\VRPagesCategories;
 use App\Models\VRPagesTranslations;
@@ -97,13 +98,22 @@ class VRPagesController extends Controller
     public function adminShow($id)
     {
         $dataFromModel = new VRPages();
-//      TODO take categorie
-// $configuration['record'] = VRPages::find($id)->where('id', '=', $id)->with(['category'])->get()->toArray();
         $configuration['record'] = VRPages::find($id)->toArray();
         $configuration['tableName'] = $dataFromModel->getTableName();
 
+        $pagesCategoriesId = VRPages::find($id)->pages_categories_id;
+        $configuration['category'] = VRPagesCategories::find($pagesCategoriesId)->name;
+
         $resourcesTable_id = VRPages::find($id)->cover_image_id;
         $configuration['coverImage'] = VRResources::find($resourcesTable_id)->path;
+
+        $dataFromModel2 = new VRPagesTranslations();
+        $configuration['fields_translations'] = $dataFromModel2->getFillable();
+        unset($configuration['fields_translations'][1]);
+        unset($configuration['fields_translations'][2]);
+
+        $configuration['translations'] = VRPagesTranslations::all()->where('pages_id', '=', $id)->toArray();
+        $configuration['languages_names'] = VRLanguages::all()->pluck('name', 'id')->toArray();
 
         return view('admin.single', $configuration);
     }
