@@ -35,17 +35,11 @@ class VROrdersController extends Controller
         $dataFromModel = new VROrders();
         $configuration['fields'] = $dataFromModel->getFillable();
         $configuration['tableName'] = $dataFromModel->getTableName();
-     //   dd($configuration);
-        unset ($configuration['fields'][1]);
-
-
 
         $configuration['enum_dropDown'] = [
             "label" => trans('status'),
             "values" => VROrders::$STATUS
         ];
-
-//TODO figure out how to show ENUM values in dropdown of "STATUS" field
 
         return view('admin.createform', $configuration);
     }
@@ -113,6 +107,11 @@ class VROrdersController extends Controller
 
         $configuration['record'] = VROrders::find($id)->toArray();
 
+        $configuration['enum_dropDown'] = [
+            "label" => trans('status'),
+            "values" => VROrders::$STATUS
+        ];
+
         return view('admin.editform', $configuration);
     }
 
@@ -139,7 +138,7 @@ class VROrdersController extends Controller
         if ($missingValues != '') {
             $missingValues = substr($missingValues, 1, -1);
             $configuration['error'] = ['message' => trans('Please enter ' . $missingValues)];
-            $configuration['record'] = VRPagesCategories::find($id)->toArray();
+            $configuration['record'] = VROrders::find($id)->toArray();
             return view('admin.editform', $configuration);
         }
 
