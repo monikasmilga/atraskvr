@@ -73,12 +73,12 @@
                     <div class="card">
                         <div class="card-header" role="tab" id="headingOne">
                             <h5 class="mb-0">
-                                <a data-toggle="collapse" data-parent="#accordion" href="#{{$experience['translations'][0]['title']}}" aria-expanded="true" aria-controls="{{$experience['translations'][0]['title']}}">
+                                <a data-toggle="collapse" data-parent="#accordion" href="#{{str_replace(" ","_",$experience['translations'][0]['title'])}}" aria-expanded="true" aria-controls="{{str_replace(" ","_",$experience['translations'][0]['title'])}}">
                                     {{$experience['translations'][0]['title']}}
                                 </a>
                             </h5>
                         </div>
-                        <div id="{{$experience['translations'][0]['title']}}" class="collapse" role="tabpanel" aria-labelledby="headingOne">
+                        <div id="{{str_replace(" ","_",$experience['translations'][0]['title'])}}" class="collapse" role="tabpanel" aria-labelledby="headingOne">
                             <div class="card-block">
                         @foreach($times as $key => $value)
 
