@@ -21,16 +21,15 @@
 		
 			{!! Form::open(['url' => route('app.' . $tableName . '.store'), 'files' => true]) !!}
 
-			@if(isset($enum_dropDown))
-				<div class="form-group">
-					{!! Form::label($enum_dropDown['label'], 'Choose ' . $enum_dropDown['label']) !!}
-					{{Form::select($enum_dropDown['label'], $enum_dropDown['values'], '', ['class' => 'form-control'])}}<br/>
-				</div>
-			@endif
-
 			@foreach($fields as $field)
 
 				@if($field == 'user_id')
+
+				@elseif(isset($enum_dropDown))
+					<div class="form-group">
+						{!! Form::label($enum_dropDown['label'], 'Choose ' . $enum_dropDown['label']) !!}
+						{{Form::select($enum_dropDown['label'], $enum_dropDown['values'], '', ['class' => 'form-control'])}}<br/>
+					</div>
 
 				@elseif($field == 'cover_image_id' and $tableName == 'pages')
 					<div class="form-group">

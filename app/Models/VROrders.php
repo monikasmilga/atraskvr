@@ -10,4 +10,5 @@ class VROrders extends CoreModel
     protected $fillable = ['id', 'status'];
 
     public static $STATUS = ['reserved' => 'reserved', 'canceled' => 'canceled', 'active' => 'active'];
+
 }
