@@ -14,3 +14,11 @@ input[type=checkbox] {
 
 
 }
+
+.display-4 {
+    padding: 20px;
+}
+
+.submit-button {
+    margin: 40px 0;
+}
