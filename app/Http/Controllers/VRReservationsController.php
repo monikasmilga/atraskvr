@@ -34,12 +34,24 @@ class VRReservationsController extends Controller
             $date = Carbon::today()->toDateString();
 
 
+
         $startTime = Carbon::today()->addHours(11);
+
+        $workStart = Carbon::today()->addHours(11);
+
+
+
+
+
+
 
         $endTime = Carbon::today()->addHour(22);
 
         $startDate = Carbon::today();
         $endDate = Carbon::today()->addWeek(2);
+
+
+
 
 
         $configuration['date_from_url'] = $date;
@@ -59,31 +71,50 @@ class VRReservationsController extends Controller
     public function adminStore()
     {
 
+        $timesReserved = VRReservations::pluck('time');
+        $timesReservedArray = [];
+
+        foreach ($timesReserved as $value) {
+            foreach ($value as $gg) {
+
+                array_push($timesReservedArray, $gg);
+
+            }
+        }
+
+
         $data = request()->all();
+        unset($data['_token']);
+
+
+
+
+
+
+
 
         $order = VROrders::create([
             'status' => 'reserved'
         ]);
 
 
+
         foreach ($data as $key => $value) {
-            if($key == '_token') {
-
-            } else {
-
-                VRReservations::create([
-
-                    'time' => $value,
-                    'pages_id' => $key,
-                    'orders_id' => $order['id']
-
-                ]);
-            }
 
 
+                    VRReservations::create([
 
-        }
+                        'time' => $value,
+                        'pages_id' => $key,
+                        'orders_id' => $order['id']
 
+                    ]);
+
+                }
+
+
+                }
+    
 
 
 
@@ -92,15 +123,5 @@ class VRReservationsController extends Controller
 
 
 
-//        VRReservations::create([
-//
-//
-//
-//        ]);
-
-
-
-
-    }
     
 }
