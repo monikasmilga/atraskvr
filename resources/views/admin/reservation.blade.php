@@ -4,11 +4,28 @@
 @section('content')
 
 
+    <div class="container">
+    <nav aria-label="...">
+        <ul class="pagination pagination-lg justify-content-center">
+
+
+
+
     @foreach($days as $day)
 
-        <a href="{{$day}}">{{$day}}</a><br>
+                <li class="page-item
+
+                @if($date_from_url == $day)
+                      {{' active'}}
+                @endif
+
+                "><a class="page-link" href="{{route('app.reservations.create', $day)}}">{{$day}}</a></li>
 
     @endforeach
+
+        </ul>
+
+    </nav>
 
     <br><br>
 
@@ -22,7 +39,7 @@
 
                 @if($day == $date_from_url)
 
-                    <p>{{$day}}</p>
+                    <h1 class="display-4">{{$day}}</h1>
 
                     @foreach($experiences as $experience)
                         <div class="experience-checkbox-group">
@@ -35,29 +52,28 @@
                                     <br>
 
                                 @endif
+                                    <input type="checkbox" name="{{$experience['id'] . '[]'}}" value="{{$day . ' ' . $value}}"
+
+                                        @if(isset($reservations))
+                                            @foreach($reservations as $reservation)
+
+                                                @foreach($reservation['time'] as $time)
+
+                                                    @if($time == $day . ' ' . $value && $experience['id'] == $reservation['pages_id'])
+
+                                                        {{'disabled'}}
+
+                                                    @endif
+
+                                                @endforeach
+
+                                            @endforeach
+
+                                        @endif
+
+                                    >{{$value}}
 
 
-                                    @foreach($reservations as $reservation)
-
-                                        @foreach($reservation['time'] as $time)
-
-                                            @if($time == $day . ' ' . $value && $experience['id'] == $reservation['pages_id'])
-
-                                                <input style="outline: 1px solid red" type="checkbox" name="{{$experience['id'] . '[]'}}" value="{{$day . ' ' . $value}}" disabled>{{$value}}
-
-
-                                            @else(end($reservations) == $reservation)
-
-                                                @if($time !== $day . ' ' . $value)
-                                                    <input type="checkbox" name="{{$experience['id'] . '[]'}}" value="{{$day . ' ' . $value}}">{{$value}}
-                                                @endif
-
-                                            @endif
-
-
-                                        @endforeach
-
-                                    @endforeach
 
 
 
@@ -85,6 +101,8 @@
             {{csrf_field()}}
             <input class="btn btn-sm btn-primary" type="submit">
     </form>
+
+    </div>
 
 
 @endsection
