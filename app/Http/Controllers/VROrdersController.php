@@ -22,6 +22,10 @@ class VROrdersController extends Controller
 
         $configuration['list_data'] = VROrders::get()->where('deleted_at', '=', null)->toArray();
 
+        if(Route::has('app.' . $configuration['tableName'] . '_translations.create')){
+            $configuration[ 'translationExist' ] = true;
+        }
+
         return view('admin.list', $configuration);
     }
 
@@ -145,8 +149,13 @@ class VROrdersController extends Controller
         $record = VROrders::find($id);
         $record->update($data);
 
-        $configuration['list_data'] = VROrders::get()->toArray();
-        $configuration['comment'] = ['message' => trans('Record added successfully')];
+        $configuration['list_data'] = VROrders::get()->where('deleted_at', '=', null)->toArray();
+
+        if(Route::has('app.' . $configuration['tableName'] . '_translations.create')){
+            $configuration[ 'translationExist' ] = true;
+        }
+
+        $configuration['comment'] = ['message' => trans('Record updated successfully')];
 
         return view('admin.list', $configuration);
     }

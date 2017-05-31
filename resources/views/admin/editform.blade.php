@@ -21,13 +21,6 @@
 
             {!! Form::open(['url' => route('app.' . $tableName . '.update', $record['id'])]) !!}
 
-            {{--@if(isset($enum_dropDown))--}}
-                {{--<div class="form-group">--}}
-                    {{--{!! Form::label($enum_dropDown['label'], 'Choose ' . $enum_dropDown['label']) !!}--}}
-                    {{--{{Form::select($enum_dropDown['label'], $enum_dropDown['values'], '', ['class' => 'form-control'])}}<br/>--}}
-                {{--</div>--}}
-            {{--@endif--}}
-
             @foreach($fields as $field)
 
                 @if(isset($enum_dropDown))
