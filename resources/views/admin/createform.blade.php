@@ -18,55 +18,55 @@
   					<strong>{{ $comment['message'] }}</strong>
 				</div>
 			@endif
-		
-			{!! Form::open(['url' => route('app.' . $tableName . '.store'), 'files' => true]) !!}
 
+			{!! Form::open(['url' => route('app.' . $tableName . '.store'), 'files' => true]) !!}
 
 			@foreach($fields as $field)
 
 				@if($field == 'user_id')
 
 				@elseif($field == 'cover_image_id' and $tableName == 'pages')
-					<div class="form-group">
-						{!! Form::file('image', ['class' => 'form-control'])!!}<br/>
-					</div>
+				{{--@elseif($field == 'path' || $tableName == 'resources')--}}
+                <div class="form-group">
+                    {!! Form::file('images[]', array('multiple'=>true)) !!}<br/>
+                </div>
 
-				@elseif(isset($dropdown) and substr($field, -3) == '_id')
-					<div class="form-group">
-						{!! Form::label($field, 'Choose ' . ucfirst(substr($field, 0, -4) . ':')) !!}
-						{{Form::select($field, $dropdown[$field], '', ['class' => 'form-control'])}}<br/>
-					</div>
+            @elseif(isset($dropdown) and substr($field, -3) == '_id')
+                <div class="form-group">
+                    {!! Form::label($field, 'Choose ' . ucfirst(substr($field, 0, -4) . ':')) !!}
+                    {{Form::select($field, $dropdown[$field], '', ['class' => 'form-control'])}}<br/>
+                </div>
 
-				@elseif(isset($checkbox[$field]))
-					{!! Form::label($field, 'Pick ' . ucfirst($field . ':')) !!}<br/>
-					@foreach($checkbox[$field] as $key => $checkboxItem)
-							{{Form::checkbox($field.'[]', $key)}}
-							{{Form::label($checkboxItem, $checkboxItem)}}<br/>
-					@endforeach<br/>
+            @elseif(isset($checkbox[$field]))
+                {!! Form::label($field, 'Pick ' . ucfirst($field . ':')) !!}<br/>
+                @foreach($checkbox[$field] as $key => $checkboxItem)
+                        {{Form::checkbox($field.'[]', $key)}}
+                        {{Form::label($checkboxItem, $checkboxItem)}}<br/>
+                @endforeach<br/>
 
-				@elseif($field == 'password')
-					<div class="form-group">
-						{!! Form::label($field, 'Enter ' . ucfirst($field . ':')) !!}
-						{!! Form::password($field, ['class' => 'form-control'])!!}<br/>
-					</div>
+            @elseif($field == 'password')
+                <div class="form-group">
+                    {!! Form::label($field, 'Enter ' . ucfirst($field . ':')) !!}
+                    {!! Form::password($field, ['class' => 'form-control'])!!}<br/>
+                </div>
 
-				@elseif($field)
-					<div class="form-group">
-							{!! Form::label($field, 'Enter ' . ucfirst($field . ':')) !!}
-							{!! Form::text($field, '', ['class' => 'form-control'])!!}<br/>
-					</div>
+            @elseif($field && $tableName != 'resources')
+                <div class="form-group">{{$field}}
+                        {!! Form::label($field, 'Enter ' . ucfirst($field . ':')) !!}
+                        {!! Form::text($field, '', ['class' => 'form-control'])!!}<br/>
+                </div>
 
-				@endif
-
-
-			@endforeach
+            @endif
 
 
-			{!! Form::submit('Create' , ['class' => 'btn btn-success']) !!}
-			<a class="btn btn-primary" href="{{ route('app.' . $tableName . '.index') }}">{{ucfirst($tableName)}} list</a>
+        @endforeach
 
-			{!! Form::close() !!}
-		</div>
-	</div>
+
+        {!! Form::submit('Create' , ['class' => 'btn btn-success']) !!}
+        <a class="btn btn-primary" href="{{ route('app.' . $tableName . '.index') }}">{{ucfirst($tableName)}} list</a>
+
+        {!! Form::close() !!}
+    </div>
+</div>
 
 @endsection

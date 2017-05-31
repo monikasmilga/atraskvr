@@ -49,7 +49,7 @@ class VRPagesController extends Controller
         $configuration['fields'] = $dataFromModel->getFillable();
         $configuration['tableName'] = $dataFromModel->getTableName();
 
-        $configuration['dropdown']['pages_categories_id'] = VRPagesCategories::all()->pluck('name', 'id')->toArray();
+        $configuration['dropdown']['pages_categories_id'] = VRPagesCategories::all()->pluck('id', 'id')->toArray();
 
         return view('admin.createform', $configuration);
     }
