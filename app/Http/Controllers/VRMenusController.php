@@ -139,7 +139,7 @@ class VRMenusController extends Controller
             $configuration[ 'translationExist' ] = true;
         }
 
-        $configuration['fullComment'] = 'Record updated successfully';
+        $configuration['comment'] = ['message' => trans('Record added successfully')];
 
         return view('admin.list', $configuration);
     }

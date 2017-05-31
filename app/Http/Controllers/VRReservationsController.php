@@ -9,11 +9,13 @@ use App\Models\VRReservations;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
-use Illuminate\Pagination\LengthAwarePaginator;
+
 
 
 class VRReservationsController extends Controller
 {
+
+
     private function generateDateRange(Carbon $start_date, Carbon $end_date, $addWhat, $value, $dateFormat)
     {
         $dates = [];
@@ -26,49 +28,26 @@ class VRReservationsController extends Controller
     }
 
 
-    public function adminCreate()
+    public function adminCreate($date = null)
     {
+        if ($date == null)
+            $date = Carbon::today()->toDateString();
 
 
+        $startTime = Carbon::today()->addHours(11);
 
-
-        $startTime = Carbon::today()->addHour(11);
         $endTime = Carbon::today()->addHour(22);
 
         $startDate = Carbon::today();
-        $endDate = Carbon::today()->addDays(3);
+        $endDate = Carbon::today()->addWeek(2);
 
 
-
+        $configuration['date_from_url'] = $date;
         $configuration['times'] = $this->generateDateRange($startTime, $endTime, 'addMinutes', 10, 'H:i');
         $configuration['days'] = $this->generateDateRange($startDate, $endDate, 'addDays', 1, 'Y-m-d');
-        $configuration['today'] = Carbon::createFromFormat('Y-m-d', Carbon::today()->toDateString())->toDateString();
-
-
-
-
-
-
-
-
-
-
-
-//        $masyvas = [4, 7, 5, 8];
-//        $currentPage = LengthAwarePaginator::resolveCurrentPage();
-//        $col = new Collection($masyvas);
-//        $perPage = 1;
-//        $currentPageSearchResults = $col->slice(($currentPage - 1) * $perPage, $perPage)->all();
-//        $configuration['entries'] = new LengthAwarePaginator($currentPageSearchResults, count($col), $perPage);
-
-
-
-
-
-
-
-
         $configuration['experiences'] = VRPages::with('translations')->get()->toArray();
+        //$configuration['reservations'] = VRReservations::pluck('time', 'pages_id')->toArray();
+        $configuration['reservations'] = VRReservations::get()->toArray();
 
 
 
@@ -94,7 +73,7 @@ class VRReservationsController extends Controller
 
                 VRReservations::create([
 
-                    'time' => json_encode($value),
+                    'time' => $value,
                     'pages_id' => $key,
                     'orders_id' => $order['id']
 

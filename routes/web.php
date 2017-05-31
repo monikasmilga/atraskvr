@@ -17,7 +17,7 @@ Route::get( '/', function () {
     return view('welcome');
 });
 
-Route::group(['prefix' => 'admin'], function () {
+Route::group(['prefix' => 'admin', 'middleware' => 'check-role-super-admin'], function () {
 
     Route::get('/', function () {
         return view('admin.welcome_admin');
@@ -210,7 +210,7 @@ Route::group(['prefix' => 'admin'], function () {
 
         Route::get('/', ['as' => 'app.reservations.index','uses' => 'VRReservationsController@adminIndex']);
 
-        Route::get('/create', ['as' => 'app.reservations.create','uses' => 'VRReservationsController@adminCreate']);
+        Route::get('/create/{date?}', ['as' => 'app.reservations.create','uses' => 'VRReservationsController@adminCreate']);
         Route::post('/create', ['as' => 'app.reservations.store', 'uses' => 'VRReservationsController@adminStore']);
 
         Route::group(['prefix' => '{id}'], function () {
@@ -261,3 +261,9 @@ Route::group(['prefix' => 'admin'], function () {
     });
 
 });
+
+
+
+Auth::routes();
+
+Route::get('/home', 'HomeController@index')->name('home');
