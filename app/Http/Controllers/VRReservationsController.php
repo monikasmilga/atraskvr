@@ -16,6 +16,13 @@ class VRReservationsController extends Controller
 {
 
 
+
+
+
+
+
+
+
     private function generateDateRange(Carbon $start_date, Carbon $end_date, $addWhat, $value, $dateFormat)
     {
         $dates = [];
@@ -28,7 +35,7 @@ class VRReservationsController extends Controller
     }
 
 
-    public function adminCreate($date = null)
+    public function adminCreate($date = null, $message = null)
     {
         if ($date == null)
             $date = Carbon::today()->toDateString();
@@ -53,12 +60,11 @@ class VRReservationsController extends Controller
 
 
 
-
+        $configuration['message'] = $message;
         $configuration['date_from_url'] = $date;
         $configuration['times'] = $this->generateDateRange($startTime, $endTime, 'addMinutes', 10, 'H:i');
         $configuration['days'] = $this->generateDateRange($startDate, $endDate, 'addDays', 1, 'Y-m-d');
         $configuration['experiences'] = VRPages::with('translations')->get()->toArray();
-        //$configuration['reservations'] = VRReservations::pluck('time', 'pages_id')->toArray();
         $configuration['reservations'] = VRReservations::get()->toArray();
 
 
@@ -71,55 +77,62 @@ class VRReservationsController extends Controller
     public function adminStore()
     {
 
-        $timesReserved = VRReservations::pluck('time');
-        $timesReservedArray = [];
-
-        foreach ($timesReserved as $value) {
-            foreach ($value as $gg) {
-
-                array_push($timesReservedArray, $gg);
-
-            }
-        }
+        $timesReserved = VRReservations::pluck('time', 'pages_id');
 
 
         $data = request()->all();
         unset($data['_token']);
 
 
-
-
-
-
-
-
-        $order = VROrders::create([
-            'status' => 'reserved'
-        ]);
-
+        $message = '';
 
 
         foreach ($data as $key => $value) {
 
+            foreach ($timesReserved as $timesKey => $timesValue) {
 
-                    VRReservations::create([
-
-                        'time' => $value,
-                        'pages_id' => $key,
-                        'orders_id' => $order['id']
-
-                    ]);
+                if($key == $timesKey && $value == $timesValue) {
+                    $message =  'Time already taken';
+                    break;
 
                 }
 
+            }
 
-                }
-    
+        }
+
+            if(!strlen($message) > 0){
+
+                $order = VROrders::create([
+                    'status' => 'reserved'
+                ]);
+
+            foreach ($data as $key => $value) {
+
+                VRReservations::create([
+
+                    'time' => $value,
+                    'pages_id' => $key,
+                    'orders_id' => $order['id']
+
+                ]);
+
+            }
 
 
 
+            } else {
 
 
+                return $this->adminCreate(null, $message);
+            }
+
+
+
+        $message = 'Time reserved successfully!';
+        return $this->adminCreate(null, $message);
+
+    }
 
 
 
