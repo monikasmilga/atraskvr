@@ -35,7 +35,15 @@ class VROrdersController extends Controller
         $dataFromModel = new VROrders();
         $configuration['fields'] = $dataFromModel->getFillable();
         $configuration['tableName'] = $dataFromModel->getTableName();
-        $configuration['dropdown']['status'] = $dataFromModel->all();
+     //   dd($configuration);
+        unset ($configuration['fields'][1]);
+
+
+
+        $configuration['enum_dropDown'] = [
+            "label" => trans('status'),
+            "values" => VROrders::$STATUS
+        ];
 
 //TODO figure out how to show ENUM values in dropdown of "STATUS" field
 

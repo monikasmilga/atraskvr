@@ -20,26 +20,20 @@ class CreateAdministrator extends Command
 
     public function handle()
     {
-        if(VRUsers::get()->toArray() == [])
-        {
-            $this->comment("Creating admin user");
 
-            $record = VRUsers::create([
-                'id' => Uuid::uuid4(),
-                'name' => $name = $this->ask('Please provide name'),
-                'surname' => 'pavarde',
-                'email' => $email = $this->ask('Please provide email'),
-                'phone' => 86868686,
-                'password' => bcrypt($password = $this->secret('Please provide password')),
-            ]);
+        $this->comment("Creating admin user");
 
-            $record -> connection()-> sync('super-admin');
+        $record = VRUsers::create([
+            'id' => Uuid::uuid4(),
+            'name' => $name = $this->ask('Please provide name'),
+            'surname' => 'pavarde',
+            'email' => $email = $this->ask('Please provide email'),
+            'phone' => 86868686,
+            'password' => bcrypt($password = $this->secret('Please provide password')),
+        ]);
 
-            $this->comment("Great success!");
+        $record -> connection()-> sync('super-admin');
 
-        } else {
-
-            $this->comment("Super admin user already exists");
-        }
+        $this->comment("Great success!");
     }
 }

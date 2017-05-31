@@ -17,7 +17,7 @@ Route::get( '/', function () {
     return view('welcome');
 });
 
-Route::group(['prefix' => 'admin'], function () {
+Route::group(['prefix' => 'admin', 'middleware' => 'check-role-super-admin'], function () {
 
     Route::get('/', function () {
         return view('admin.welcome_admin');
@@ -261,3 +261,9 @@ Route::group(['prefix' => 'admin'], function () {
     });
 
 });
+
+
+
+Auth::routes();
+
+Route::get('/home', 'HomeController@index')->name('home');

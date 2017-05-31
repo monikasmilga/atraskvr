@@ -4,9 +4,27 @@
 @section('content')
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
     <div class="container">
     <nav aria-label="...">
         <ul class="pagination pagination-lg justify-content-center">
+
+
+
+
+
 
 
 
@@ -23,6 +41,8 @@
 
     @endforeach
 
+
+
         </ul>
 
     </nav>
@@ -34,75 +54,128 @@
 
     <form method="POST" action="{{route('app.reservations.store')}}">
 
-        @foreach($days as $day)
-            <div class="date-checkbox-group">
 
+        <div id="accordion" role="tablist" aria-multiselectable="true">
+
+            @foreach($days as $day)
                 @if($day == $date_from_url)
-
                     <h1 class="display-4">{{$day}}</h1>
-
                     @foreach($experiences as $experience)
-                        <div class="experience-checkbox-group">
-                            {{$experience['translations'][0]['title']}}
+                    <div class="card">
+                        <div class="card-header" role="tab" id="headingOne">
+                            <h5 class="mb-0">
+                                <a data-toggle="collapse" data-parent="#accordion" href="#{{$experience['translations'][0]['title']}}" aria-expanded="true" aria-controls="{{$experience['translations'][0]['title']}}">
+                                    {{$experience['translations'][0]['title']}}
+                                </a>
+                            </h5>
+                        </div>
+                        <div id="{{$experience['translations'][0]['title']}}" class="collapse" role="tabpanel" aria-labelledby="headingOne">
+                            <div class="card-block">
+                        @foreach($times as $key => $value)
 
-                            @foreach($times as $key => $value)
+                                    @if($key % 6 == 0)
 
-                                @if($key % 6 == 0)
+                                        <br>
 
-                                    <br>
+                                    @endif
 
-                                @endif
                                     <input type="checkbox" name="{{$experience['id'] . '[]'}}" value="{{$day . ' ' . $value}}"
 
-                                        @if(isset($reservations))
-                                            @foreach($reservations as $reservation)
+                                    @if(isset($reservations))
+                                        @foreach($reservations as $reservation)
 
-                                                @foreach($reservation['time'] as $time)
+                                            @foreach($reservation['time'] as $time)
 
-                                                    @if($time == $day . ' ' . $value && $experience['id'] == $reservation['pages_id'])
+                                                @if($time == $day . ' ' . $value && $experience['id'] == $reservation['pages_id'])
 
-                                                        {{'disabled'}}
+                                                    {{'disabled'}}
 
-                                                    @endif
+                                                        @endif
+
+                                                    @endforeach
 
                                                 @endforeach
 
-                                            @endforeach
-
-                                        @endif
+                                            @endif
 
                                     >{{$value}}
 
-
-
-
-
-                            @endforeach
-
-
-                            <br>
+                        @endforeach
+                            </div>
                         </div>
+                    </div>
                     @endforeach
-
-
-                @elseif($date_from_url == null)
-
-                    <h1>Nera datos</h1>
-
-
                 @endif
+            @endforeach
+
+        </div>
 
 
 
 
-            </div>
+        {{--@foreach($days as $day)--}}
+            {{--<div class="date-checkbox-group">--}}
 
-        @endforeach
+                {{--@if($day == $date_from_url)--}}
+
+                    {{--<h1 class="display-4">{{$day}}</h1>--}}
+
+                    {{--@foreach($experiences as $experience)--}}
+                        {{--<div class="experience-checkbox-group">--}}
+                            {{--{{$experience['translations'][0]['title']}}--}}
+
+                            {{--@foreach($times as $key => $value)--}}
+
+
+                                    {{--<input type="checkbox" name="{{$experience['id'] . '[]'}}" value="{{$day . ' ' . $value}}"--}}
+
+                                        {{--@if(isset($reservations))--}}
+                                            {{--@foreach($reservations as $reservation)--}}
+
+                                                {{--@foreach($reservation['time'] as $time)--}}
+
+                                                    {{--@if($time == $day . ' ' . $value && $experience['id'] == $reservation['pages_id'])--}}
+
+                                                        {{--{{'disabled'}}--}}
+
+                                                    {{--@endif--}}
+
+                                                {{--@endforeach--}}
+
+                                            {{--@endforeach--}}
+
+                                        {{--@endif--}}
+
+                                    {{-->{{$value}}--}}
+
+                            {{--@endforeach--}}
+
+
+                            {{--<br>--}}
+                        {{--</div>--}}
+                    {{--@endforeach--}}
+
+
+                {{--@elseif($date_from_url == null)--}}
+
+                    {{--<h1>Nera datos</h1>--}}
+
+
+                {{--@endif--}}
+
+
+
+
+            {{--</div>--}}
+
+        {{--@endforeach--}}
             {{csrf_field()}}
-            <input class="btn btn-sm btn-primary" type="submit">
+            <input class="btn btn btn-primary submit-button" type="submit">
     </form>
 
     </div>
 
 
 @endsection
+
+
