@@ -16,6 +16,10 @@ class VROrdersController extends Controller
      */
     public function adminIndex()
     {
+
+        return VROrders::get();
+
+
         $dataFromModel = new VROrders();
         $configuration['fields'] = $dataFromModel->getFillable();
         $configuration['tableName'] = $dataFromModel->getTableName();
