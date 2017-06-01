@@ -22,3 +22,12 @@ input[type=checkbox] {
 .submit-button {
     margin: 40px 0;
 }
+
+#menu {
+    background-color: black ;
+}
+
+#menu a:hover, ul, a:active {
+    color: #fd7b30;
+}
+
