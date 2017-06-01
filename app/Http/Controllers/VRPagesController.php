@@ -58,34 +58,29 @@ class VRPagesController extends Controller
     {
 
         $data = request()->all();
-       
+
 
         $dataFromModel = new VRPages();
         $configuration['fields'] = $dataFromModel->getFillable();
         $configuration['tableName'] = $dataFromModel->getTableName();
         $configuration['dropdown']['pages_categories_id'] = VRPagesCategories::all()->pluck('id', 'id')->toArray();
 
-//        $missingValues = '';
-//        foreach ($configuration['fields'] as $key => $value) {
-//            if ($value == 'pages_categories_id') {
-//            } elseif (!isset($data['cover_image_id'])) {
-//                $missingValues = 'Please add cover image' . ',';
-//            }
-////            elseif (!isset($data[$value])) {
-////                $missingValues = $missingValues . ' ' . $value . ',';
-////            }
-//        }
+        $missingValues = '';
+        foreach ($configuration['fields'] as $key => $value) {
+            if ($value == 'pages_categories_id') {
+            } elseif (!isset($data['cover_image_id'])) {
+                $missingValues = 'Please add cover image' . ',';
+            }
+            elseif (!isset($data[$value])) {
+                $missingValues = $missingValues . ' ' . $value . ',';
+            }
+        }
 
-//        if ($missingValues != '') {
-//            $missingValues = substr($missingValues, 0, -1);
-//            $configuration['error'] = ['message' => trans($missingValues)];
-//            return view('admin.createform', $configuration);
-//        }
-
-//        $resource = request()->file('image');
-//        $newDTResourcesController = new VRUploadController();
-//        $record = $newDTResourcesController->upload($resource);
-//        $data['cover_image_id'] = $record->id;
+        if ($missingValues != '') {
+            $missingValues = substr($missingValues, 0, -1);
+            $configuration['error'] = ['message' => trans($missingValues)];
+            return view('admin.createform', $configuration);
+        }
 
         $allData = VRPages::create($data)->toArray();
 
@@ -108,13 +103,16 @@ class VRPagesController extends Controller
     {
         $dataFromModel = new VRPages();
         $configuration['record'] = VRPages::find($id)->toArray();
+
+        $configuration['mediaInfo'] = VRResources::find($configuration['record']['cover_image_id'])->toArray();
+
         $configuration['tableName'] = $dataFromModel->getTableName();
 
         $pagesCategoriesId = VRPages::find($id)->pages_categories_id;
         $configuration['category'] = VRPagesCategories::find($pagesCategoriesId)->name;
 
         $resourcesTable_id = VRPages::find($id)->cover_image_id;
-        $configuration['coverImage'] = VRResources::find($resourcesTable_id)->path;
+        $configuration['image'] = VRResources::find($resourcesTable_id)->path;
 
         $dataFromModel2 = new VRPagesTranslations();
         $configuration['fields_translations'] = $dataFromModel2->getFillable();

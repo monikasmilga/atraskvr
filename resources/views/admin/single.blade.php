@@ -30,9 +30,19 @@
 
                 @foreach($record as $key => $value)
                     <tr id="{{$record['id']}}">
-                        @if($key == 'cover_image_id' and $tableName == 'pages')
-                            <td>cover image</td>
-                            <td><img src={{asset($coverImage)}}/></td>
+                        @if(($key == 'cover_image_id' && $tableName == 'pages') || ($key == "mime_type" && $tableName == 'resources'))
+                            @if($mediaInfo['mime_type'] == "image/jpeg")
+                                <td>Image</td>
+                                <td><img src="{{asset($image)}}"></td>
+                                @elseif($mediaInfo['mime_type'] == "video/mp4")
+                                <td>Video</td>
+                                <td class="embed-responsive embed-responsive-4by3">
+                                    <video controls preload="none">
+                                        <source src="{{asset($record['path'])}}"><source>
+                                    </video>
+                                </td>
+                            @endif
+
                         @elseif($key == 'pages_categories_id')
                             <td>pages category</td>
                             <td>{{$category}}</td>
@@ -48,19 +58,19 @@
         </table>
 
         <h3>
-            @if($translations != null)
-                @if(isset($record['name']))
-                    {{ucfirst($record['name'] . ' translations')}}
-                @else
-                    @if($tableName == 'pages_categories')
-                    {{ucfirst(substr($tableName, 0, -3)) . 'y translations'}}
-                    @else{{ucfirst(substr($tableName, 0, -1)) . ' translations'}}
-                    @endif
-                @endif
+        @if(isset($translations) && $translations != null)
+            @if(isset($record['name']))
+                {{ucfirst($record['name'] . ' translations')}}
+            @else
+            @if($tableName == 'pages_categories')
+                {{ucfirst(substr($tableName, 0, -3)) . 'y translations'}}
+            @else{{ucfirst(substr($tableName, 0, -1)) . ' translations'}}
             @endif
+            @endif
+
         </h3><br>
         <table class="table">
-            <tbody>
+
             @foreach($translations as $translation)
                 <thead class="thead-default">
                 <tr>
@@ -68,6 +78,7 @@
                     <th>{{$languages_names[$translation['languages_id']]}}</th>
                 </tr>
                 </thead>
+                <tbody>
                 @foreach($translation as $key_translation => $value_translation)
 
                     <tr>
@@ -80,7 +91,8 @@
                     </tr>
                 @endforeach
             @endforeach
-            </tbody>
+                 </tbody>
+        @endif
         </table>
 
         <a class="btn btn-sm btn-primary" href="{{route('app.' . $tableName . '.index')}}">Back</a>
