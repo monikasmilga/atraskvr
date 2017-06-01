@@ -25,11 +25,22 @@
 
 				@if($field == 'user_id')
 
-				@elseif($field == 'cover_image_id' and $tableName == 'pages')
+				@elseif(isset($dropdown) && $field == 'cover_image_id' || ($field == 'path' and $tableName == 'resources'))
 				{{--@elseif($field == 'path' || $tableName == 'resources')--}}
                 <div class="form-group">
                     {!! Form::file('images[]', array('multiple'=>true)) !!}<br/>
                 </div>
+
+                <div class="form-group">
+
+
+                    @if(isset($dropdown[$field]))
+                    {!! Form::label($field, 'Choose ' . ucfirst(substr($field, 0, -3) . ':')) !!}
+                    {{--{{dd($dropdown)}}--}}
+                    {{Form::select($field ,$dropdown[$field], '', ['class' => 'form-control'])}}<br/>
+                    @endif
+                </div>
+
 
             @elseif(isset($dropdown) and substr($field, -3) == '_id')
                 <div class="form-group">
@@ -59,14 +70,14 @@
             @endif
 
 
-        @endforeach
+            @endforeach
 
 
-        {!! Form::submit('Create' , ['class' => 'btn btn-success']) !!}
-        <a class="btn btn-primary" href="{{ route('app.' . $tableName . '.index') }}">{{ucfirst($tableName)}} list</a>
+{!! Form::submit('Create' , ['class' => 'btn btn-success']) !!}
+<a class="btn btn-primary" href="{{ route('app.' . $tableName . '.index') }}">{{ucfirst($tableName)}} list</a>
 
-        {!! Form::close() !!}
-    </div>
+{!! Form::close() !!}
+</div>
 </div>
 
 @endsection

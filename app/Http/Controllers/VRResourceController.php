@@ -33,22 +33,24 @@ class VRResourceController extends Controller
     protected function adminStore(array $data = null)
     {
         $resource = request()->file('images');
-        dd(request()->all());
+//        dd(request()->all());
         $imgIds = [];
         foreach($resource as $image) {
             $uploadController = new VRUploadController();
             $record = $uploadController->upload($image);
             $imgIds[] = $record->id;
         }
-        if(request()->title != null || request()-> != null)
+
+
+//        if(request()->title != null)
              return  $imgIds;
-        else
-            return redirect()->route('app.resources.index');
+//        else
+//            return redirect()->route('app.resources.index');
     }
 
     public function getResourceStore()
     {
-        return $this->resourceStore();
+        return $this->adminStore();
     }
 
 }

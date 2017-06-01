@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\VRLanguages;
 use App\Models\VRPages;
 use App\Models\VRPagesCategories;
+use App\Models\VRPagesResourcesConnections;
 use App\Models\VRPagesTranslations;
 use App\Models\VRResources;
 use Illuminate\Http\Request;
@@ -49,7 +50,7 @@ class VRPagesController extends Controller
         $configuration['fields'] = $dataFromModel->getFillable();
         $configuration['tableName'] = $dataFromModel->getTableName();
 
-        $configuration['dropdown']['pages_categories_id'] = VRPagesCategories::all()->pluck('id', 'id')->toArray();
+        $configuration['dropdown']['pages_categories_id'] = VRPagesCategories::all()->pluck('name', 'id')->toArray();
 
         return view('admin.createform', $configuration);
     }
@@ -57,41 +58,51 @@ class VRPagesController extends Controller
     public function adminStore()
     {
         $data = request()->all();
-
+        ;
         $data['cover_image_id'] = request()->file('image');
 
         $dataFromModel = new VRPages();
         $configuration['fields'] = $dataFromModel->getFillable();
         $configuration['tableName'] = $dataFromModel->getTableName();
-        $configuration['dropdown']['pages_categories_id'] = VRPagesCategories::all()->pluck('name', 'id')->toArray();
+        $configuration['dropdown']['pages_categories_id'] = VRPagesCategories::all()->pluck('id', 'id')->toArray();
 
-        $missingValues = '';
-        foreach ($configuration['fields'] as $key => $value) {
-            if ($value == 'pages_categories_id') {
-            } elseif (!isset($data['cover_image_id'])) {
-                $missingValues = 'Please add cover image' . ',';
-            }
-//            elseif (!isset($data[$value])) {
-//                $missingValues = $missingValues . ' ' . $value . ',';
+//        $missingValues = '';
+//        foreach ($configuration['fields'] as $key => $value) {
+//            if ($value == 'pages_categories_id') {
+//            } elseif (!isset($data['cover_image_id'])) {
+//                $missingValues = 'Please add cover image' . ',';
 //            }
-        }
+////            elseif (!isset($data[$value])) {
+////                $missingValues = $missingValues . ' ' . $value . ',';
+////            }
+//        }
 
-        if ($missingValues != '') {
-            $missingValues = substr($missingValues, 0, -1);
-            $configuration['error'] = ['message' => trans($missingValues)];
-            return view('admin.createform', $configuration);
-        }
+//        if ($missingValues != '') {
+//            $missingValues = substr($missingValues, 0, -1);
+//            $configuration['error'] = ['message' => trans($missingValues)];
+//            return view('admin.createform', $configuration);
+//        }
 
-        $resource = request()->file('image');
-        $newDTResourcesController = new VRUploadController();
-        $record = $newDTResourcesController->upload($resource);
-        $data['cover_image_id'] = $record->id;
+//        $resource = request()->file('image');
+//        $newDTResourcesController = new VRUploadController();
+//        $record = $newDTResourcesController->upload($resource);
+//        $data['cover_image_id'] = $record->id;
 
-        VRPages::create($data);
+        $allData = VRPages::create($data)->toArray();
+
+        $resourceStore = new VRResourceController();
+        $resource_id = $resourceStore->getResourceStore($allData);
 
         $configuration['comment'] = ['message' => trans('Record added successfully')];
 
-        return view('admin.createform', $configuration);
+        foreach($resource_id as $id) {
+
+            VRPagesResourcesConnections::create([
+                'pages_id' => $allData['id'],
+                'resources_id' => $id
+            ]);
+        }
+        return view('admin.createForm', $configuration);
     }
 
     public function adminShow($id)
