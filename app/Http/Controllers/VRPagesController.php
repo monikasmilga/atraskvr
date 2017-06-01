@@ -26,10 +26,8 @@ class VRPagesController extends Controller
         $configuration['tableName'] = $dataFromModel->getTableName();
 
         $configuration['list_data'] = VRPages::get()->where('deleted_at', '=', null)->toArray();
-
-
         $configuration['coverImages'] = VRResources::all()->pluck('path', 'id')->toArray();
-        
+
         //TODO take categories
 
         if ($configuration['list_data'] == []) {
@@ -50,16 +48,17 @@ class VRPagesController extends Controller
         $configuration['fields'] = $dataFromModel->getFillable();
         $configuration['tableName'] = $dataFromModel->getTableName();
 
-        $configuration['dropdown']['pages_categories_id'] = VRPagesCategories::all()->pluck('name', 'id')->toArray();
+        $configuration['dropdown']['pages_categories_id'] = VRPagesCategories::all()->pluck('id', 'id')->toArray();
+        $configuration['dropdown']['cover_image'] = VRResources::all()->pluck('path', 'id')->toArray();
 
         return view('admin.createform', $configuration);
     }
 
     public function adminStore()
     {
+
         $data = request()->all();
-        ;
-        $data['cover_image_id'] = request()->file('image');
+       
 
         $dataFromModel = new VRPages();
         $configuration['fields'] = $dataFromModel->getFillable();
@@ -102,7 +101,7 @@ class VRPagesController extends Controller
                 'resources_id' => $id
             ]);
         }
-        return view('admin.createForm', $configuration);
+        return redirect()->route('app.pages.index');
     }
 
     public function adminShow($id)

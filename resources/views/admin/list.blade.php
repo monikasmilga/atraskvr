@@ -60,6 +60,7 @@
 
 {{--dinamic data display --}}
                         @foreach($record as $key_data => $value_data)
+
                             @foreach($fields as $key => $value)
                                 @if($key_data == $value and $key_data == 'cover_image_id')
                                         <td><img style="width:70px" src={{asset($coverImages[$value_data])}}></td>

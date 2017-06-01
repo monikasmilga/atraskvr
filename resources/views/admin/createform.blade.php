@@ -22,52 +22,54 @@
 			{!! Form::open(['url' => route('app.' . $tableName . '.store'), 'files' => true]) !!}
 
 			@foreach($fields as $field)
-
 				@if($field == 'user_id')
 
-				@elseif(isset($dropdown) && $field == 'cover_image_id' || ($field == 'path' and $tableName == 'resources'))
-				{{--@elseif($field == 'path' || $tableName == 'resources')--}}
-                <div class="form-group">
-                    {!! Form::file('images[]', array('multiple'=>true)) !!}<br/>
-                </div>
+{{--display dropdown fields to choose categories--}}
+                {{--## substr($field, -4) == 's_id' ## translates to ## $field == 'pages_categories_id' ##--}}
+                @elseif(isset($dropdown) and substr($field, -4) == 's_id')
+                    <div class="form-group">
+                        {!! Form::label($field, 'Choose ' . ucfirst(substr($field, 0, -3) . ':')) !!}
+                        {{Form::select($field, $dropdown[$field], '', ['class' => 'form-control'])}}<br/>
+                    </div>
 
-                <div class="form-group">
+{{--display dropdown fields for the cover img selection from VRResources--}}
+                {{--## substr($field, -4) == 's_id' ## translates to ## $field == 'cover_image_id' ##--}}
+                @elseif(substr($field, -4) == 'e_id')
+                    <div class="form-group">
+                        {!! Form::label($field, 'Choose ' . ucfirst(substr($field, 0, -3) . ':')) !!}
+                        {{Form::select($field,$dropdown['cover_image'], '', ['class' => 'form-control'])}}<br/>
+                    </div>
+{{--display media upload button for multiple files IN PAGES CREATE. Used in 'create new page' and also 'create --}}
+                    <div class="form-group">
+                        {!! Form::file('images[]', array('multiple'=>true)) !!}<br/>
+                    </div>
 
+{{--display media upload button for multiple files. Used in 'create new page' and also 'create new resource' links--}}
+                @elseif((substr($field, -4) == 'e_id') || ($field == 'path' and $tableName == 'resources'))
+                    <div class="form-group">
+                        {!! Form::file('images[]', array('multiple'=>true)) !!}<br/>
+                    </div>
 
-                    @if(isset($dropdown[$field]))
-                    {!! Form::label($field, 'Choose ' . ucfirst(substr($field, 0, -3) . ':')) !!}
-                    {{--{{dd($dropdown)}}--}}
-                    {{Form::select($field ,$dropdown[$field], '', ['class' => 'form-control'])}}<br/>
-                    @endif
-                </div>
-
-
-            @elseif(isset($dropdown) and substr($field, -3) == '_id')
-                <div class="form-group">
-                    {!! Form::label($field, 'Choose ' . ucfirst(substr($field, 0, -4) . ':')) !!}
-                    {{Form::select($field, $dropdown[$field], '', ['class' => 'form-control'])}}<br/>
-                </div>
-
-            @elseif(isset($checkbox[$field]))
-                {!! Form::label($field, 'Pick ' . ucfirst($field . ':')) !!}<br/>
+                @elseif(isset($checkbox[$field]))
+                        {!! Form::label($field, 'Pick ' . ucfirst($field . ':')) !!}<br/>
                 @foreach($checkbox[$field] as $key => $checkboxItem)
                         {{Form::checkbox($field.'[]', $key)}}
                         {{Form::label($checkboxItem, $checkboxItem)}}<br/>
                 @endforeach<br/>
 
-            @elseif($field == 'password')
-                <div class="form-group">
-                    {!! Form::label($field, 'Enter ' . ucfirst($field . ':')) !!}
-                    {!! Form::password($field, ['class' => 'form-control'])!!}<br/>
-                </div>
-
-            @elseif($field && $tableName != 'resources')
-                <div class="form-group">{{$field}}
+                @elseif($field == 'password')
+                    <div class="form-group">
                         {!! Form::label($field, 'Enter ' . ucfirst($field . ':')) !!}
-                        {!! Form::text($field, '', ['class' => 'form-control'])!!}<br/>
-                </div>
+                        {!! Form::password($field, ['class' => 'form-control'])!!}<br/>
+                    </div>
 
-            @endif
+                @elseif($field && $tableName != 'resources')
+                    <div class="form-group">{{$field}}
+                            {!! Form::label($field, 'Enter ' . ucfirst($field . ':')) !!}
+                            {!! Form::text($field, '', ['class' => 'form-control'])!!}<br/>
+                    </div>
+
+                @endif
 
 
             @endforeach
