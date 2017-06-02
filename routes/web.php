@@ -262,6 +262,11 @@ Route::group(['prefix' => 'admin'], function () {
 
 });
 
+Route::get('/', [
+    'as' => 'frontend.index',
+    'uses' => 'FrontEndController@index'
+]);
+
 
 
 Auth::routes();

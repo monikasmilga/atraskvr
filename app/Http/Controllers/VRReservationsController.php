@@ -42,17 +42,12 @@ class VRReservationsController extends Controller
 
 
 
+//        $startTime = Carbon::now(+2)->addHours(1);
         $startTime = Carbon::today()->addHours(11);
-
-        $workStart = Carbon::today()->addHours(11);
-
-
-
-
-
-
-
         $endTime = Carbon::today()->addHour(22);
+
+//        $workStart = Carbon::today()->addHour(11);
+
 
         $startDate = Carbon::today();
         $endDate = Carbon::today()->addWeek(2);
@@ -60,9 +55,30 @@ class VRReservationsController extends Controller
 
 
 
+//        $times = $this->generateDateRange($startTime, $endTime, 'addMinutes', 10, 'Y-m-d H:i');
+//        $fullTimes = $this->generateDateRange($workStart, $endTime, 'addMinutes', 10, 'Y-m-d H:i');
+
+//        $disabledTimes = [];
+//
+//
+//
+//        for($i = 0; $i < sizeof($fullTimes); $i++) {
+//
+//            if(strtotime($times[$i]) < (strtotime($fullTimes[$i]))) {
+//
+//                echo $fullTimes[$i];
+//
+//            }
+//
+//        }
+
+
+
+
         $configuration['message'] = $message;
         $configuration['date_from_url'] = $date;
         $configuration['times'] = $this->generateDateRange($startTime, $endTime, 'addMinutes', 10, 'H:i');
+//        $configuration['fullTimes'] = $this->generateDateRange($workStart, $endTime, 'addMinutes', 10, 'Y-m-d H:i');
         $configuration['days'] = $this->generateDateRange($startDate, $endDate, 'addDays', 1, 'Y-m-d');
         $configuration['experiences'] = VRPages::with('translations')->get()->toArray();
         $configuration['reservations'] = VRReservations::get()->toArray();
