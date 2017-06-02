@@ -21,10 +21,15 @@
 
             {!! Form::open(['url' => route('app.' . $tableName . '.update', $record['id'])]) !!}
 
-
             @foreach($fields as $field)
 
-                @if($field == 'user_id')
+                @if(isset($enum_dropDown))
+                    <div class="form-group">
+                        {!! Form::label($enum_dropDown['label'], 'Choose ' . $enum_dropDown['label']) !!}
+                        {{Form::select($field, $enum_dropDown['values'], $record[$field], ['class' => 'form-control'])}}<br/>
+                    </div>
+
+                @elseif($field == 'user_id')
 
                 @elseif($field == 'cover_image_id' and $tableName == 'pages')
                     <div class="form-group">
