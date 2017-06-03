@@ -42,7 +42,7 @@ class VRPagesController extends Controller
         return view('admin.list', $configuration);
     }
 
-//function to show connecnted files from pages_resources_connections
+//function to pull connected files from pages_resources_connections
     public function mediaFiles($id)
     {
         $config['mediaFilesShow'] = VRpages::with('resourceImage','pagesConnectedImages')->where('id', '=', $id)->get()->toArray();
