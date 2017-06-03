@@ -44,7 +44,7 @@
 
 {{--display media--}}
                         @if(array_key_exists ('path', $record))
-                            @if($record['mime_type'] == "image/jpeg")
+                            @if($record['mime_type'] == "image/jpeg" || $record['mime_type'] == "png")
                                 <td>
                                     <a href="#"><img src="{{URL::asset($record['path'])}}" alt="Forest" width="80" height="150"/></a>
                                 </td>

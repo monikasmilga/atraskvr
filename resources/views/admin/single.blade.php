@@ -31,7 +31,7 @@
                 @foreach($record as $key => $value)
                     <tr id="{{$record['id']}}">
                         @if(($key == 'cover_image_id' && $tableName == 'pages') || ($key == "mime_type" && $tableName == 'resources'))
-                            @if($mediaInfo['mime_type'] == "image/jpeg")
+                            @if($mediaInfo['mime_type'] == "image/jpeg" ||$mediaInfo['mime_type'] == "png")
                                 <td>Image</td>
                                 <td><img src="{{asset($image)}}"></td>
                                 @elseif($mediaInfo['mime_type'] == "video/mp4")
@@ -56,6 +56,44 @@
 
             </tbody>
         </table>
+
+{{--Connected media table.Display the media connected to page via pages_resources_connections--}}
+    @if(isset($connectedMediaDataArrays))
+        <a href=></a><h3>Connected media data</h3><br>
+            @foreach ($connectedMediaDataArrays['connectedMediaData'] as $mediaDataArray)
+        <table class="table">
+            <thead class="thead-default">
+                <tr>
+                    <th>madia type</th>
+                    <th>media file</th>
+                    @foreach($mediaDataArray as $key => $value)
+                    <th>{{$key}}</th>
+                    @endforeach
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+
+                    @if($mediaDataArray['mime_type'] == "image/jpeg" || $mediaInfo['mime_type'] == "png")
+                        <td>Image</td>
+                        <td><img src="{{asset($mediaDataArray['path'])}}" width="90", height="120"></td>
+                    @elseif($mediaDataArray['mime_type'] == "video/mp4")
+                        <td>Video</td>
+                        <td class="embed-responsive embed-responsive-4by3">
+                            <video controls preload="none">
+                                <source src="{{asset($mediaDataArray['path'])}}"><source>
+                            </video>
+                        </td>
+                    @endif
+
+                    @foreach($mediaDataArray as $key => $value)
+                        <td>{{$value}}</td>
+                    @endforeach
+                </tr>
+            </tbody>
+        </table>
+        @endforeach
+@endif
 
         <h3>
         @if(isset($translations) && $translations != null)

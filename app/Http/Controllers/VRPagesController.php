@@ -42,6 +42,33 @@ class VRPagesController extends Controller
         return view('admin.list', $configuration);
     }
 
+//function to show connecnted files from pages_resources_connections
+    public function mediaFiles($id)
+    {
+        $config['mediaFilesShow'] = VRpages::with('resourceImage','pagesConnectedImages')->where('id', '=', $id)->get()->toArray();
+        if(isset($config['mediaFilesShow']))
+        {
+            foreach($config['mediaFilesShow'] as $mediaFiles)
+            {
+                foreach($mediaFiles['pages_connected_images'] as $mediaFile)
+                {
+                    $connectedMediaData[] = $mediaFile['resources_connected_images'];
+                    $config['connectedMediaData'] = $connectedMediaData;
+                    if($mediaFile['resources_connected_images']['mime_type'] == "image/jpeg" || "image/png")
+                    {
+                        $config['image'][] = $mediaFile['resources_connected_images']['path'];
+                    }
+                    if($mediaFile['resources_connected_images']['mime_type'] == "video/mp4")
+                    {
+                        $config['video'][] = $mediaFile['resources_connected_images']['path'];
+                    }
+                }
+            }
+        }
+        return $config;
+    }
+
+
     public function adminCreate()
     {
         $dataFromModel = new VRPages();
@@ -121,6 +148,12 @@ class VRPagesController extends Controller
 
         $configuration['translations'] = VRPagesTranslations::all()->where('pages_id', '=', $id)->toArray();
         $configuration['languages_names'] = VRLanguages::all()->pluck('name', 'id')->toArray();
+
+
+        $configuration['connectedMediaDataArrays'] = $this-> mediaFiles($id);
+        $configuration['connectedMediaDataArrays']['connectedMediaData'];
+
+
 
         return view('admin.single', $configuration);
     }

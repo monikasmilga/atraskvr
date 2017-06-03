@@ -36,15 +36,16 @@
                 {{--## substr($field, -4) == 's_id' ## translates to ## $field == 'cover_image_id' ##--}}
                 @elseif(substr($field, -4) == 'e_id')
                     <div class="form-group">
+                        {{--{{dd($dropdown['cover_image'])}}--}}
                         {!! Form::label($field, 'Choose ' . ucfirst(substr($field, 0, -3) . ':')) !!}
-                        {{Form::select($field,$dropdown['cover_image'], '', ['class' => 'form-control'])}}<br/>
+                        {{Form::select($field,$dropdown['cover_image'],'', ['class' => 'form-control'])}}<br/>
                     </div>
 {{--display media upload button for multiple files IN PAGES CREATE. Used in 'create new page' and also 'create --}}
                     <div class="form-group">
                         {!! Form::file('images[]', array('multiple'=>true)) !!}<br/>
                     </div>
 
-{{--display media upload button for multiple files. Used in 'create new page' and also 'create new resource' links--}}
+{{--display media upload button for multiple files. Used 'create new resource' links--}}
                 @elseif((substr($field, -4) == 'e_id') || ($field == 'path' and $tableName == 'resources'))
                     <div class="form-group">
                         {!! Form::file('images[]', array('multiple'=>true)) !!}<br/>
