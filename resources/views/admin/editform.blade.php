@@ -19,7 +19,7 @@
                 </div>
             @endif
 
-            {!! Form::open(['url' => route('app.' . $tableName . '.update', $record['id'])]) !!}
+            {!! Form::open(['url' => route('app.' . $tableName . '.update', $record['id']), 'files' => true]) !!}
 
             @foreach($fields as $field)
 

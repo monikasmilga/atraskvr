@@ -9,7 +9,7 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 class VRUploadController extends Controller
 {
-    public function upload(UploadedFile $file)
+    public function upload(UploadedFile $file, $id)
     {
         $data =
             [
@@ -26,6 +26,18 @@ class VRUploadController extends Controller
 
         $data["path"] = $path . $fileName;
 
-        return VRResources::create($data);
+        if($id == null)
+        {
+            return VRResources::create($data);
+
+        } elseif($id != null){
+
+            $record = VRResources::find($id);
+
+            $record->update($data);
+
+            return $record;
+        }
+
     }
 }
