@@ -16,11 +16,19 @@ class VROrdersController extends Controller
      */
     public function adminIndex()
     {
+
+        return VROrders::get();
+
+
         $dataFromModel = new VROrders();
         $configuration['fields'] = $dataFromModel->getFillable();
         $configuration['tableName'] = $dataFromModel->getTableName();
 
         $configuration['list_data'] = VROrders::get()->where('deleted_at', '=', null)->toArray();
+
+        if(Route::has('app.' . $configuration['tableName'] . '_translations.create')){
+            $configuration[ 'translationExist' ] = true;
+        }
 
         return view('admin.list', $configuration);
     }
@@ -35,9 +43,11 @@ class VROrdersController extends Controller
         $dataFromModel = new VROrders();
         $configuration['fields'] = $dataFromModel->getFillable();
         $configuration['tableName'] = $dataFromModel->getTableName();
-        $configuration['dropdown']['status'] = $dataFromModel->all();
 
-//TODO figure out how to show ENUM values in dropdown of "STATUS" field
+        $configuration['enum_dropDown'] = [
+            "label" => trans('status'),
+            "values" => VROrders::$STATUS
+        ];
 
         return view('admin.createform', $configuration);
     }
@@ -105,6 +115,11 @@ class VROrdersController extends Controller
 
         $configuration['record'] = VROrders::find($id)->toArray();
 
+        $configuration['enum_dropDown'] = [
+            "label" => trans('status'),
+            "values" => VROrders::$STATUS
+        ];
+
         return view('admin.editform', $configuration);
     }
 
@@ -131,15 +146,20 @@ class VROrdersController extends Controller
         if ($missingValues != '') {
             $missingValues = substr($missingValues, 1, -1);
             $configuration['error'] = ['message' => trans('Please enter ' . $missingValues)];
-            $configuration['record'] = VRPagesCategories::find($id)->toArray();
+            $configuration['record'] = VROrders::find($id)->toArray();
             return view('admin.editform', $configuration);
         }
 
         $record = VROrders::find($id);
         $record->update($data);
 
-        $configuration['list_data'] = VROrders::get()->toArray();
-        $configuration['comment'] = ['message' => trans('Record added successfully')];
+        $configuration['list_data'] = VROrders::get()->where('deleted_at', '=', null)->toArray();
+
+        if(Route::has('app.' . $configuration['tableName'] . '_translations.create')){
+            $configuration[ 'translationExist' ] = true;
+        }
+
+        $configuration['comment'] = ['message' => trans('Record updated successfully')];
 
         return view('admin.list', $configuration);
     }

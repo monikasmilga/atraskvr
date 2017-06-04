@@ -30,7 +30,7 @@ class VRMenusController extends Controller
             return view('admin.list', $configuration);
         }
 
-        if(Route::has('app.' . $configuration['tableName'] . '_translations.create')) {
+        if(Route::has('app.' . $configuration['tableName'] . '_translations.create')){
             $configuration[ 'translationExist' ] = true;
         }
 
@@ -133,13 +133,13 @@ class VRMenusController extends Controller
         $configuration['fields'] = $dataFromModel->getFillable();
         $configuration['tableName'] = $dataFromModel->getTableName();
 
-        $configuration['list_data'] = VRMenus::get()->toArray();
+        $configuration['list_data'] = VRMenus::get()->where('deleted_at', '=', null)->toArray();
 
         if(Route::has('app.' . $configuration['tableName'] . '_translations.create')){
             $configuration[ 'translationExist' ] = true;
         }
 
-        $configuration['comment'] = ['message' => trans('Record added successfully')];
+        $configuration['comment'] = ['message' => trans('Record updated successfully')];
 
         return view('admin.list', $configuration);
     }
