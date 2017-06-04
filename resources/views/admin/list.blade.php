@@ -13,12 +13,15 @@
             <a class="btn btn-warning btn-md float-right" href="http://atraskvr.dev/admin/">Admin home page</a>
         @endif
         @if(!isset($error))
-                @if(isset($comment))
-                    @if(sizeof($comment['message'] > 0))
+            @if(isset($comment))
+                <div class="alert alert-success">
+                    <strong>{{ $comment['message'] }}</strong>
+                </div>
+            @endif
+                @if(isset($message))
                     <div class="alert alert-warning">
-                        <strong>{{ $comment['message'] }}</strong>
+                        <strong>{{ $message }}</strong>
                     </div>
-                    @endif
                 @endif
                     <h3>{{$tableName . ' list'}}</h3><br>
                     <a style="margin-bottom: 50px" class="btn btn-primary btn-sm" href="{{ route('app.' . $tableName . '.create') }}">Create new {{substr($tableName, 0, -1)}}</a>

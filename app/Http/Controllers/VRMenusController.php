@@ -5,8 +5,10 @@ namespace App\Http\Controllers;
 use App\Models\VRLanguages;
 use App\Models\VRMenus;
 use App\Models\VRMenusTranslations;
+use Illuminate\Contracts\Session\Session;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Route;
 
 class VRMenusController extends Controller
@@ -19,6 +21,9 @@ class VRMenusController extends Controller
      */
     public function adminIndex()
     {
+        $message = Session()->get('message');
+        $configuration['message'] = $message;
+
         $dataFromModel = new VRMenus();
         $configuration['fields'] = $dataFromModel->getFillable();
         $configuration['tableName'] = $dataFromModel->getTableName();
@@ -39,6 +44,9 @@ class VRMenusController extends Controller
 
     public function adminCreate()
     {
+        $message = Session()->get('message');
+        $configuration['message'] = $message;
+
         $dataFromModel = new VRMenus();
         $configuration['fields'] = $dataFromModel->getFillable();
         $configuration['tableName'] = $dataFromModel->getTableName();
@@ -69,9 +77,9 @@ class VRMenusController extends Controller
 
         VRMenus::create($data);
 
-        $configuration['comment'] = ['message' => trans('Record added successfully')];
+        $message = ['message' => trans('Record added successfully')];
 
-        return view('admin.createform', $configuration);
+        return redirect()->route('app.menus.create')->with($message);
     }
 
     public function adminShow($id)
@@ -129,19 +137,9 @@ class VRMenusController extends Controller
 
         $record->update($data);
 
-        $dataFromModel = new VRMenus();
-        $configuration['fields'] = $dataFromModel->getFillable();
-        $configuration['tableName'] = $dataFromModel->getTableName();
+        $message = ['message' => trans('Record updated successfully')];
 
-        $configuration['list_data'] = VRMenus::get()->where('deleted_at', '=', null)->toArray();
-
-        if(Route::has('app.' . $configuration['tableName'] . '_translations.create')){
-            $configuration[ 'translationExist' ] = true;
-        }
-
-        $configuration['comment'] = ['message' => trans('Record updated successfully')];
-
-        return view('admin.list', $configuration);
+        return redirect()->route('app.menus.index')->with($message);
     }
 
     public function adminDestroy($id)

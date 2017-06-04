@@ -13,10 +13,12 @@
 				</div>
 			@endif
 
-			@if(isset($comment))
-				<div class="alert alert-success">
-  					<strong>{{ $comment['message'] }}</strong>
-				</div>
+			@if(isset($message))
+				@if(sizeof($message > 0))
+					<div class="alert alert-warning">
+						<strong>{{ $message }}</strong>
+					</div>
+				@endif
 			@endif
 		
 			{!! Form::open(['url' => route('app.' . $tableName . '.store'), 'files' => true]) !!}

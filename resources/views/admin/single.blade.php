@@ -85,7 +85,7 @@
 
         <a class="btn btn-sm btn-primary" href="{{route('app.' . $tableName . '.index')}}">Back</a>
         <a class="btn btn-success btn-sm" href="{{route('app.' . $tableName . '.edit', $record['id'])}}">Edit</a>
-    </div>
+    </div><br><br>
 
 @endsection
 

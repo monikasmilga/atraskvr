@@ -21,6 +21,9 @@ class VRPagesCategoriesController extends Controller
      */
     public function adminIndex()
     {
+        $message = Session()->get('message');
+        $configuration['message'] = $message;
+
         $dataFromModel = new VRPagesCategories();
         $configuration['fields'] = $dataFromModel->getFillable();
         $configuration['tableName'] = $dataFromModel->getTableName();
@@ -41,6 +44,9 @@ class VRPagesCategoriesController extends Controller
 
     public function adminCreate()
     {
+        $message = Session()->get('message');
+        $configuration['message'] = $message;
+
         $dataFromModel = new VRPagesCategories();
         $configuration['fields'] = $dataFromModel->getFillable();
         $configuration['tableName'] = $dataFromModel->getTableName();
@@ -68,15 +74,11 @@ class VRPagesCategoriesController extends Controller
             return view('admin.createform', $configuration);
         }
 
-//        VRPagesCategories::create([
-//            'id' => $data['id']
-//        ]);
-
         VRPagesCategories::create($data);
 
-        $configuration['comment'] = ['message' => trans('Record added successfully')];
+        $message = ['message' => trans('Record added successfully')];
 
-        return view('admin.createform', $configuration);
+        return redirect()->route('app.pages_categories.create')->with($message);
     }
 
     public function adminShow($id)
@@ -132,15 +134,9 @@ class VRPagesCategoriesController extends Controller
 
         $record->update($data);
 
-        $configuration['list_data'] = VRPagesCategories::get()->toArray();
+        $message = ['message' => trans('Record updated successfully')];
 
-        if(Route::has('app.' . $configuration['tableName'] . '_translations.create')){
-            $configuration[ 'translationExist' ] = true;
-        }
-
-        $configuration['comment'] = ['message' => trans('Record updated successfully')];
-
-        return view('admin.list', $configuration);
+        return redirect()->route('app.pages_categories.index')->with($message);
     }
 
     public function adminDestroy($id)

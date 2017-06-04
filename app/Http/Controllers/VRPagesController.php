@@ -20,6 +20,9 @@ class VRPagesController extends Controller
      */
     public function adminIndex()
     {
+        $message = Session()->get('message');
+        $configuration['message'] = $message;
+
         $dataFromModel = new VRPages();
         $configuration['fields'] = $dataFromModel->getFillable();
         $configuration['tableName'] = $dataFromModel->getTableName();
@@ -42,6 +45,9 @@ class VRPagesController extends Controller
 
     public function adminCreate()
     {
+        $message = Session()->get('message');
+        $configuration['message'] = $message;
+
         $dataFromModel = new VRPages();
         $configuration['fields'] = $dataFromModel->getFillable();
         $configuration['tableName'] = $dataFromModel->getTableName();
@@ -86,9 +92,9 @@ class VRPagesController extends Controller
 
         VRPages::create($data);
 
-        $configuration['comment'] = ['message' => trans('Record added successfully')];
+        $message = ['message' => trans('Record added successfully')];
 
-        return view('admin.createform', $configuration);
+        return redirect()->route('app.pages.create')->with($message);
     }
 
     public function adminShow($id)
@@ -161,18 +167,9 @@ class VRPagesController extends Controller
 
         $record->update($data);
 
+        $message = ['message' => trans('Record updated successfully')];
 
-//        $configuration['list_data'] = VRPages::get()->where('deleted_at', '=', null)->toArray();
-//
-//        if(Route::has('app.' . $configuration['tableName'] . '_translations.create')){
-//            $configuration[ 'translationExist' ] = true;
-//        }
-
-        $configuration['comment'] = ['message' => trans('Record updated successfully')];
-
-        return $this->adminIndex();
-
-//        return view('admin.list', $configuration);
+        return redirect()->route('app.pages.index')->with($message);
     }
 
     public function adminDestroy($id)
