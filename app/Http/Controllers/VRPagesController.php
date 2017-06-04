@@ -27,8 +27,6 @@ class VRPagesController extends Controller
         $configuration['list_data'] = VRPages::get()->where('deleted_at', '=', null)->toArray();
 
         $configuration['coverImages'] = VRResources::all()->pluck('path', 'id')->toArray();
-        
-        //TODO take categories
 
         if ($configuration['list_data'] == []) {
             $configuration['error'] = ['message' => trans("List is empty. Please create some " . $configuration['tableName'] . ", then check list again")];
@@ -82,8 +80,8 @@ class VRPagesController extends Controller
         }
 
         $resource = request()->file('image');
-        $newDTResourcesController = new VRUploadController();
-        $record = $newDTResourcesController->upload($resource);
+        $newVRResourcesController = new VRUploadController();
+        $record = $newVRResourcesController->upload($resource, null);
         $data['cover_image_id'] = $record->id;
 
         VRPages::create($data);
@@ -124,7 +122,6 @@ class VRPagesController extends Controller
 
         $configuration['dropdown']['pages_categories_id'] = VRPagesCategories::all()->pluck('name', 'id')->toArray();
 
-
         $configuration['record'] = VRPages::find($id)->toArray();
 
         return view('admin.editform', $configuration);
@@ -133,6 +130,8 @@ class VRPagesController extends Controller
     public function adminUpdate($id)
     {
         $data = request()->all();
+
+        $data['cover_image_id'] = request()->file('image');
 
         $dataFromModel = new VRPages();
         $configuration['fields'] = $dataFromModel->getFillable();
@@ -152,19 +151,28 @@ class VRPagesController extends Controller
             return view('admin.editform', $configuration);
         }
 
+        $resource = request()->file('image');
+        $newVRResourcesController = new VRUploadController();
+        $resourceId = VRPages::find($id)->cover_image_id;
+        $record = $newVRResourcesController->upload($resource, $resourceId);
+        $data['cover_image_id'] = $record->id;
+
         $record = VRPages::find($id);
 
         $record->update($data);
 
-        $configuration['list_data'] = VRPages::get()->where('deleted_at', '=', null)->toArray();
 
-        if(Route::has('app.' . $configuration['tableName'] . '_translations.create')){
-            $configuration[ 'translationExist' ] = true;
-        }
+//        $configuration['list_data'] = VRPages::get()->where('deleted_at', '=', null)->toArray();
+//
+//        if(Route::has('app.' . $configuration['tableName'] . '_translations.create')){
+//            $configuration[ 'translationExist' ] = true;
+//        }
 
         $configuration['comment'] = ['message' => trans('Record updated successfully')];
 
-        return view('admin.list', $configuration);
+        return $this->adminIndex();
+
+//        return view('admin.list', $configuration);
     }
 
     public function adminDestroy($id)
