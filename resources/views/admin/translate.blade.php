@@ -38,11 +38,19 @@
                         @foreach($languages as $key => $language)
 
                             @if(count($translations) == 0)
+                                @if(($field_value == 'title' or $field_value == 'name') and $language == 'lt')
+                                    <td>
+                                        <div class="form-group">
+                                            {!! Form::textarea($field_value . '_' . $language, $record['name'], ['class' => 'form-control', 'rows'=>"3"])!!}<br/>
+                                        </div>
+                                    </td>
+                                @elseif($field_value)
                                     <td>
                                         <div class="form-group">
                                             {!! Form::textarea($field_value . '_' . $language, 'translation value', ['class' => 'form-control', 'rows'=>"3"])!!}<br/>
                                         </div>
                                     </td>
+                                @endif
                             @endif
 
                             @foreach($translations as $translation)

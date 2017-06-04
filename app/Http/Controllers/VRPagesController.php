@@ -117,6 +117,10 @@ class VRPagesController extends Controller
         $configuration['translations'] = VRPagesTranslations::all()->where('pages_id', '=', $id)->toArray();
         $configuration['languages_names'] = VRLanguages::all()->pluck('name', 'id')->toArray();
 
+        if(Route::has('app.' . $configuration['tableName'] . '_translations.create')) {
+            $configuration[ 'translationExist' ] = true;
+        }
+
         return view('admin.single', $configuration);
     }
 
@@ -167,6 +171,13 @@ class VRPagesController extends Controller
 
         $record->update($data);
 
+        DB::table('vr_pages_translations')
+            ->wherePages_idAndLanguages_id($id, 'lt')
+            ->update([
+                         'title' => $record->name,
+                         'slug' => str_slug($record->name, '-'),
+                     ]);
+
         $message = ['message' => trans('Record updated successfully')];
 
         return redirect()->route('app.pages.index')->with($message);
@@ -174,12 +185,15 @@ class VRPagesController extends Controller
 
     public function adminDestroy($id)
     {
-        if (VRPages::destroy($id) and VRPagesTranslations::where('menus_id', '=', $id)->delete()) {
-            return json_encode(["success" => true, "id" => $id]);
+        if (VRPages::destroy($id) and VRResources::find(VRPages::find($id)->cover_image_id)->delete()){
 
-        }elseif (VRPages::destroy($id))
-        {
-            return json_encode(["success" => true, "id" => $id]);
+            if(VRPagesTranslations::where('pages_id', '=', $id)->delete()){
+                return json_encode(["success" => true, "id" => $id]);
+            }
+
+            else {
+                return json_encode(["success" => true, "id" => $id]);
+            }
         }
     }
 }

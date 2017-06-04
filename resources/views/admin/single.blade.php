@@ -46,42 +46,43 @@
 
             </tbody>
         </table>
-
-        <h3>
-            @if($translations != null)
-                @if(isset($record['name']))
-                    {{ucfirst($record['name'] . ' translations')}}
-                @else
-                    @if($tableName == 'pages_categories')
-                    {{ucfirst(substr($tableName, 0, -3)) . 'y translations'}}
-                    @else{{ucfirst(substr($tableName, 0, -1)) . ' translations'}}
+        @if(isset($translationExist))
+            <h3>
+                @if($translations != null)
+                    @if(isset($record['name']))
+                        {{ucfirst($record['name'] . ' translations')}}
+                    @else
+                        @if($tableName == 'pages_categories')
+                        {{ucfirst(substr($tableName, 0, -3)) . 'y translations'}}
+                        @else{{ucfirst(substr($tableName, 0, -1)) . ' translations'}}
+                        @endif
                     @endif
                 @endif
-            @endif
-        </h3><br>
-        <table class="table">
-            <tbody>
-            @foreach($translations as $translation)
-                <thead class="thead-default">
-                <tr>
-                    <th></th>
-                    <th>{{$languages_names[$translation['languages_id']]}}</th>
-                </tr>
-                </thead>
-                @foreach($translation as $key_translation => $value_translation)
-
+            </h3><br>
+            <table class="table">
+                <tbody>
+                @foreach($translations as $translation)
+                    <thead class="thead-default">
                     <tr>
-                        @foreach($fields_translations as $key_field => $value_field)
-                            @if($value_field == $key_translation)
-                                <td>{{$key_translation}}</td>
-                                <td>{{$value_translation}}</td>
-                            @endif
-                        @endforeach
+                        <th></th>
+                        <th>{{$languages_names[$translation['languages_id']]}}</th>
                     </tr>
+                    </thead>
+                    @foreach($translation as $key_translation => $value_translation)
+
+                        <tr>
+                            @foreach($fields_translations as $key_field => $value_field)
+                                @if($value_field == $key_translation)
+                                    <td>{{$key_translation}}</td>
+                                    <td>{{$value_translation}}</td>
+                                @endif
+                            @endforeach
+                        </tr>
+                    @endforeach
                 @endforeach
-            @endforeach
-            </tbody>
-        </table>
+                </tbody>
+            </table>
+        @endif
 
         <a class="btn btn-sm btn-primary" href="{{route('app.' . $tableName . '.index')}}">Back</a>
         <a class="btn btn-success btn-sm" href="{{route('app.' . $tableName . '.edit', $record['id'])}}">Edit</a>

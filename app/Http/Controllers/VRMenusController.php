@@ -96,6 +96,10 @@ class VRMenusController extends Controller
         $configuration['translations'] = VRMenusTranslations::all()->where('menus_id', '=', $id)->toArray();
         $configuration['languages_names'] = VRLanguages::all()->pluck('name', 'id')->toArray();
 
+        if(Route::has('app.' . $configuration['tableName'] . '_translations.create')) {
+            $configuration[ 'translationExist' ] = true;
+        }
+
         return view('admin.single', $configuration);
     }
 
@@ -136,6 +140,13 @@ class VRMenusController extends Controller
         $record = VRMenus::find($id);
 
         $record->update($data);
+
+        DB::table('vr_menus_translations')
+            ->whereMenus_idAndLanguages_id($id, 'lt')
+            ->update([
+                'title' => $record->name,
+                'slug' => str_slug($record->name, '-'),
+                     ]);
 
         $message = ['message' => trans('Record updated successfully')];
 
