@@ -1,4 +1,4 @@
-@extends('admin.main')
+  @extends('admin.main')
 
 @section('content')
 	
@@ -19,10 +19,18 @@
 				</div>
 			@endif
 
+
 			{!! Form::open(['url' => route('app.' . $tableName . '.store'), 'files' => true]) !!}
 
 			@foreach($fields as $field)
 				@if($field == 'user_id')
+
+         @elseif(isset($enum_dropDown))
+            <div class="form-group">
+            {!! Form::label($enum_dropDown['label'], 'Choose ' . $enum_dropDown['label']) !!}
+            {{Form::select($enum_dropDown['label'], $enum_dropDown['values'], '', ['class' => 'form-control'])}}<br/>
+            
+          </div>
 
 {{--display dropdown fields to choose categories--}}
                 {{--## substr($field, -4) == 's_id' ## translates to ## $field == 'pages_categories_id' ##--}}
@@ -72,9 +80,7 @@
 
                 @endif
 
-
             @endforeach
-
 
 {!! Form::submit('Create' , ['class' => 'btn btn-success']) !!}
 <a class="btn btn-primary" href="{{ route('app.' . $tableName . '.index') }}">{{ucfirst($tableName)}} list</a>
@@ -83,4 +89,5 @@
 </div>
 </div>
 
+				
 @endsection

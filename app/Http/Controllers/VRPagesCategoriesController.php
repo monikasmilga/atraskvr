@@ -138,7 +138,7 @@ class VRPagesCategoriesController extends Controller
             $configuration[ 'translationExist' ] = true;
         }
 
-        $configuration['comment'] = ['message' => trans('Record added successfully')];
+        $configuration['comment'] = ['message' => trans('Record updated successfully')];
 
         return view('admin.list', $configuration);
     }

@@ -16,7 +16,7 @@ class VRPages extends CoreModel
 
     public function translations()
     {
-        return $this->hasMany(VRPagesTranslations::class, 'pages_id', 'id');
+        return $this->hasMany(VRPagesTranslations::class, 'pages_id', 'id')->where('languages_id', 'lt');
     }
 
     public function resourceImage()

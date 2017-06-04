@@ -16,6 +16,13 @@ class VRReservationsController extends Controller
 {
 
 
+
+
+
+
+
+
+
     private function generateDateRange(Carbon $start_date, Carbon $end_date, $addWhat, $value, $dateFormat)
     {
         $dates = [];
@@ -28,25 +35,52 @@ class VRReservationsController extends Controller
     }
 
 
-    public function adminCreate($date = null)
+    public function adminCreate($date = null, $message = null)
     {
         if ($date == null)
             $date = Carbon::today()->toDateString();
 
 
-        $startTime = Carbon::today()->addHours(11);
 
+//        $startTime = Carbon::now(+2)->addHours(1);
+        $startTime = Carbon::today()->addHours(11);
         $endTime = Carbon::today()->addHour(22);
+
+//        $workStart = Carbon::today()->addHour(11);
+
 
         $startDate = Carbon::today();
         $endDate = Carbon::today()->addWeek(2);
 
 
+
+
+//        $times = $this->generateDateRange($startTime, $endTime, 'addMinutes', 10, 'Y-m-d H:i');
+//        $fullTimes = $this->generateDateRange($workStart, $endTime, 'addMinutes', 10, 'Y-m-d H:i');
+
+//        $disabledTimes = [];
+//
+//
+//
+//        for($i = 0; $i < sizeof($fullTimes); $i++) {
+//
+//            if(strtotime($times[$i]) < (strtotime($fullTimes[$i]))) {
+//
+//                echo $fullTimes[$i];
+//
+//            }
+//
+//        }
+
+
+
+
+        $configuration['message'] = $message;
         $configuration['date_from_url'] = $date;
         $configuration['times'] = $this->generateDateRange($startTime, $endTime, 'addMinutes', 10, 'H:i');
+//        $configuration['fullTimes'] = $this->generateDateRange($workStart, $endTime, 'addMinutes', 10, 'Y-m-d H:i');
         $configuration['days'] = $this->generateDateRange($startDate, $endDate, 'addDays', 1, 'Y-m-d');
         $configuration['experiences'] = VRPages::with('translations')->get()->toArray();
-        //$configuration['reservations'] = VRReservations::pluck('time', 'pages_id')->toArray();
         $configuration['reservations'] = VRReservations::get()->toArray();
 
 
@@ -59,17 +93,37 @@ class VRReservationsController extends Controller
     public function adminStore()
     {
 
-        $data = request()->all();
+        $timesReserved = VRReservations::pluck('time', 'pages_id');
 
-        $order = VROrders::create([
-            'status' => 'reserved'
-        ]);
+
+        $data = request()->all();
+        unset($data['_token']);
+
+
+        $message = '';
 
 
         foreach ($data as $key => $value) {
-            if($key == '_token') {
 
-            } else {
+            foreach ($timesReserved as $timesKey => $timesValue) {
+
+                if($key == $timesKey && $value == $timesValue) {
+                    $message =  'Time already taken';
+                    break;
+
+                }
+
+            }
+
+        }
+
+            if(!strlen($message) > 0){
+
+                $order = VROrders::create([
+                    'status' => 'reserved'
+                ]);
+
+            foreach ($data as $key => $value) {
 
                 VRReservations::create([
 
@@ -78,29 +132,25 @@ class VRReservationsController extends Controller
                     'orders_id' => $order['id']
 
                 ]);
+
             }
 
 
 
-        }
+            } else {
+
+
+                return $this->adminCreate(null, $message);
+            }
 
 
 
-
-
-
-
-
-
-//        VRReservations::create([
-//
-//
-//
-//        ]);
-
-
-
+        $message = 'Time reserved successfully!';
+        return $this->adminCreate(null, $message);
 
     }
+
+
+
     
 }

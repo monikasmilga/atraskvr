@@ -26,6 +26,7 @@ class VRPagesController extends Controller
         $configuration['tableName'] = $dataFromModel->getTableName();
 
         $configuration['list_data'] = VRPages::get()->where('deleted_at', '=', null)->toArray();
+
         $configuration['coverImages'] = VRResources::all()->pluck('path', 'id')->toArray();
 
         //TODO take categories
@@ -198,13 +199,13 @@ class VRPagesController extends Controller
 
         $record->update($data);
 
-        $configuration['list_data'] = VRPages::get()->toArray();
+        $configuration['list_data'] = VRPages::get()->where('deleted_at', '=', null)->toArray();
 
-        if (Route::has('app.' . $configuration['tableName'] . '_translations.create')) {
-            $configuration['translationExist'] = true;
+        if(Route::has('app.' . $configuration['tableName'] . '_translations.create')){
+            $configuration[ 'translationExist' ] = true;
         }
 
-        $configuration['comment'] = ['message' => trans('Record added successfully')];
+        $configuration['comment'] = ['message' => trans('Record updated successfully')];
 
         return view('admin.list', $configuration);
     }

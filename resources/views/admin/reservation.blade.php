@@ -4,105 +4,141 @@
 @section('content')
 
 
+
+
     <div class="container">
-    <nav aria-label="...">
-        <ul class="pagination pagination-lg justify-content-center">
+        <nav aria-label="...">
+            <ul class="pagination pagination-lg justify-content-center">
 
 
+                @foreach($days as $day)
+
+                    <li class="page-item
+
+                        @if($date_from_url == $day)
+                            {{' active'}}
+                        @endif
+
+                            "><a class="page-link" href="{{route('app.reservations.create', $day)}}">{{$day}}</a></li>
+
+                @endforeach
 
 
-    @foreach($days as $day)
+            </ul>
 
-                <li class="page-item
+        </nav>
 
-                @if($date_from_url == $day)
-                      {{' active'}}
+        <br><br>
+
+
+        <form method="POST" action="{{route('app.reservations.store')}}">
+
+
+            <div id="accordion" role="tablist" aria-multiselectable="true">
+
+
+                @if(isset($message))
+
+                    @if(substr($message, -1) == '!')
+
+                        <div class="alert alert-success">
+                            <strong>{{ $message }}</strong>
+                        </div>
+
+                    @else
+
+                        <div class="alert alert-danger">
+                            <strong>{{ $message }}</strong>
+                        </div>
+
+                    @endif
+
+
                 @endif
 
-                "><a class="page-link" href="{{route('app.reservations.create', $day)}}">{{$day}}</a></li>
+                @foreach($days as $day)
 
-    @endforeach
-
-        </ul>
-
-    </nav>
-
-    <br><br>
+                    @if($day == $date_from_url)
 
 
 
+                        <h1 class="display-4">{{$day}}</h1>
+                        @if(isset($experiences))
 
-    <form method="POST" action="{{route('app.reservations.store')}}">
 
-        @foreach($days as $day)
-            <div class="date-checkbox-group">
 
-                @if($day == $date_from_url)
 
-                    <h1 class="display-4">{{$day}}</h1>
+                            @foreach($experiences as $experience)
 
-                    @foreach($experiences as $experience)
-                        <div class="experience-checkbox-group">
-                            {{$experience['translations'][0]['title']}}
 
-                            @foreach($times as $key => $value)
 
-                                @if($key % 6 == 0)
+                                <div class="card">
+                                    <div class="card-header" role="tab" id="headingOne">
+                                        <h5 class="mb-0">
+                                            <a data-toggle="collapse" data-parent="#accordion"
+                                               href="#{{str_replace(' ', '_', $experience['translations'][0]['title'])}}"
+                                               aria-expanded="true"
+                                               aria-controls="{{str_replace(' ', '_', $experience['translations'][0]['title'])}}">
+                                                {{$experience['translations'][0]['title']}}
+                                            </a>
+                                        </h5>
+                                    </div>
+                                    <div id="{{str_replace(' ', '_', $experience['translations'][0]['title'])}}"
+                                         class="collapse" role="tabpanel" aria-labelledby="headingOne">
+                                        <div class="card-block">
 
-                                    <br>
 
-                                @endif
-                                    <input type="checkbox" name="{{$experience['id'] . '[]'}}" value="{{$day . ' ' . $value}}"
+                                            @foreach($times as $key => $value)
 
-                                        @if(isset($reservations))
-                                            @foreach($reservations as $reservation)
 
-                                                @foreach($reservation['time'] as $time)
 
-                                                    @if($time == $day . ' ' . $value && $experience['id'] == $reservation['pages_id'])
+                                                @if($key % 6 == 0)
 
-                                                        {{'disabled'}}
+                                                    <br>
 
-                                                    @endif
+                                                @endif
 
-                                                @endforeach
+                                                <input type="checkbox" name="{{$experience['id'] . '[]'}}"
+                                                       value="{{$day . ' ' . $value}}"
+
+                                                @if(isset($reservations))
+                                                    @foreach($reservations as $reservation)
+
+                                                        @foreach($reservation['time'] as $time)
+
+                                                            @if($time == $day . ' ' . $value && $experience['id'] == $reservation['pages_id'])
+
+                                                                {{'disabled'}}
+
+                                                                    @endif
+
+                                                                @endforeach
+
+                                                            @endforeach
+
+                                                        @endif
+
+                                                >{{$value}}
 
                                             @endforeach
-
-                                        @endif
-
-                                    >{{$value}}
-
-
-
-
-
+                                        </div>
+                                    </div>
+                                </div>
                             @endforeach
-
-
-                            <br>
-                        </div>
-                    @endforeach
-
-
-                @elseif($date_from_url == null)
-
-                    <h1>Nera datos</h1>
-
-
-                @endif
-
-
-
+                        @endif
+                    @endif
+                @endforeach
 
             </div>
 
-        @endforeach
+
             {{csrf_field()}}
-            <input class="btn btn-sm btn-primary" type="submit">
-    </form>
+            <input class="btn btn-outline-primary submit-button" type="submit">
+        </form>
 
     </div>
 
 
 @endsection
+
+
