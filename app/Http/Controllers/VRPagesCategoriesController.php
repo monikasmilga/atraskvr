@@ -21,6 +21,9 @@ class VRPagesCategoriesController extends Controller
      */
     public function adminIndex()
     {
+        $message = Session()->get('message');
+        $configuration['message'] = $message;
+
         $dataFromModel = new VRPagesCategories();
         $configuration['fields'] = $dataFromModel->getFillable();
         $configuration['tableName'] = $dataFromModel->getTableName();
@@ -41,6 +44,9 @@ class VRPagesCategoriesController extends Controller
 
     public function adminCreate()
     {
+        $message = Session()->get('message');
+        $configuration['message'] = $message;
+
         $dataFromModel = new VRPagesCategories();
         $configuration['fields'] = $dataFromModel->getFillable();
         $configuration['tableName'] = $dataFromModel->getTableName();
@@ -68,15 +74,11 @@ class VRPagesCategoriesController extends Controller
             return view('admin.createform', $configuration);
         }
 
-//        VRPagesCategories::create([
-//            'id' => $data['id']
-//        ]);
-
         VRPagesCategories::create($data);
 
-        $configuration['comment'] = ['message' => trans('Record added successfully')];
+        $message = ['message' => trans('Record added successfully')];
 
-        return view('admin.createform', $configuration);
+        return redirect()->route('app.pages_categories.create')->with($message);
     }
 
     public function adminShow($id)
@@ -92,6 +94,10 @@ class VRPagesCategoriesController extends Controller
 
         $configuration['translations'] = VRPagesCategoriesTranslations::all()->where('categories_id', '=', $id)->toArray();
         $configuration['languages_names'] = VRLanguages::all()->pluck('name', 'id')->toArray();
+
+        if(Route::has('app.' . $configuration['tableName'] . '_translations.create')) {
+            $configuration[ 'translationExist' ] = true;
+        }
 
         return view('admin.single', $configuration);
     }
@@ -132,20 +138,25 @@ class VRPagesCategoriesController extends Controller
 
         $record->update($data);
 
-        $configuration['list_data'] = VRPagesCategories::get()->toArray();
+        DB::table('vr_pages_categories_translations')
+            ->whereCategories_idAndLanguages_id($id, 'lt')
+            ->update([
+                         'name' => $record->name,
+                         'slug' => str_slug($record->name, '-'),
+                     ]);
 
-        if(Route::has('app.' . $configuration['tableName'] . '_translations.create')){
-            $configuration[ 'translationExist' ] = true;
-        }
+        $message = ['message' => trans('Record updated successfully')];
 
-        $configuration['comment'] = ['message' => trans('Record updated successfully')];
-
-        return view('admin.list', $configuration);
+        return redirect()->route('app.pages_categories.index')->with($message);
     }
 
     public function adminDestroy($id)
     {
         if (VRPagesCategories::destroy($id) and VRPagesCategoriesTranslations::where('categories_id', '=', $id)->delete())
+        {
+            return json_encode(["success" => true, "id" => $id]);
+
+        }elseif (VRPagesCategories::destroy($id))
         {
             return json_encode(["success" => true, "id" => $id]);
         }

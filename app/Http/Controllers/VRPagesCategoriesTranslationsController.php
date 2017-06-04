@@ -94,20 +94,9 @@ class VRPagesCategoriesTranslationsController extends Controller
             }
             $fullComment = $fullComment . $comment[$name] .'. ';
 
-            $configuration['comment'] = ['message' => $fullComment];        }
-
-        $dataFromModel = new VRPagesCategories();
-        $configuration['fields'] = $dataFromModel->getFillable();
-        $configuration['tableName'] = $dataFromModel->getTableName();
-
-        $configuration['list_data'] = VRPagesCategories::get()->where('deleted_at', '=', null)->toArray();
-
-        $configuration['fullComment'] = $fullComment;
-
-        if(Route::has('app.' . $configuration['tableName'] . '_translations.create')){
-            $configuration[ 'translationExist' ] = true;
+            $message = ['message' => $fullComment];
         }
 
-        return view('admin.list', $configuration);
+        return redirect()->route('app.pages_categories.index')->with($message);
     }
 }
