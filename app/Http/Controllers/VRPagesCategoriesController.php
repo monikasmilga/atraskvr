@@ -144,6 +144,10 @@ class VRPagesCategoriesController extends Controller
         if (VRPagesCategories::destroy($id) and VRPagesCategoriesTranslations::where('categories_id', '=', $id)->delete())
         {
             return json_encode(["success" => true, "id" => $id]);
+
+        }elseif (VRPagesCategories::destroy($id))
+        {
+            return json_encode(["success" => true, "id" => $id]);
         }
     }
 }

@@ -176,6 +176,10 @@ class VRPagesController extends Controller
     {
         if (VRPages::destroy($id) and VRPagesTranslations::where('menus_id', '=', $id)->delete()) {
             return json_encode(["success" => true, "id" => $id]);
+
+        }elseif (VRPages::destroy($id))
+        {
+            return json_encode(["success" => true, "id" => $id]);
         }
     }
 }

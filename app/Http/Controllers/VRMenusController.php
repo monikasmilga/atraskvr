@@ -144,9 +144,11 @@ class VRMenusController extends Controller
 
     public function adminDestroy($id)
     {
-        if(VRMenus::destroy($id) and VRMenusTranslations::where('menus_id', '=', $id)->delete())
-        {
-            return json_encode(["success" => true, "id" => $id]);
+        if ( VRMenus::destroy ( $id ) and VRMenusTranslations::where ( 'menus_id' , '=' , $id )->delete () ) {
+            return json_encode ( [ "success" => true , "id" => $id ] );
+
+        } elseif ( VRMenus::destroy ( $id ) ) {
+            return json_encode ( [ "success" => true , "id" => $id ] );
         }
     }
 }
