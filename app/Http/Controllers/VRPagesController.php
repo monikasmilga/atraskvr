@@ -31,6 +31,8 @@ class VRPagesController extends Controller
 
         $configuration['coverImages'] = VRResources::all()->pluck('path', 'id')->toArray();
 
+        $configuration['categories'] = VRPagesCategories::all()->pluck('name', 'id')->toArray();
+
         if ($configuration['list_data'] == []) {
             $configuration['error'] = ['message' => trans("List is empty. Please create some " . $configuration['tableName'] . ", then check list again")];
             return view('admin.list', $configuration);
@@ -130,9 +132,12 @@ class VRPagesController extends Controller
         $configuration['fields'] = $dataFromModel->getFillable();
         $configuration['tableName'] = $dataFromModel->getTableName();
 
+        $configuration['record'] = VRPages::find($id)->toArray();
+
         $configuration['dropdown']['pages_categories_id'] = VRPagesCategories::all()->pluck('name', 'id')->toArray();
 
-        $configuration['record'] = VRPages::find($id)->toArray();
+//        $resourcesTable_id = VRPages::find($id)->cover_image_id;
+//        $configuration['coverImage'] = VRResources::find($resourcesTable_id)->path;
 
         return view('admin.editform', $configuration);
     }

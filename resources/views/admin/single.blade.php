@@ -36,6 +36,9 @@
                         @elseif($key == 'pages_categories_id')
                             <td>pages category</td>
                             <td>{{$category}}</td>
+                        @elseif($key == 'parent_id')
+                            <td>parent id</td>
+                            <td>{{$parent_id[$record['parent_id']]}}</td>
                         @elseif($key == 'count')
                         @else
                             <td>{{$key}}</td>

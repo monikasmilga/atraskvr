@@ -30,6 +30,10 @@ class VRMenusController extends Controller
 
         $configuration['list_data'] = VRMenus::get()->where('deleted_at', '=', null)->toArray();
 
+        $configuration['menus'] = VRMenus::all()->pluck('name', 'id')->toArray();
+
+//        dd($configuration);
+
         if ($configuration['list_data'] == []) {
             $configuration['error'] = ['message' => trans("List is empty. Please create some " . $configuration['tableName'] . ", then check list again")];
             return view('admin.list', $configuration);
@@ -50,6 +54,8 @@ class VRMenusController extends Controller
         $dataFromModel = new VRMenus();
         $configuration['fields'] = $dataFromModel->getFillable();
         $configuration['tableName'] = $dataFromModel->getTableName();
+
+        $configuration['dropdown']['parent_id'] = VRMenus::all()->pluck('name', 'id')->toArray();
 
         return view('admin.createform', $configuration);
     }
@@ -87,6 +93,7 @@ class VRMenusController extends Controller
         $dataFromModel = new VRMenus();
         $configuration['record'] = VRMenus::find($id)->toArray();
         $configuration['tableName'] = $dataFromModel->getTableName();
+        $configuration['parent_id'] = VRMenus::get()->where('id', '=', (VRMenus::find($id)->parent_id))->pluck('name', 'id')->toArray();
 
         $dataFromModel2 = new VRMenusTranslations();
         $configuration['fields_translations'] = $dataFromModel2->getFillable();
@@ -110,6 +117,8 @@ class VRMenusController extends Controller
         $configuration['tableName'] = $dataFromModel->getTableName();
 
         $configuration['record'] = VRMenus::find($id)->toArray();
+
+        $configuration['dropdown']['parent_id'] = VRMenus::all()->pluck('name', 'id')->toArray();
 
         return view('admin.editform', $configuration);
     }

@@ -29,7 +29,17 @@
                 <thead>
                 <tr>
                     @foreach($fields as $key => $value)
-                    <th>{{$value}}</th>
+
+                        @if($value == 'cover_image_id' and $tableName == 'pages')
+                            <th>cover image</th>
+                        @elseif($value == 'pages_categories_id' and $tableName == 'pages')
+                            <th>pages category</th>
+                        @elseif($value == 'parent_id' and $tableName == 'menus')
+                            <th>parent</th>
+                        @else
+                            <th>{{$value}}</th>
+                        @endif
+
                     @endforeach
                         @if(isset($translationExist))
                             <th>Translate</th>
@@ -46,8 +56,16 @@
                             @foreach($fields as $key => $value)
                                 @if($key_data == $value and $key_data == 'cover_image_id')
                                         <td><img style="width:70px" src={{asset($coverImages[$value_data])}}></td>
+                                @elseif($key_data == $value and $key_data == 'pages_categories_id')
+                                    <td>{{$categories[$record['pages_categories_id']]}}</td>
+                                @elseif($key_data == $value and $key_data == 'parent_id')
+                                    @if($record['parent_id'] != null)
+                                    <td>{{$menus[$record['parent_id']]}}</td>
+                                    @else
+                                        <td></td>
+                                    @endif
                                 @elseif($key_data == $value)
-                                <td>{{$value_data}}</td>
+                                    <td>{{$value_data}}</td>
                                 @endif
                             @endforeach
                         @endforeach

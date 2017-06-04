@@ -38,6 +38,12 @@
 						{!! Form::file('image', ['class' => 'form-control'])!!}<br/>
 					</div>
 
+				@elseif(isset($dropdown) and $field == 'parent_id')
+					<div class="form-group">
+						{!! Form::label($field, 'Choose ' . ucfirst(substr($field, 0, -3) . ':')) !!}
+						{{Form::select($field, $dropdown[$field], '', ['class' => 'form-control'])}}<br/>
+					</div>
+
 				@elseif(isset($dropdown) and substr($field, -3) == '_id')
 					<div class="form-group">
 						{!! Form::label($field, 'Choose ' . ucfirst(substr($field, 0, -4) . ':')) !!}
