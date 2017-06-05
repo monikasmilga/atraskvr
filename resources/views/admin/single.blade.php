@@ -140,7 +140,7 @@
                         </tr>
                     @endforeach
                 @endforeach
-                </tbody>
+                {{--</tbody>--}}
             </table>
         @endif
 
