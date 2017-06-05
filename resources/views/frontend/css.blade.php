@@ -7,7 +7,7 @@
     <link href={{asset('/css/frontend.css')}} rel="stylesheet">
     <link href={{asset('/css/640.css')}} rel="stylesheet">
     <link href={{asset('/css/1024.css')}} rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css?family=Nunito+Sans:800" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Nunito+Sans:900" rel="stylesheet">
 </head>
 </html>
 

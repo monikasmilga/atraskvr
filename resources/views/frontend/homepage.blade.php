@@ -11,7 +11,7 @@
         </div>
 
         <div id="main-title">{{trans('app.discover_vr')}}</div>
-        
+        <div id="orange-box">{{trans('app.orange_box')}}</div>
     </div>
 
 
