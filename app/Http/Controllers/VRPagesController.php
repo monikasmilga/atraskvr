@@ -8,6 +8,7 @@ use App\Models\VRPagesCategories;
 use App\Models\VRPagesTranslations;
 use App\Models\VRResources;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
 
 class VRPagesController extends Controller
