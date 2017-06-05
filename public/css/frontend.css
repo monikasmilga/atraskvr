@@ -97,8 +97,16 @@
 
 #elektromarkt
 {
-    background: url("../images/partner-logo_elektromarkt 2.png") no-repeat;
-
+    background: url("../images/partner-logo_elektromarkt 2.png") no-repeat center center;
+    width: 239px;
+    margin: 0 auto;
+    height: 210px;
+    background-size: contain;
+    background-position-y: 130px;
+    color: #FF958B;
+    font-size: 18px;
+    text-align: center;
+    padding-top: 100px;
 }
 
 /*#menu a {*/
