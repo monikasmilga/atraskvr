@@ -20,6 +20,9 @@ class VRPagesController extends Controller
      */
     public function adminIndex()
     {
+        $message = Session()->get('message');
+        $configuration['message'] = $message;
+
         $dataFromModel = new VRPages();
         $configuration['fields'] = $dataFromModel->getFillable();
         $configuration['tableName'] = $dataFromModel->getTableName();
@@ -27,8 +30,8 @@ class VRPagesController extends Controller
         $configuration['list_data'] = VRPages::get()->where('deleted_at', '=', null)->toArray();
 
         $configuration['coverImages'] = VRResources::all()->pluck('path', 'id')->toArray();
-        
-        //TODO take categories
+
+        $configuration['categories'] = VRPagesCategories::all()->pluck('name', 'id')->toArray();
 
         if ($configuration['list_data'] == []) {
             $configuration['error'] = ['message' => trans("List is empty. Please create some " . $configuration['tableName'] . ", then check list again")];
@@ -44,6 +47,9 @@ class VRPagesController extends Controller
 
     public function adminCreate()
     {
+        $message = Session()->get('message');
+        $configuration['message'] = $message;
+
         $dataFromModel = new VRPages();
         $configuration['fields'] = $dataFromModel->getFillable();
         $configuration['tableName'] = $dataFromModel->getTableName();
@@ -82,15 +88,15 @@ class VRPagesController extends Controller
         }
 
         $resource = request()->file('image');
-        $newDTResourcesController = new VRUploadController();
-        $record = $newDTResourcesController->upload($resource);
+        $newVRResourcesController = new VRUploadController();
+        $record = $newVRResourcesController->upload($resource, null);
         $data['cover_image_id'] = $record->id;
 
         VRPages::create($data);
 
-        $configuration['comment'] = ['message' => trans('Record added successfully')];
+        $message = ['message' => trans('Record added successfully')];
 
-        return view('admin.createform', $configuration);
+        return redirect()->route('app.pages.create')->with($message);
     }
 
     public function adminShow($id)
@@ -113,6 +119,10 @@ class VRPagesController extends Controller
         $configuration['translations'] = VRPagesTranslations::all()->where('pages_id', '=', $id)->toArray();
         $configuration['languages_names'] = VRLanguages::all()->pluck('name', 'id')->toArray();
 
+        if(Route::has('app.' . $configuration['tableName'] . '_translations.create')) {
+            $configuration[ 'translationExist' ] = true;
+        }
+
         return view('admin.single', $configuration);
     }
 
@@ -122,10 +132,12 @@ class VRPagesController extends Controller
         $configuration['fields'] = $dataFromModel->getFillable();
         $configuration['tableName'] = $dataFromModel->getTableName();
 
+        $configuration['record'] = VRPages::find($id)->toArray();
+
         $configuration['dropdown']['pages_categories_id'] = VRPagesCategories::all()->pluck('name', 'id')->toArray();
 
-
-        $configuration['record'] = VRPages::find($id)->toArray();
+//        $resourcesTable_id = VRPages::find($id)->cover_image_id;
+//        $configuration['coverImage'] = VRResources::find($resourcesTable_id)->path;
 
         return view('admin.editform', $configuration);
     }
@@ -133,6 +145,8 @@ class VRPagesController extends Controller
     public function adminUpdate($id)
     {
         $data = request()->all();
+
+        $data['cover_image_id'] = request()->file('image');
 
         $dataFromModel = new VRPages();
         $configuration['fields'] = $dataFromModel->getFillable();
@@ -152,25 +166,39 @@ class VRPagesController extends Controller
             return view('admin.editform', $configuration);
         }
 
+        $resource = request()->file('image');
+        $newVRResourcesController = new VRUploadController();
+        $resourceId = VRPages::find($id)->cover_image_id;
+        $record = $newVRResourcesController->upload($resource, $resourceId);
+        $data['cover_image_id'] = $record->id;
+
         $record = VRPages::find($id);
 
         $record->update($data);
 
-        $configuration['list_data'] = VRPages::get()->where('deleted_at', '=', null)->toArray();
+        DB::table('vr_pages_translations')
+            ->wherePages_idAndLanguages_id($id, 'lt')
+            ->update([
+                         'title' => $record->name,
+                         'slug' => str_slug($record->name, '-'),
+                     ]);
 
-        if(Route::has('app.' . $configuration['tableName'] . '_translations.create')){
-            $configuration[ 'translationExist' ] = true;
-        }
+        $message = ['message' => trans('Record updated successfully')];
 
-        $configuration['comment'] = ['message' => trans('Record updated successfully')];
-
-        return view('admin.list', $configuration);
+        return redirect()->route('app.pages.index')->with($message);
     }
 
     public function adminDestroy($id)
     {
-        if (VRPages::destroy($id) and VRPagesTranslations::where('menus_id', '=', $id)->delete()) {
-            return json_encode(["success" => true, "id" => $id]);
+        if (VRPages::destroy($id) and VRResources::find(VRPages::find($id)->cover_image_id)->delete()){
+
+            if(VRPagesTranslations::where('pages_id', '=', $id)->delete()){
+                return json_encode(["success" => true, "id" => $id]);
+            }
+
+            else {
+                return json_encode(["success" => true, "id" => $id]);
+            }
         }
     }
 }

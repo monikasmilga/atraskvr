@@ -16,9 +16,8 @@ class VROrdersController extends Controller
      */
     public function adminIndex()
     {
-
-        return VROrders::get();
-
+        $message = Session()->get('message');
+        $configuration['message'] = $message;
 
         $dataFromModel = new VROrders();
         $configuration['fields'] = $dataFromModel->getFillable();
@@ -26,7 +25,12 @@ class VROrdersController extends Controller
 
         $configuration['list_data'] = VROrders::get()->where('deleted_at', '=', null)->toArray();
 
-        if(Route::has('app.' . $configuration['tableName'] . '_translations.create')){
+        if ($configuration['list_data'] == []) {
+            $configuration['error'] = ['message' => trans("List is empty. Please create some " . $configuration['tableName'] . ", then check list again")];
+            return view('admin.list', $configuration);
+        }
+
+        if(Route::has('app.' . $configuration['tableName'] . '_translations.create')) {
             $configuration[ 'translationExist' ] = true;
         }
 
@@ -40,6 +44,9 @@ class VROrdersController extends Controller
      */
     public function adminCreate()
     {
+        $message = Session()->get('message');
+        $configuration['message'] = $message;
+
         $dataFromModel = new VROrders();
         $configuration['fields'] = $dataFromModel->getFillable();
         $configuration['tableName'] = $dataFromModel->getTableName();
@@ -79,11 +86,10 @@ class VROrdersController extends Controller
 
         VROrders::create($data);
 
-        $configuration['comment'] = ['message' => trans('Record added successfully')];
+        $message = ['message' => trans('Record added successfully')];
 
-        return view('admin.createform', $configuration);
+        return redirect()->route('app.orders.create')->with($message);
     }
-
 
     /**
      * @param $id
@@ -151,17 +157,12 @@ class VROrdersController extends Controller
         }
 
         $record = VROrders::find($id);
+
         $record->update($data);
 
-        $configuration['list_data'] = VROrders::get()->where('deleted_at', '=', null)->toArray();
+        $message = ['message' => trans('Record updated successfully')];
 
-        if(Route::has('app.' . $configuration['tableName'] . '_translations.create')){
-            $configuration[ 'translationExist' ] = true;
-        }
-
-        $configuration['comment'] = ['message' => trans('Record updated successfully')];
-
-        return view('admin.list', $configuration);
+        return redirect()->route('app.orders.index')->with($message);
     }
 
     public function adminDestroy($id)

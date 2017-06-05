@@ -95,21 +95,9 @@ class VRMenusTranslationsController extends Controller
 
             $fullComment = $fullComment . $comment[$name] .'. ';
 
-            $configuration['comment'] = ['message' => $fullComment];
+            $message = ['message' => $fullComment];
         }
 
-        $dataFromModel = new VRMenus();
-        $configuration['fields'] = $dataFromModel->getFillable();
-        $configuration['tableName'] = $dataFromModel->getTableName();
-
-        $configuration['list_data'] = VRMenus::get()->where('deleted_at', '=', null)->toArray();
-
-        $configuration['fullComment'] = $fullComment;
-
-        if(Route::has('app.' . $configuration['tableName'] . '_translations.create')) {
-            $configuration[ 'translationExist' ] = true;
-        }
-
-        return view('admin.list', $configuration);
+        return redirect()->route('app.menus.index')->with($message);
     }
 }

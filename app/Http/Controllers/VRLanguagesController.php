@@ -16,6 +16,9 @@ class VRLanguagesController extends Controller
      */
     public function adminIndex()
     {
+        $message = Session()->get('message');
+        $configuration['message'] = $message;
+
         $dataFromModel = new VRLanguages();
         $configuration['fields'] = $dataFromModel->getFillable();
         $configuration['tableName'] = $dataFromModel->getTableName();
@@ -36,6 +39,9 @@ class VRLanguagesController extends Controller
 
     public function adminCreate()
     {
+        $message = Session()->get('message');
+        $configuration['message'] = $message;
+
         $dataFromModel = new VRLanguages();
         $configuration['fields'] = $dataFromModel->getFillable();
         $configuration['tableName'] = $dataFromModel->getTableName();
@@ -65,9 +71,9 @@ class VRLanguagesController extends Controller
 
         VRLanguages::create($data);
 
-        $configuration['comment'] = ['message' => trans('Record added successfully')];
+        $message = ['message' => trans('Record added successfully')];
 
-        return view('admin.createform', $configuration);
+        return redirect()->route('app.languages.create')->with($message);
     }
 
     public function adminShow($id)
@@ -75,6 +81,10 @@ class VRLanguagesController extends Controller
         $dataFromModel = new VRLanguages();
         $configuration['record'] = VRLanguages::find($id)->toArray();
         $configuration['tableName'] = $dataFromModel->getTableName();
+
+        if(Route::has('app.' . $configuration['tableName'] . '.translations')){
+            $configuration[ 'translationExist' ] = true;
+        }
 
         return view('admin.single', $configuration);
     }
@@ -115,19 +125,9 @@ class VRLanguagesController extends Controller
 
         $record->update($data);
 
-        $dataFromModel = new VRLanguages();
-        $configuration['fields'] = $dataFromModel->getFillable();
-        $configuration['tableName'] = $dataFromModel->getTableName();
+        $message = ['message' => trans('Record updated successfully')];
 
-        $configuration['list_data'] = VRLanguages::get()->toArray();
-
-        if(Route::has('app.' . $configuration['tableName'] . '_translations.create')){
-            $configuration[ 'translationExist' ] = true;
-        }
-
-        $configuration['fullComment'] = 'Record updated successfully';
-
-        return view('admin.list', $configuration);
+        return redirect()->route('app.languages.index')->with($message);
     }
 
     public function adminDestroy($id)
