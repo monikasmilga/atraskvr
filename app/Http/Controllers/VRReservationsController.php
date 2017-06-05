@@ -85,6 +85,7 @@ class VRReservationsController extends Controller
         $startDate = Carbon::today();
         $endDate = Carbon::today()->addWeek(2);
 
+         $timeNow = Carbon::now(+2)->addHours(1);
 
 
         $allTimes = $this->generateDateRange($startTime2, $endTime2, 'addMinutes', 10, 'Y-m-d H:i');
