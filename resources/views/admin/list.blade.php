@@ -24,7 +24,7 @@
                     </div>
                 @endif
                     <h3>{{$tableName . ' list'}}</h3><br>
-                    <a style="margin-bottom: 50px" class="btn btn-primary btn-sm" href="{{ route('app.' . $tableName . '.create') }}">Create new {{substr($tableName, 0, -1)}}</a>
+                         <a style="margin-bottom: 50px" class="btn btn-primary btn-sm" href="{{ route('app.' . $tableName . '.create') }}">Create new {{substr($tableName, 0, -1)}}</a>
                     <table class="table">
                 <thead>
                 <tr>
@@ -50,9 +50,30 @@
                 </tr>
                 </thead>
                 <tbody>
+
+
                 @foreach($list_data as $key => $record)
                     <tr id="{{$record['id']}}">
+
+{{--display media--}}
+                        @if(array_key_exists ('path', $record))
+                            @if($record['mime_type'] == "image/jpeg" || $record['mime_type'] == "png")
+                                <td>
+                                    <a href="#"><img src="{{URL::asset($record['path'])}}" alt="Forest" width="80" height="150"/></a>
+                                </td>
+                            @endif
+                            @if($record['mime_type'] == "video/mp4")
+                                <td class="embed-responsive embed-responsive-4by3" style="width:80px; height:150px">
+                                    <video controls preload="none">
+                                        <source src="{{URL::asset($record['path'])}}"><source>
+                                    </video>
+                                </td>
+                            @endif
+                        @endif
+
+{{--dinamic data display --}}
                         @foreach($record as $key_data => $value_data)
+
                             @foreach($fields as $key => $value)
                                 @if($key_data == $value and $key_data == 'cover_image_id')
                                         <td><img style="width:70px" src={{asset($coverImages[$value_data])}}></td>
@@ -65,7 +86,9 @@
                                         <td></td>
                                     @endif
                                 @elseif($key_data == $value)
-                                    <td>{{$value_data}}</td>
+
+                                       <td>{{$value_data}}</td>
+                                       
                                 @endif
                             @endforeach
                         @endforeach
