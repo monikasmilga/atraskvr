@@ -96,25 +96,9 @@ class VRPagesTranslationsController extends Controller
 
             $fullComment = $fullComment . $comment[$name] .'. ';
 
-            $configuration['comment'] = ['message' => $fullComment];
+            $message = ['message' => $fullComment];
         }
 
-        $dataFromModel = new VRPages();
-        $configuration['fields'] = $dataFromModel->getFillable();
-        $configuration['tableName'] = $dataFromModel->getTableName();
-
-        $configuration['list_data'] = VRPages::get()->where('deleted_at', '=', null)->toArray();
-
-        $configuration['coverImages'] = VRResources::all()->pluck('path', 'id')->toArray();
-
-        $configuration['fullComment'] = $fullComment;
-
-
-
-        if(Route::has('app.' . $configuration['tableName'] . '_translations.create')) {
-            $configuration[ 'translationExist' ] = true;
-        }
-
-        return view('admin.list', $configuration);
+        return redirect()->route('app.pages.index')->with($message);
     }
 }
