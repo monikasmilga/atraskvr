@@ -25,11 +25,13 @@ body {
 
 .navbar .navbar-collapse ul li a:focus {
 
-    color: #C1C2C6;
+    color: #FD7B52;
 }
 
 
-.navbar-default .navbar-nav>.open>a, .navbar-default .navbar-nav>.open>a:focus, .navbar-default .navbar-nav>.open>a:hover {
+.navbar-default .navbar-nav>.open>a,
+.navbar-default .navbar-nav>.open>a:focus,
+.navbar-default .navbar-nav>.open>a:hover {
 
     color: #FD7B52;
     background-color: #000000;
@@ -46,12 +48,84 @@ body {
     background-color: #000000;
 }
 
+
 .navbar .navbar-nav  {
 
     display: inline-block;
     float: none;
 }
 
-.navbar .navbar-collapse {
+.navbar-collapse {
     text-align: center;
 }
+
+.navbar-default .navbar-nav .open .dropdown-menu>li>a {
+    color: #F0F0F0;
+}
+
+.navbar-default .navbar-nav .open .dropdown-menu>li>a:hover {
+    color: #FD7B52;
+}
+
+.navbar-default .navbar-toggle {
+    color: #F0F0F0;
+    border-color: #F0F0F0;
+}
+
+.navbar-default .navbar-toggle:focus {
+
+    background-color: #000000;
+
+}
+
+.navbar-default .navbar-collapse, .navbar-default .navbar-form {
+    border-color: #000000;
+}
+
+.navbar {
+    margin-bottom: 0;
+    position: fixed;
+    width: 100%;
+
+}
+
+#part-1 {
+    height: 1073px;
+    background: url(../images/header.jpg) no-repeat center center;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+    -webkit-transition: height 1s;
+
+
+}
+
+#elektroMarkt {
+    height: 326px;
+    width: 268px;
+    background: url(../images/elektro_markt.png) no-repeat center center;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+    margin: 0 auto ;
+    background-position-y: -100px;
+
+
+}
+
+#elektroMarktLogo {
+
+    height: 100px;
+    width: 100px;
+    background: url(../images/elektro_markt_logo.png) no-repeat;
+    /*-webkit-background-size: cover;*/
+    /*-moz-background-size: cover;*/
+    /*-o-background-size: cover;*/
+    /*background-size: cover;*/
+    /*margin: 0 auto ;*/
+    background-position-y: 150px;
+
+}
+
