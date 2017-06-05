@@ -2,4 +2,8 @@
     #part-1 {
         height: 1048px;
     }
+
+    #mainTitleDescription {
+        display: none;
+    }
 }

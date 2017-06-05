@@ -3,4 +3,8 @@
         height: 601px;
     }
 
+    #mainTitleDescription {
+        display: none;
+    }
+
 }
