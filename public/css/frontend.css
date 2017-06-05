@@ -98,6 +98,7 @@ body {
     -o-background-size: cover;
     background-size: cover;
     -webkit-transition: height 1s;
+    position: relative;
 
 
 }
@@ -158,4 +159,19 @@ body {
     letter-spacing: 1px;
 
 }
+
+
+.irregular-shape {
+
+    width: 100%;
+    height: 500px;
+    position: absolute;
+    left: 0;
+    bottom: -240px;
+    background: url("../images/irregular_shape.png") no-repeat center center;
+
+}
+
+
+
 

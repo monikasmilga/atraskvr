@@ -13,10 +13,10 @@
 
                 @foreach($menu as $menuItem)
 
-                    @if($menuItem['title'] == 'Virtualūs kambariai')
+                    @if($menuItem['title'] == 'Virtualūs kambariai' || $menuItem['title'] == 'Virtual rooms')
 
                         <li class="dropdown">
-                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Virtualus kambariai<span class="caret"></span></a>
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">{{$menuItem['title']}}<span class="caret"></span></a>
                             <ul class="dropdown-menu">
 
                                 @foreach($pages as $page)
@@ -37,6 +37,14 @@
                     @endif
 
                 @endforeach
+
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">{{trans('app.language')}}<span class="caret"></span></a>
+                        <ul class="dropdown-menu">
+                            <li><a href="/lt">Lt</a></li>
+                            <li><a href="/en">En</a></li>
+                        </ul>
+                    </li>
 
 
             </ul>

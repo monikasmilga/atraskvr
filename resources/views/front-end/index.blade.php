@@ -22,10 +22,7 @@
             <div id="mainTitleDescription">{{trans('app.header_description')}}</div>
 
 
-
         </div>
-
-
 
 @endsection
 

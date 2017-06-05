@@ -262,7 +262,10 @@ Route::group(['prefix' => 'admin'], function () {
 
 });
 
-Route::get('/', [
+
+
+
+Route::get('{language}/', [
     'as' => 'frontend.index',
     'uses' => 'FrontEndController@index'
 ]);

@@ -8,6 +8,8 @@ use Illuminate\Support\Facades\Route;
 
 class VRLanguagesController extends Controller
 {
+
+
     /**
      * Display a listing of the resource.
      * GET /pages categories
