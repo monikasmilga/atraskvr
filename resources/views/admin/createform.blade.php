@@ -56,11 +56,12 @@
 
                 @elseif($field == 'cover_image_id' and $tableName == 'pages')
                     @if($dropdown[$field] != null)
-                    <div class="form-group">
-                        {{--{{dd($dropdown['cover_image'])}}--}}
-                        {!! Form::label($field, 'Choose ' . ucfirst(substr($field, 0, -3) . ':')) !!}
-                        {{Form::select($field,$dropdown[$field],'', ['class' => 'form-control'])}}<br/>
-                    </div>
+                        <div class="form-group">
+
+                            {!! Form::label($field, 'Choose ' . ucfirst(substr($field, 0, -3) . ':')) !!}
+                            {{Form::select($field,$dropdown[$field],'', ['class' => 'form-control'])}}<br/>
+                        </div>
+
                         <div class="form-group">
                             {!! Form::label($field, 'Upload ' . ucfirst(substr($field, 0, -3) . ':')) !!}<br/>
                             {!! Form::file('image')!!}<br/>
