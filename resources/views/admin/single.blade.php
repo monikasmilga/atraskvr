@@ -140,10 +140,6 @@
                         </tr>
                     @endforeach
                 @endforeach
-               // @endforeach
-               // </tbody>
-              //  @endif
-      //  </table>
                 </tbody>
             </table>
         @endif

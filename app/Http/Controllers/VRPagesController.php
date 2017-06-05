@@ -83,8 +83,8 @@ class VRPagesController extends Controller
         $configuration['fields'] = $dataFromModel->getFillable();
         $configuration['tableName'] = $dataFromModel->getTableName();
 
-        $configuration['dropdown']['pages_categories_id'] = VRPagesCategories::all()->pluck('id', 'id')->toArray();
-        $configuration['dropdown']['cover_image'] = VRResources::all()->pluck('path', 'id')->toArray();
+        $configuration['dropdown']['pages_categories_id'] = VRPagesCategories::all()->pluck('name', 'id')->toArray();
+        $configuration['dropdown']['cover_image_id'] = VRResources::all()->pluck('path', 'id')->toArray();
 
         return view('admin.createform', $configuration);
     }
@@ -98,7 +98,7 @@ class VRPagesController extends Controller
         $dataFromModel = new VRPages();
         $configuration['fields'] = $dataFromModel->getFillable();
         $configuration['tableName'] = $dataFromModel->getTableName();
-        $configuration['dropdown']['pages_categories_id'] = VRPagesCategories::all()->pluck('id', 'id')->toArray();
+        $configuration['dropdown']['pages_categories_id'] = VRPagesCategories::all()->pluck('name', 'id')->toArray();
 
         $missingValues = '';
         foreach ($configuration['fields'] as $key => $value) {
@@ -169,6 +169,8 @@ class VRPagesController extends Controller
         $configuration['connectedMediaDataArrays'] = $this-> mediaFiles($id);
         $configuration['connectedMediaDataArrays']['connectedMediaData'];
 
+
+
         if(Route::has('app.' . $configuration['tableName'] . '_translations.create')) {
             $configuration[ 'translationExist' ] = true;
         }
@@ -187,8 +189,8 @@ class VRPagesController extends Controller
 
         $configuration['dropdown']['pages_categories_id'] = VRPagesCategories::all()->pluck('name', 'id')->toArray();
 
-//        $resourcesTable_id = VRPages::find($id)->cover_image_id;
-//        $configuration['coverImage'] = VRResources::find($resourcesTable_id)->path;
+        $resourcesTable_id = VRPages::find($id)->cover_image_id;
+        $configuration['coverImage'] = VRResources::find($resourcesTable_id)->path;
 
         return view('admin.editform', $configuration);
     }

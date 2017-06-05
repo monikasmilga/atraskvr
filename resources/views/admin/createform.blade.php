@@ -54,19 +54,19 @@
 {{--display dropdown fields for the cover img selection from VRResources--}}
                 {{--## substr($field, -4) == 's_id' ## translates to ## $field == 'cover_image_id' ##--}}
                 
-                @elseif(substr($field, -4) == 'e_id')
+                @elseif($field == 'cover_image_id')
                     <div class="form-group">
                         {{--{{dd($dropdown['cover_image'])}}--}}
                         {!! Form::label($field, 'Choose ' . ucfirst(substr($field, 0, -3) . ':')) !!}
-                        {{Form::select($field,$dropdown['cover_image'],'', ['class' => 'form-control'])}}<br/>
+                        {{Form::select($field,$dropdown[$field],'', ['class' => 'form-control'])}}<br/>
                     </div>
                     
                     
-                    @elseif(isset($dropdown) and substr($field, -3) == '_id')
-                    <div class="form-group">
-                      {!! Form::label($field, 'Choose ' . ucfirst(substr($field, 0, -4) . ':')) !!}
-                      {{Form::select($field, $dropdown[$field], '', ['class' => 'form-control'])}}<br/>
-                    </div>
+                    {{--@elseif(isset($dropdown) and substr($field, -3) == '_id')--}}
+                    {{--<div class="form-group">--}}
+                      {{--{!! Form::label($field, 'Choose ' . ucfirst(substr($field, 0, -4) . ':')) !!}--}}
+                      {{--{{Form::select($field, $dropdown[$field], '', ['class' => 'form-control'])}}<br/>--}}
+                    {{--</div>--}}
                     
                     
                     
