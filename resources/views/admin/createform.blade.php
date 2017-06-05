@@ -54,12 +54,23 @@
 {{--display dropdown fields for the cover img selection from VRResources--}}
                 {{--## substr($field, -4) == 's_id' ## translates to ## $field == 'cover_image_id' ##--}}
 
-                @elseif($field == 'cover_image_id')
+                @elseif($field == 'cover_image_id' and $tableName == 'pages')
+                    @if($dropdown[$field] != null)
                     <div class="form-group">
                         {{--{{dd($dropdown['cover_image'])}}--}}
                         {!! Form::label($field, 'Choose ' . ucfirst(substr($field, 0, -3) . ':')) !!}
                         {{Form::select($field,$dropdown[$field],'', ['class' => 'form-control'])}}<br/>
                     </div>
+                        <div class="form-group">
+                            {!! Form::label($field, 'Upload ' . ucfirst(substr($field, 0, -3) . ':')) !!}<br/>
+                            {!! Form::file('image')!!}<br/>
+                        </div><br/>
+                    @else
+                        <div class="form-group">
+                            {!! Form::label($field, 'Upload ' . ucfirst(substr($field, 0, -3) . ':')) !!}<br/>
+                            {!! Form::file('image')!!}<br/>
+                        </div><br/>
+                    @endif
 
 
                     {{--@elseif(isset($dropdown) and substr($field, -3) == '_id')--}}
@@ -72,6 +83,7 @@
 
 {{--display media upload button for multiple files IN PAGES CREATE. Used in 'create new page' and also 'create --}}
                     <div class="form-group">
+                        {!! Form::label('images', 'Upload Media files:' ) !!}<br>
                         {!! Form::file('images[]', array('multiple'=>true)) !!}<br/>
                     </div>
 

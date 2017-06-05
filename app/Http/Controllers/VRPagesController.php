@@ -9,6 +9,7 @@ use App\Models\VRPagesResourcesConnections;
 use App\Models\VRPagesTranslations;
 use App\Models\VRResources;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
 
 class VRPagesController extends Controller
@@ -94,11 +95,13 @@ class VRPagesController extends Controller
 
         $data = request()->all();
 
+        $data['cover_image_id'] = request()->file('image');
 
         $dataFromModel = new VRPages();
         $configuration['fields'] = $dataFromModel->getFillable();
         $configuration['tableName'] = $dataFromModel->getTableName();
         $configuration['dropdown']['pages_categories_id'] = VRPagesCategories::all()->pluck('name', 'id')->toArray();
+        $configuration['dropdown']['cover_image_id'] = VRResources::all()->pluck('path', 'id')->toArray();
 
         $missingValues = '';
         foreach ($configuration['fields'] as $key => $value) {
@@ -110,27 +113,20 @@ class VRPagesController extends Controller
                 $missingValues = $missingValues . ' ' . $value . ',';
             }
         }
-
         if ($missingValues != '') {
             $missingValues = substr($missingValues, 0, -1);
             $configuration['error'] = ['message' => trans($missingValues)];
             return view('admin.createform', $configuration);
         }
 
-
+//      Create cover id from uploading from windows directory
+        $newVRResourcesController = new VRUploadController();
+        $record = $newVRResourcesController->upload($data['image'], null);
+        $data['cover_image_id'] = $record->id;
         $allData = VRPages::create($data)->toArray();
-
-//         $resource = request()->file('image');
-//         $newVRResourcesController = new VRUploadController();
-//         $record = $newVRResourcesController->upload($resource, null);
-//         $data['cover_image_id'] = $record->id;
-
 
         $resourceStore = new VRResourceController();
         $resource_id = $resourceStore->getResourceStore($allData);
-
-        $message = ['message' => trans('Record added successfully')];
-
 
         foreach($resource_id as $id) {
 
@@ -139,7 +135,9 @@ class VRPagesController extends Controller
                 'resources_id' => $id
             ]);
         }
- 
+
+        $message = ['message' => trans('Record added successfully')];
+
         return redirect()->route('app.pages.create')->with($message);
     }
 
@@ -166,8 +164,9 @@ class VRPagesController extends Controller
         $configuration['translations'] = VRPagesTranslations::all()->where('pages_id', '=', $id)->toArray();
         $configuration['languages_names'] = VRLanguages::all()->pluck('name', 'id')->toArray();
 
-        $configuration['connectedMediaDataArrays'] = $this-> mediaFiles($id);
-        $configuration['connectedMediaDataArrays']['connectedMediaData'];
+        $configuration['connectedMediaData'] = $this-> mediaFiles($id);
+//        dd($this-> mediaFiles($id));
+//        $configuration['connectedMediaDataArrays']['connectedMediaData'];
 
 
 
@@ -192,6 +191,8 @@ class VRPagesController extends Controller
         $resourcesTable_id = VRPages::find($id)->cover_image_id;
         $configuration['coverImage'] = VRResources::find($resourcesTable_id)->path;
 
+
+
         return view('admin.editform', $configuration);
     }
 
@@ -199,19 +200,18 @@ class VRPagesController extends Controller
     {
         $data = request()->all();
 
-        $data['cover_image_id'] = request()->file('image');
-
         $dataFromModel = new VRPages();
         $configuration['fields'] = $dataFromModel->getFillable();
         $configuration['tableName'] = $dataFromModel->getTableName();
 
         $missingValues = '';
         foreach ($configuration['fields'] as $key => $value) {
-            if ($value == 'parent_id') {
+            if ($value == 'cover_image_id') {
             } elseif (!isset($data[$value])) {
                 $missingValues = $missingValues . ' ' . $value . ',';
             }
         }
+
         if ($missingValues != '') {
             $missingValues = substr($missingValues, 1, -1);
             $configuration['error'] = ['message' => trans('Please enter ' . $missingValues)];
@@ -219,15 +219,20 @@ class VRPagesController extends Controller
             return view('admin.editform', $configuration);
         }
 
-        $resource = request()->file('image');
-        $newVRResourcesController = new VRUploadController();
-        $resourceId = VRPages::find($id)->cover_image_id;
-        $record = $newVRResourcesController->upload($resource, $resourceId);
-        $data['cover_image_id'] = $record->id;
+        if (request()->file('image') != null) {
+
+            $data['cover_image_id'] = request()->file('image');
+            $resource = request()->file('image');
+            $newVRResourcesController = new VRUploadController();
+            $resourceId = VRPages::find($id)->cover_image_id;
+            $record = $newVRResourcesController->upload($resource, $resourceId);
+            $data['cover_image_id'] = $record->id;
+        }
 
         $record = VRPages::find($id);
 
         $record->update($data);
+
 
         DB::table('vr_pages_translations')
             ->wherePages_idAndLanguages_id($id, 'lt')

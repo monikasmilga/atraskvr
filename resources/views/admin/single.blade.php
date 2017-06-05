@@ -29,10 +29,15 @@
 
             @foreach($record as $key => $value)
                 <tr id="{{$record['id']}}">
+                    {{--Single Record and single page cover image display--}}
                     @if(($key == 'cover_image_id' && $tableName == 'pages') || ($key == "mime_type" && $tableName == 'resources'))
                         @if($mediaInfo['mime_type'] == "image/jpeg" ||$mediaInfo['mime_type'] == "png")
-                            <td>Image</td>
-                            <td><img src="{{asset($image)}}"></td>
+                            <td>{{$key}}</td>
+                            <td>{{$value}}</td>
+                            <tr>
+                                <td>Image</td>
+                                <td><img src="{{asset($image)}}"></td>
+                            </tr>
                         @elseif($mediaInfo['mime_type'] == "video/mp4")
                             <td>Video</td>
                             <td class="embed-responsive embed-responsive-4by3">
@@ -41,28 +46,35 @@
                                 </video>
                             </td>
                         @endif
-                    @endif
+
+
                     {{--@if($key == 'cover_image_id' and $tableName == 'pages')--}}
                     {{--<td>cover image</td>--}}
                     {{--<td><img src={{asset($image)}}/></td>--}}
-                    @if($key == 'pages_categories_id')
+
+                    @elseif($key == 'pages_categories_id')
                         <td>pages category</td>
                         <td>{{$category}}</td>
                     @elseif($key == 'parent_id')
                         <td>parent id</td>
-                        <td>{{$parent_id[$record['parent_id']]}}</td>
+                        @if($value != null )
+                          <td>{{$parent_id[$record['parent_id']]}}</td>
+                        @endif
                     @elseif($key == 'count')
                     @else
                         <td>{{$key}}</td>
                         <td>{{$value}}</td>
                     @endif
-                </tr>
+
+                    </tr>
             @endforeach
 
             </tbody>
+
         </table>
 
         {{--Connected media table. Display the media connected to page via pages_resources_connections--}}
+        {{--{{dd($connectedMediaDataArrays)}}--}}
         @if(isset($connectedMediaDataArrays))
             <a href=></a><h3>Connected media data</h3><br>
             @foreach ($connectedMediaDataArrays['connectedMediaData'] as $mediaDataArray)
@@ -136,7 +148,7 @@
                         </tr>
                     @endforeach
                 @endforeach
-                {{--</tbody>--}}
+                </tbody>
             </table>
         @endif
 

@@ -37,10 +37,14 @@ class VRResourceController extends Controller
 //        dd(request()->all());
         $imgIds = [];
 
-        foreach($resource as $image) {
-            $uploadController = new VRUploadController();
-            $record = $uploadController->upload($image, null);
-            $imgIds[] = $record->id;
+        if(is_array($resource))
+        {
+            foreach($resource as $image) {
+                $uploadController = new VRUploadController();
+                $record = $uploadController->upload($image, null);
+                $imgIds[] = $record->id;
+            }
+
         }
         if(request()->pages_categories_id != null)
              return  $imgIds;

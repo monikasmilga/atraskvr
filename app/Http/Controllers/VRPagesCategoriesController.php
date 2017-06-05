@@ -116,7 +116,7 @@ class VRPagesCategoriesController extends Controller
     public function adminUpdate($id)
     {
         $data = request()->all();
-
+        dd($data);
         $dataFromModel = new VRPagesCategories();
         $configuration['fields'] = $dataFromModel->getFillable();
         $configuration['tableName'] = $dataFromModel->getTableName();
