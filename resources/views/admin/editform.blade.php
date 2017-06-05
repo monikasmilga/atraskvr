@@ -33,8 +33,9 @@
 
                 @elseif($field == 'cover_image_id' and $tableName == 'pages')
                     <div class="form-group">
-                        {!! Form::file('image', ['class' => 'form-control'])!!}<br/>
-                    </div>
+                        {!! Form::label($field, 'Upload ' . ucfirst(substr($field, 0, -3) . ':')) !!}<br/>
+                        {!! Form::file('image')!!}<br/>
+                    </div><br/>
 
                 @elseif(isset($dropdown) and $field == 'parent_id')
                     <div class="form-group">

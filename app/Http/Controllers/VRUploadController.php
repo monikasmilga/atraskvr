@@ -26,6 +26,8 @@ class VRUploadController extends Controller
 
         $data["path"] = $path . $fileName;
 
+
+
         if($id == null)
         {
             return VRResources::create($data);

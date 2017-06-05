@@ -8,5 +8,10 @@
     <li><a href="http://atraskvr.dev/admin/users">Users</a></li>
     <li><a href="http://atraskvr.dev/admin/roles">Roles</a></li>
     <li><a href="http://atraskvr.dev/admin/permissions">Permissions</a></li>
+    <li><a href="http://atraskvr.dev/admin/resources">Resources</a></li>
+
+
+
+    {{--app.resources.show--}}
 </ul>
 
