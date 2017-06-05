@@ -93,12 +93,12 @@ class VRPagesController extends Controller
     {
 
         $data = request()->all();
+//        dd($data);
 
         if (request()->image != null)
         {
             $data['cover_image_id'] = request()->file('image');
         }
-
 
         $dataFromModel = new VRPages();
         $configuration['fields'] = $dataFromModel->getFillable();
@@ -107,19 +107,25 @@ class VRPagesController extends Controller
         $configuration['dropdown']['cover_image_id'] = VRResources::all()->pluck('path', 'id')->toArray();
 
         $missingValues = '';
-        foreach ($configuration['fields'] as $key => $value) {
+
+        foreach ($configuration['fields'] as $key => $value)
+        {
             if ($value == 'pages_categories_id')
             {}
-            elseif (!isset($data['cover_image_id'])) {
 
+            elseif (!isset($data['cover_image_id']))
+            {
                 $missingValues = 'Please add cover image' . ',';
             }
 
-            elseif (!isset($data[$value])) {
+            elseif (!isset($data[$value]))
+            {
                 $missingValues = $missingValues . ' ' . $value . ',';
             }
         }
-        if ($missingValues != '') {
+
+        if ($missingValues != '')
+        {
             $missingValues = substr($missingValues, 0, -1);
             $configuration['error'] = ['message' => trans($missingValues)];
             return view('admin.createform', $configuration);
@@ -211,9 +217,13 @@ class VRPagesController extends Controller
         $configuration['tableName'] = $dataFromModel->getTableName();
 
         $missingValues = '';
-        foreach ($configuration['fields'] as $key => $value) {
-            if ($value == 'cover_image_id') {
-            } elseif (!isset($data[$value])) {
+
+        foreach ($configuration['fields'] as $key => $value)
+        {
+            if ($value == 'cover_image_id')
+            {}
+            elseif (!isset($data[$value]))
+            {
                 $missingValues = $missingValues . ' ' . $value . ',';
             }
         }
@@ -225,8 +235,8 @@ class VRPagesController extends Controller
             return view('admin.editform', $configuration);
         }
 
-        if (request()->file('image') != null) {
-
+        if (request()->file('image') != null)
+        {
             $data['cover_image_id'] = request()->file('image');
             $resource = request()->file('image');
             $newVRResourcesController = new VRUploadController();
