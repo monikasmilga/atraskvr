@@ -5,8 +5,10 @@ namespace App\Http\Controllers;
 use App\Models\VRLanguages;
 use App\Models\VRMenus;
 use App\Models\VRMenusTranslations;
+use Illuminate\Contracts\Session\Session;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Route;
 
 class VRMenusController extends Controller
@@ -19,18 +21,25 @@ class VRMenusController extends Controller
      */
     public function adminIndex()
     {
+        $message = Session()->get('message');
+        $configuration['message'] = $message;
+
         $dataFromModel = new VRMenus();
         $configuration['fields'] = $dataFromModel->getFillable();
         $configuration['tableName'] = $dataFromModel->getTableName();
 
         $configuration['list_data'] = VRMenus::get()->where('deleted_at', '=', null)->toArray();
 
+        $configuration['menus'] = VRMenus::all()->pluck('name', 'id')->toArray();
+
+//        dd($configuration);
+
         if ($configuration['list_data'] == []) {
             $configuration['error'] = ['message' => trans("List is empty. Please create some " . $configuration['tableName'] . ", then check list again")];
             return view('admin.list', $configuration);
         }
 
-        if(Route::has('app.' . $configuration['tableName'] . '_translations.create')) {
+        if(Route::has('app.' . $configuration['tableName'] . '_translations.create')){
             $configuration[ 'translationExist' ] = true;
         }
 
@@ -39,9 +48,14 @@ class VRMenusController extends Controller
 
     public function adminCreate()
     {
+        $message = Session()->get('message');
+        $configuration['message'] = $message;
+
         $dataFromModel = new VRMenus();
         $configuration['fields'] = $dataFromModel->getFillable();
         $configuration['tableName'] = $dataFromModel->getTableName();
+
+        $configuration['dropdown']['parent_id'] = VRMenus::all()->pluck('name', 'id')->toArray();
 
         return view('admin.createform', $configuration);
     }
@@ -69,9 +83,9 @@ class VRMenusController extends Controller
 
         VRMenus::create($data);
 
-        $configuration['comment'] = ['message' => trans('Record added successfully')];
+        $message = ['message' => trans('Record added successfully')];
 
-        return view('admin.createform', $configuration);
+        return redirect()->route('app.menus.create')->with($message);
     }
 
     public function adminShow($id)
@@ -79,6 +93,7 @@ class VRMenusController extends Controller
         $dataFromModel = new VRMenus();
         $configuration['record'] = VRMenus::find($id)->toArray();
         $configuration['tableName'] = $dataFromModel->getTableName();
+        $configuration['parent_id'] = VRMenus::get()->where('id', '=', (VRMenus::find($id)->parent_id))->pluck('name', 'id')->toArray();
 
         $dataFromModel2 = new VRMenusTranslations();
         $configuration['fields_translations'] = $dataFromModel2->getFillable();
@@ -87,6 +102,10 @@ class VRMenusController extends Controller
 
         $configuration['translations'] = VRMenusTranslations::all()->where('menus_id', '=', $id)->toArray();
         $configuration['languages_names'] = VRLanguages::all()->pluck('name', 'id')->toArray();
+
+        if(Route::has('app.' . $configuration['tableName'] . '_translations.create')) {
+            $configuration[ 'translationExist' ] = true;
+        }
 
         return view('admin.single', $configuration);
     }
@@ -98,6 +117,8 @@ class VRMenusController extends Controller
         $configuration['tableName'] = $dataFromModel->getTableName();
 
         $configuration['record'] = VRMenus::find($id)->toArray();
+
+        $configuration['dropdown']['parent_id'] = VRMenus::all()->pluck('name', 'id')->toArray();
 
         return view('admin.editform', $configuration);
     }
@@ -129,26 +150,25 @@ class VRMenusController extends Controller
 
         $record->update($data);
 
-        $dataFromModel = new VRMenus();
-        $configuration['fields'] = $dataFromModel->getFillable();
-        $configuration['tableName'] = $dataFromModel->getTableName();
+        DB::table('vr_menus_translations')
+            ->whereMenus_idAndLanguages_id($id, 'lt')
+            ->update([
+                'title' => $record->name,
+                'slug' => str_slug($record->name, '-'),
+                     ]);
 
-        $configuration['list_data'] = VRMenus::get()->toArray();
+        $message = ['message' => trans('Record updated successfully')];
 
-        if(Route::has('app.' . $configuration['tableName'] . '_translations.create')){
-            $configuration[ 'translationExist' ] = true;
-        }
-
-        $configuration['fullComment'] = 'Record updated successfully';
-
-        return view('admin.list', $configuration);
+        return redirect()->route('app.menus.index')->with($message);
     }
 
     public function adminDestroy($id)
     {
-        if(VRMenus::destroy($id) and VRMenusTranslations::where('menus_id', '=', $id)->delete())
-        {
-            return json_encode(["success" => true, "id" => $id]);
+        if ( VRMenus::destroy ( $id ) and VRMenusTranslations::where ( 'menus_id' , '=' , $id )->delete () ) {
+            return json_encode ( [ "success" => true , "id" => $id ] );
+
+        } elseif ( VRMenus::destroy ( $id ) ) {
+            return json_encode ( [ "success" => true , "id" => $id ] );
         }
     }
 }

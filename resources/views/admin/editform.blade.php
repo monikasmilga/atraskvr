@@ -19,16 +19,27 @@
                 </div>
             @endif
 
-            {!! Form::open(['url' => route('app.' . $tableName . '.update', $record['id'])]) !!}
-
+            {!! Form::open(['url' => route('app.' . $tableName . '.update', $record['id']), 'files' => true]) !!}
 
             @foreach($fields as $field)
 
-                @if($field == 'user_id')
+                @if(isset($enum_dropDown))
+                    <div class="form-group">
+                        {!! Form::label($enum_dropDown['label'], 'Choose ' . $enum_dropDown['label']) !!}
+                        {{Form::select($field, $enum_dropDown['values'], $record[$field], ['class' => 'form-control'])}}<br/>
+                    </div>
+
+                @elseif($field == 'user_id')
 
                 @elseif($field == 'cover_image_id' and $tableName == 'pages')
                     <div class="form-group">
                         {!! Form::file('image', ['class' => 'form-control'])!!}<br/>
+                    </div>
+
+                @elseif(isset($dropdown) and $field == 'parent_id')
+                    <div class="form-group">
+                        {!! Form::label($field, 'Choose ' . ucfirst(substr($field, 0, -3) . ':')) !!}
+                        {{Form::select($field, $dropdown[$field], $record[$field], ['class' => 'form-control'])}}<br/>
                     </div>
 
                 @elseif(isset($dropdown) and substr($field, -3) == '_id')
@@ -37,19 +48,19 @@
                         {{Form::select($field ,$dropdown[$field], $record[$field], ['class' => 'form-control'])}}<br/>
                     </div>
 
-                @elseif(isset($checkbox[$field]))
-                    {!! Form::label($field, 'Pick ' . ucfirst($field . ':')) !!}<br/>
-                    @foreach($checkbox['ingredients'] as $key => $ingridient)
+                {{--@elseif(isset($checkbox[$field]))--}}
+                    {{--{!! Form::label($field, 'Pick ' . ucfirst($field . ':')) !!}<br/>--}}
+                    {{--@foreach($checkbox['ingredients'] as $key => $ingridient)--}}
 
-                    @if (in_array($key, $pizzas_ingredients))
-                        {{Form::checkbox($field.'[]', $key, true)}}
-                        {{Form::label($ingridient, $ingridient)}}<br/>
-                    @else
-                        {{Form::checkbox($field.'[]', $key)}}
-                        {{Form::label($ingridient, $ingridient)}}<br/>
-                    @endif
+                    {{--@if (in_array($key, $pizzas_ingredients))--}}
+                        {{--{{Form::checkbox($field.'[]', $key, true)}}--}}
+                        {{--{{Form::label($ingridient, $ingridient)}}<br/>--}}
+                    {{--@else--}}
+                        {{--{{Form::checkbox($field.'[]', $key)}}--}}
+                        {{--{{Form::label($ingridient, $ingridient)}}<br/>--}}
+                    {{--@endif--}}
 
-                    @endforeach
+                    {{--@endforeach--}}
 
                 @elseif($field == 'password')
                     <div class="form-group">

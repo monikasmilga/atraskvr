@@ -1,0 +1,24 @@
+.experience-checkbox-group {
+
+
+    width: 80%;
+    display: block;
+    padding: 25px;
+    margin: 0 auto;
+
+}
+
+input[type=checkbox] {
+    width: 30px;
+    background-color: red;
+
+
+}
+
+.display-4 {
+    padding: 20px;
+}
+
+.submit-button {
+    margin: 40px 0;
+}

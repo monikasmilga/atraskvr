@@ -13,22 +13,35 @@
 				</div>
 			@endif
 
-			@if(isset($comment))
-				<div class="alert alert-success">
-  					<strong>{{ $comment['message'] }}</strong>
-				</div>
+			@if(isset($message))
+				@if(sizeof($message > 0))
+					<div class="alert alert-warning">
+						<strong>{{ $message }}</strong>
+					</div>
+				@endif
 			@endif
 		
 			{!! Form::open(['url' => route('app.' . $tableName . '.store'), 'files' => true]) !!}
-
 
 			@foreach($fields as $field)
 
 				@if($field == 'user_id')
 
+				@elseif(isset($enum_dropDown))
+					<div class="form-group">
+						{!! Form::label($enum_dropDown['label'], 'Choose ' . $enum_dropDown['label']) !!}
+						{{Form::select($enum_dropDown['label'], $enum_dropDown['values'], '', ['class' => 'form-control'])}}<br/>
+					</div>
+
 				@elseif($field == 'cover_image_id' and $tableName == 'pages')
 					<div class="form-group">
 						{!! Form::file('image', ['class' => 'form-control'])!!}<br/>
+					</div>
+
+				@elseif(isset($dropdown) and $field == 'parent_id')
+					<div class="form-group">
+						{!! Form::label($field, 'Choose ' . ucfirst(substr($field, 0, -3) . ':')) !!}
+						{{Form::select($field, $dropdown[$field], '', ['class' => 'form-control'])}}<br/>
 					</div>
 
 				@elseif(isset($dropdown) and substr($field, -3) == '_id')
