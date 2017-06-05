@@ -13,10 +13,12 @@
 				</div>
 			@endif
 
-			@if(isset($comment))
-				<div class="alert alert-success">
-  					<strong>{{ $comment['message'] }}</strong>
-				</div>
+			@if(isset($message))
+				@if(sizeof($message > 0))
+					<div class="alert alert-warning">
+						<strong>{{ $message }}</strong>
+					</div>
+				@endif
 			@endif
 
 
@@ -25,29 +27,49 @@
 			@foreach($fields as $field)
 				@if($field == 'user_id')
 
+
          @elseif(isset($enum_dropDown))
             <div class="form-group">
             {!! Form::label($enum_dropDown['label'], 'Choose ' . $enum_dropDown['label']) !!}
             {{Form::select($enum_dropDown['label'], $enum_dropDown['values'], '', ['class' => 'form-control'])}}<br/>
             
           </div>
+       
+       @elseif(isset($dropdown) and $field == 'parent_id')
+					<div class="form-group">
+						{!! Form::label($field, 'Choose ' . ucfirst(substr($field, 0, -3) . ':')) !!}
+						{{Form::select($field, $dropdown[$field], '', ['class' => 'form-control'])}}<br/>
+					</div>
 
 {{--display dropdown fields to choose categories--}}
                 {{--## substr($field, -4) == 's_id' ## translates to ## $field == 'pages_categories_id' ##--}}
+                
                 @elseif(isset($dropdown) and substr($field, -4) == 's_id')
                     <div class="form-group">
                         {!! Form::label($field, 'Choose ' . ucfirst(substr($field, 0, -3) . ':')) !!}
                         {{Form::select($field, $dropdown[$field], '', ['class' => 'form-control'])}}<br/>
                     </div>
+                    
 
 {{--display dropdown fields for the cover img selection from VRResources--}}
                 {{--## substr($field, -4) == 's_id' ## translates to ## $field == 'cover_image_id' ##--}}
+                
                 @elseif(substr($field, -4) == 'e_id')
                     <div class="form-group">
                         {{--{{dd($dropdown['cover_image'])}}--}}
                         {!! Form::label($field, 'Choose ' . ucfirst(substr($field, 0, -3) . ':')) !!}
                         {{Form::select($field,$dropdown['cover_image'],'', ['class' => 'form-control'])}}<br/>
                     </div>
+                    
+                    
+                    @elseif(isset($dropdown) and substr($field, -3) == '_id')
+                    <div class="form-group">
+                      {!! Form::label($field, 'Choose ' . ucfirst(substr($field, 0, -4) . ':')) !!}
+                      {{Form::select($field, $dropdown[$field], '', ['class' => 'form-control'])}}<br/>
+                    </div>
+                    
+                    
+                    
 {{--display media upload button for multiple files IN PAGES CREATE. Used in 'create new page' and also 'create --}}
                     <div class="form-group">
                         {!! Form::file('images[]', array('multiple'=>true)) !!}<br/>
@@ -58,7 +80,8 @@
                     <div class="form-group">
                         {!! Form::file('images[]', array('multiple'=>true)) !!}<br/>
                     </div>
-
+                    
+    
                 @elseif(isset($checkbox[$field]))
                         {!! Form::label($field, 'Pick ' . ucfirst($field . ':')) !!}<br/>
                 @foreach($checkbox[$field] as $key => $checkboxItem)
@@ -89,5 +112,6 @@
 </div>
 </div>
 
-				
+			
+
 @endsection
