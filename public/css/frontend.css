@@ -109,6 +109,18 @@
     padding-top: 100px;
 }
 
+#main-title
+{
+    font-family: 'Nunito Sans', sans-serif;
+    color: white;
+    font-size: 10vw;
+    text-align: center;
+    text-transform: uppercase;
+    ;
+
+
+}
+
 /*#menu a {*/
 /*color: white;*/
 /*}*/
