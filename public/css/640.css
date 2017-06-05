@@ -1,0 +1,25 @@
+#menu a {
+    color: white;
+    position: fixed;
+}
+
+#menu, #menu ul li .dropdown-menu {
+    background-color: black;
+}
+
+#menu a:hover, #menu a:focus, #menu ul .active a {
+    background-color: unset;
+    color: #fd7b30;
+}
+
+#menu {
+    display: -webkit-flex;
+    -webkit-justify-content: space-around;
+    justify-content: space-around;
+}
+
+@media screen and (max-width: 640px){
+    body {
+        background-color: lightgreen;
+    }
+}

@@ -1,35 +1,50 @@
+{{--<div id="menu">--}}
+{{--<ul class="nav nav-pills">--}}
+{{--<li role="presentation" class="active"><a href="#">Home</a></li>--}}
+{{--<li role="presentation"><a href="#">Profile</a></li>--}}
+{{--<li role="presentation"><a href="#">Messages</a></li>--}}
+{{--<li role="presentation" class="dropdown">--}}
+{{--<a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">--}}
+{{--Dropdown <span class="caret"></span>--}}
+{{--</a>--}}
+{{--<ul class="dropdown-menu">--}}
+{{--@foreach($menus as $key => $menu)--}}
+{{--<li><a href="kuku-title">{{$menu['title']}}</a></li>--}}
+{{--@endforeach--}}
+
+{{--</ul>--}}
+{{--</li>--}}
+{{--</ul>--}}
+{{--</div>--}}
 
 
-<ul class="dropdown-menu">
+<nav class="navbar navbar-default">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
+                    data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                <i class="fa fa-bars" aria-hidden="true"></i>
+            </button>
+        </div>
 
-
-    @foreach($menus as $key => $menu)
-
-        <li role="separator" class="divider">{{$menu['title']}}</li>
-    @endforeach
-
-
-</ul>
-
-
-<div id="menu">
-<ul class="nav nav-pills">
-
-
-    <li role="presentation" class="active"><a href="#">Home</a></li>
-    <li role="presentation"><a href="#">Profile</a></li>
-    <li role="presentation"><a href="#">Messages</a></li>
-    <li role="presentation" class="dropdown">
-        <a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
-            Dropdown <span class="caret"></span>
-        </a>
-        <ul class="dropdown-menu">
-            <li><a href="kuku">kuku</a></li>
-            <li><a href="kuku">kuku</a></li>
-            <li><a href="kuku">kuku</a></li>
-            <li><a href="kuku">kuku</a></li>
-
-        </ul>
-    </li>
-</ul>
-</div>
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav">
+                <li class="active"><a href="#">Home <span class="sr-only">(current)</span></a></li>
+                <li><a href="#">Help</a></li>
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
+                       aria-expanded="false">Dropdown <span class="caret"></span></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="#">Action</a></li>
+                        <li><a href="#">Another action</a></li>
+                        <li><a href="#">Something else here</a></li>
+                        <li role="separator" class="divider"></li>
+                        <li><a href="#">Separated link</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </div><!-- /.navbar-collapse -->
+    </div><!-- /.container-fluid -->
+</nav>

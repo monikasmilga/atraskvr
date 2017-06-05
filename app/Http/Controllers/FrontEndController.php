@@ -25,7 +25,7 @@ class FrontEndController extends Controller
     public function index()
     {
         $configuration['menus'] = VRMenusTranslations::all()->where('languages_id', '=', 'lt')->toArray();
-        return view('frontend.core', $configuration);
+        return view('frontend.homepage', $configuration);
     }
 
     /**
