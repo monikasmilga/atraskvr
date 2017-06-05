@@ -74,7 +74,6 @@ class VRPagesController extends Controller
         return $config;
     }
 
-
     public function adminCreate()
     {
         $message = Session()->get('message');
@@ -164,11 +163,7 @@ class VRPagesController extends Controller
         $configuration['translations'] = VRPagesTranslations::all()->where('pages_id', '=', $id)->toArray();
         $configuration['languages_names'] = VRLanguages::all()->pluck('name', 'id')->toArray();
 
-        $configuration['connectedMediaData'] = $this-> mediaFiles($id);
-//        dd($this-> mediaFiles($id));
-//        $configuration['connectedMediaDataArrays']['connectedMediaData'];
-
-
+        $configuration['connectedMediaDataArrays'] = $this-> mediaFiles($id);
 
         if(Route::has('app.' . $configuration['tableName'] . '_translations.create')) {
             $configuration[ 'translationExist' ] = true;
