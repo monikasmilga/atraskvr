@@ -9,12 +9,39 @@ use App\Models\VRReservations;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
-
+use Illuminate\Support\Facades\Route;
 
 
 class VRReservationsController extends Controller
 {
 
+    /**
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     *
+     * Function displays all Reservations existing in data base
+     */
+    public function adminIndex()
+    {
+        $message = Session()->get('message');
+        $configuration['message'] = $message;
+
+        $dataFromModel = new VRReservations();
+        $configuration['fields'] = $dataFromModel->getFillable();
+        $configuration['tableName'] = $dataFromModel->getTableName();
+
+        $configuration['list_data'] = VRReservations::get()->where('deleted_at', '=', null)->toArray();
+
+        if ($configuration['list_data'] == []) {
+            $configuration['error'] = ['message' => trans("List is empty. Please create some " . $configuration['tableName'] . ", then check list again")];
+            return view('admin.list', $configuration);
+        }
+
+        if(Route::has('app.' . $configuration['tableName'] . '_translations.create')) {
+            $configuration[ 'translationExist' ] = true;
+        }
+
+        return view('admin.list', $configuration);
+    }
 
 
 
@@ -42,17 +69,12 @@ class VRReservationsController extends Controller
 
 
 
+//        $startTime = Carbon::now(+2)->addHours(1);
         $startTime = Carbon::today()->addHours(11);
-
-        $workStart = Carbon::today()->addHours(11);
-
-
-
-
-
-
-
         $endTime = Carbon::today()->addHour(22);
+
+//        $workStart = Carbon::today()->addHour(11);
+
 
         $startDate = Carbon::today();
         $endDate = Carbon::today()->addWeek(2);
@@ -60,9 +82,30 @@ class VRReservationsController extends Controller
 
 
 
+//        $times = $this->generateDateRange($startTime, $endTime, 'addMinutes', 10, 'Y-m-d H:i');
+//        $fullTimes = $this->generateDateRange($workStart, $endTime, 'addMinutes', 10, 'Y-m-d H:i');
+
+//        $disabledTimes = [];
+//
+//
+//
+//        for($i = 0; $i < sizeof($fullTimes); $i++) {
+//
+//            if(strtotime($times[$i]) < (strtotime($fullTimes[$i]))) {
+//
+//                echo $fullTimes[$i];
+//
+//            }
+//
+//        }
+
+
+
+
         $configuration['message'] = $message;
         $configuration['date_from_url'] = $date;
         $configuration['times'] = $this->generateDateRange($startTime, $endTime, 'addMinutes', 10, 'H:i');
+//        $configuration['fullTimes'] = $this->generateDateRange($workStart, $endTime, 'addMinutes', 10, 'Y-m-d H:i');
         $configuration['days'] = $this->generateDateRange($startDate, $endDate, 'addDays', 1, 'Y-m-d');
         $configuration['experiences'] = VRPages::with('translations')->get()->toArray();
         $configuration['reservations'] = VRReservations::get()->toArray();
