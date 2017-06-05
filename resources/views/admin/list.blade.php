@@ -49,17 +49,17 @@
                             @endforeach
                         @endforeach
                             @if(isset($translationExist))
-                            <td><a class="btn btn-info btn-sm" href="{{route('app.' . $tableName . '_translations.create', $record['id'])}}">Translate</a></td>
+                            <td><a class="btn btn-info btn-sm" href="{{route('app.' . $tableName . '_translations.create', $record['id'])}}"><i class="fa fa-flag fm-sm" aria-hidden="true"></i> Translate</a></td>
                             @endif
-                        <td><a class="btn btn-primary btn-sm" href="{{route('app.' . $tableName . '.show', $record['id'])}}">View</a></td>
-                        <td><a class="btn btn-success btn-sm" href="{{route('app.' . $tableName . '.edit', $record['id'])}}">Edit</a></td>
-                        <td><a id="del" onclick="deleteItem('{{route('app.' . $tableName . '.delete', $record['id'])}}')" class="btn btn-danger btn-sm" >Delete</a></td>
+                        <td><a class="btn btn-primary btn-sm" href="{{route('app.' . $tableName . '.show', $record['id'])}}"><i class="fa fa-eye fa-sm" aria-hidden="true"></i> View</a></td>
+                        <td><a class="btn btn-success btn-sm" href="{{route('app.' . $tableName . '.edit', $record['id'])}}"><i class="fa fa-pencil fa-sm" aria-hidden="true"></i> Edit</a></td>
+                        <td><a href="" id="del" onclick="deleteItem('{{route('app.' . $tableName . '.delete', $record['id'])}}')" class="btn btn-danger btn-sm"><i class="fa fa-trash-o fa-sm"></i> Delete</a></td>
                     </tr>
                 @endforeach
                 </tbody>
             </table>
                     <br>
-                    <a class="btn btn-warning btn-md float-right" href="http://atraskvr.dev/admin/">Admin home page</a>
+                    <a class="btn btn-warning btn-md float-right" href="http://atraskvr.dev/admin/"><i class="fa fa-home fa-sm" aria-hidden="true"></i> Home</a>
         @endif
     </div>
 

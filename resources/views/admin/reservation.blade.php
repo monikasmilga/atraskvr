@@ -58,6 +58,8 @@
 
                 @foreach($days as $day)
 
+
+
                     @if($day == $date_from_url)
 
 
@@ -88,39 +90,103 @@
                                         <div class="card-block">
 
 
-                                            @foreach($times as $key => $value)
+
+                                            @if($day == $today)
 
 
 
-                                                @if($key % 6 == 0)
+                                                @if(isset($disabledTimes))
 
-                                                    <br>
+                                                    @foreach($disabledTimes as $key => $value)
 
-                                                @endif
+                                                        @if($key % 6 == 0)
 
-                                                <input type="checkbox" name="{{$experience['id'] . '[]'}}"
-                                                       value="{{$day . ' ' . $value}}"
-
-                                                @if(isset($reservations))
-                                                    @foreach($reservations as $reservation)
-
-                                                        @foreach($reservation['time'] as $time)
-
-                                                            @if($time == $day . ' ' . $value && $experience['id'] == $reservation['pages_id'])
-
-                                                                {{'disabled'}}
-
-                                                                    @endif
-
-                                                                @endforeach
-
-                                                            @endforeach
+                                                            <br>
 
                                                         @endif
 
-                                                >{{$value}}
+                                                        <input type="checkbox" name="{{$experience['id'] . '[]'}}"
+                                                               value="{{$day . ' ' . $value}}"
 
-                                            @endforeach
+                                                                {{'disabled'}}
+
+                                                        >{{$value}}
+
+
+                                                    @endforeach
+
+                                                @endif
+
+
+                                                @foreach($enabledTimes as $key => $value)
+
+                                                    @if($key % 6 == 0)
+
+                                                        <br>
+
+                                                    @endif
+
+                                                    <input type="checkbox" name="{{$experience['id'] . '[]'}}"
+                                                           value="{{$day . ' ' . $value}}"
+
+                                                    @if(isset($reservations))
+                                                        @foreach($reservations as $reservation)
+
+                                                            @foreach($reservation['time'] as $time)
+
+                                                                @if($time == $day . ' ' . $value && $experience['id'] == $reservation['pages_id'])
+
+                                                                    {{'disabled'}}
+
+                                                                        @endif
+
+                                                                    @endforeach
+
+                                                                @endforeach
+
+                                                            @endif
+
+                                                    >{{$value}}
+
+                                                @endforeach
+
+
+
+
+
+                                            @elseif($day != $today)
+                                                @foreach($times as $key => $value)
+
+                                                    @if($key % 6 == 0)
+
+                                                        <br>
+
+                                                    @endif
+
+                                                    <input type="checkbox" name="{{$experience['id'] . '[]'}}"
+                                                           value="{{$day . ' ' . $value}}"
+
+                                                    @if(isset($reservations))
+                                                        @foreach($reservations as $reservation)
+
+                                                            @foreach($reservation['time'] as $time)
+
+                                                                @if($time == $day . ' ' . $value && $experience['id'] == $reservation['pages_id'])
+
+                                                                    {{'disabled'}}
+
+                                                                        @endif
+
+                                                                    @endforeach
+
+                                                                @endforeach
+
+                                                            @endif
+
+                                                    >{{$value}}
+
+                                                @endforeach
+                                            @endif
                                         </div>
                                     </div>
                                 </div>
