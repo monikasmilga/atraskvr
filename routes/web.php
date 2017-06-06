@@ -226,18 +226,18 @@ Route::group(['prefix' => 'admin'], function () {
 
     Route::group(['prefix' => 'resources'], function () {
 
-        Route::get('/', ['as' => 'app.resources.index','uses' => 'VRResourcesController@adminIndex']);
+        Route::get('/', ['as' => 'app.resources.index','uses' => 'VRResourceController@adminIndex']);
 
-        Route::get('/create', ['as' => 'app.resources.create','uses' => 'VRResourcesController@adminCreate']);
-        Route::post('/create', ['as' => 'app.resources.store', 'uses' => 'VRResourcesController@adminStore']);
+        Route::get('/create', ['as' => 'app.resources.create','uses' => 'VRResourceController@adminCreate']);
+        Route::post('/create', ['as' => 'app.resources.store', 'uses' => 'VRResourceController@adminStore']);
 
         Route::group(['prefix' => '{id}'], function () {
 
-            Route::get('/edit', ['as' => 'app.resources.edit', 'uses' => 'VRResourcesController@adminEdit']);
-            Route::post('/edit', ['as' => 'app.resources.update', 'uses' => 'VRResourcesController@adminUpdate']);
+            Route::get('/edit', ['as' => 'app.resources.edit', 'uses' => 'VRResourceController@adminEdit']);
+            Route::post('/edit', ['as' => 'app.resources.update', 'uses' => 'VRResourceController@adminUpdate']);
 
-            Route::get('/', ['as' => 'app.resources.show', 'uses' => 'VRResourcesController@adminShow']);
-            Route::delete('/', ['as' => 'app.resources.delete', 'uses' => 'VRResourcesController@adminDestroy']);
+            Route::get('/', ['as' => 'app.resources.show', 'uses' => 'VRResourceController@adminShow']);
+            Route::delete('/', ['as' => 'app.resources.delete', 'uses' => 'VRResourceController@adminDestroy']);
 
         });
     });
