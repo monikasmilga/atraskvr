@@ -1,0 +1,31 @@
+@media (max-width: 640px) {
+    #part-1 {
+        height: 601px;
+    }
+
+    #mainTitleDescription {
+        margin-top: 35%;
+        width: 300px;
+        font-size: 10px;
+    }
+
+    #elektroMarkt {
+
+        width: 150px;
+        background-size: contain;
+        background-position-y: -20px;
+
+    }
+
+    .logo-title {
+
+        font-size: 15px;
+
+    }
+
+    #elektroMarktLogo {
+        width: 100px;
+    }
+
+
+}

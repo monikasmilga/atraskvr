@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\VRLanguages;
 use App\Models\VRMenusTranslations;
 use App\Models\VRPages;
 use App\Models\VRPagesTranslations;
@@ -16,10 +17,8 @@ class FrontEndController extends Controller
      */
     public function index()
     {
-
-
-        $configuration['menu'] = VRMenusTranslations::where('languages_id', 'lt')->get()->toArray();
-        return $configuration['pages'] = VRPages::with('translations')->where('pages_categories_id', 'vr_categories_id')->get()->toArray();
+        $configuration['menu'] = VRMenusTranslations::where('languages_id', app()->getLocale())->get()->toArray();
+        $configuration['pages'] = VRPages::with('translations')->where('pages_categories_id', 'vr_categories_id')->get()->toArray();
 
         return view('front-end.index', $configuration);
     }
