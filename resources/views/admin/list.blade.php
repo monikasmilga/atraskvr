@@ -88,7 +88,7 @@
                                 @elseif($key_data == $value)
 
                                        <td>{{$value_data}}</td>
-                                       
+
                                 @endif
                             @endforeach
                         @endforeach

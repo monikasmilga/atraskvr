@@ -74,8 +74,8 @@
         </table>
 
         {{--Connected media table. Display the media connected to page via pages_resources_connections--}}
-        {{--{{dd($connectedMediaDataArrays)}}--}}
-        @if(isset($connectedMediaDataArrays))
+
+        @if(isset($connectedMediaDataArrays['connectedMediaData']))
             <a href=></a><h3>Connected media data</h3><br>
             @foreach ($connectedMediaDataArrays['connectedMediaData'] as $mediaDataArray)
                 <table class="table" style="table-layout: fixed; word-wrap:break-word">

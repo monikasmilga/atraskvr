@@ -74,7 +74,6 @@ class VRPagesController extends Controller
         return $config;
     }
 
-
     public function adminCreate()
     {
         $message = Session()->get('message');
@@ -94,8 +93,12 @@ class VRPagesController extends Controller
     {
 
         $data = request()->all();
+//        dd($data);
 
-        $data['cover_image_id'] = request()->file('image');
+        if (request()->image != null)
+        {
+            $data['cover_image_id'] = request()->file('image');
+        }
 
         $dataFromModel = new VRPages();
         $configuration['fields'] = $dataFromModel->getFillable();
@@ -104,26 +107,39 @@ class VRPagesController extends Controller
         $configuration['dropdown']['cover_image_id'] = VRResources::all()->pluck('path', 'id')->toArray();
 
         $missingValues = '';
-        foreach ($configuration['fields'] as $key => $value) {
-            if ($value == 'pages_categories_id') {
-            } elseif (!isset($data['cover_image_id'])) {
+
+        foreach ($configuration['fields'] as $key => $value)
+        {
+            if ($value == 'pages_categories_id')
+            {}
+
+            elseif (!isset($data['cover_image_id']))
+            {
                 $missingValues = 'Please add cover image' . ',';
             }
-            elseif (!isset($data[$value])) {
+
+            elseif (!isset($data[$value]))
+            {
                 $missingValues = $missingValues . ' ' . $value . ',';
             }
         }
-        if ($missingValues != '') {
+
+        if ($missingValues != '')
+        {
             $missingValues = substr($missingValues, 0, -1);
             $configuration['error'] = ['message' => trans($missingValues)];
             return view('admin.createform', $configuration);
         }
 
 //      Create cover id from uploading from windows directory
-        $newVRResourcesController = new VRUploadController();
-        $record = $newVRResourcesController->upload($data['image'], null);
-        $data['cover_image_id'] = $record->id;
-        $allData = VRPages::create($data)->toArray();
+        if (request()->image != null)
+        {
+            $newVRResourcesController = new VRUploadController();
+            $record = $newVRResourcesController->upload($data['image'], null);
+            $data['cover_image_id'] = $record->id;
+          
+        }
+            $allData = VRPages::create($data)->toArray();
 
         $resourceStore = new VRResourceController();
         $resource_id = $resourceStore->getResourceStore($allData);
@@ -164,11 +180,7 @@ class VRPagesController extends Controller
         $configuration['translations'] = VRPagesTranslations::all()->where('pages_id', '=', $id)->toArray();
         $configuration['languages_names'] = VRLanguages::all()->pluck('name', 'id')->toArray();
 
-        $configuration['connectedMediaData'] = $this-> mediaFiles($id);
-//        dd($this-> mediaFiles($id));
-//        $configuration['connectedMediaDataArrays']['connectedMediaData'];
-
-
+        $configuration['connectedMediaDataArrays'] = $this-> mediaFiles($id);
 
         if(Route::has('app.' . $configuration['tableName'] . '_translations.create')) {
             $configuration[ 'translationExist' ] = true;
@@ -205,9 +217,13 @@ class VRPagesController extends Controller
         $configuration['tableName'] = $dataFromModel->getTableName();
 
         $missingValues = '';
-        foreach ($configuration['fields'] as $key => $value) {
-            if ($value == 'cover_image_id') {
-            } elseif (!isset($data[$value])) {
+
+        foreach ($configuration['fields'] as $key => $value)
+        {
+            if ($value == 'cover_image_id')
+            {}
+            elseif (!isset($data[$value]))
+            {
                 $missingValues = $missingValues . ' ' . $value . ',';
             }
         }
@@ -219,8 +235,8 @@ class VRPagesController extends Controller
             return view('admin.editform', $configuration);
         }
 
-        if (request()->file('image') != null) {
-
+        if (request()->file('image') != null)
+        {
             $data['cover_image_id'] = request()->file('image');
             $resource = request()->file('image');
             $newVRResourcesController = new VRUploadController();
