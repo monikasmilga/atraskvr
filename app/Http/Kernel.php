@@ -4,6 +4,7 @@ namespace App\Http;
 
 use App\Http\Middleware\CheckIfAdmin;
 use App\Http\Middleware\CheckIfMember;
+use App\Http\Middleware\CheckLanguage;
 use Illuminate\Foundation\Http\Kernel as HttpKernel;
 
 class Kernel extends HttpKernel
@@ -60,5 +61,6 @@ class Kernel extends HttpKernel
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
         'check-role-super-admin' => CheckIfAdmin::class,
         'check-role-member' => CheckIfMember::class,
+        'check-language' => CheckLanguage::class,
     ];
 }

@@ -1,0 +1,19 @@
+@media (max-width: 1024px) {
+    #part-1 {
+        height: 1048px;
+    }
+
+    #mainTitleDescription {
+        margin-top: 60%;
+        width: 50%;
+        font-size: 14px;
+    }
+
+    #mainTitle {
+
+        transform: scale(1.7, 1.7);
+
+    }
+
+
+}
