@@ -15,22 +15,9 @@ class FrontEndController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index($language)
+    public function index()
     {
-
-        app()->setLocale($language);
-
-        if(isset($language) && VRLanguages::find($language)) {
-
-            $menu = VRMenusTranslations::where('languages_id', $language)->get()->toArray();
-
-        }
-
-
-
-
-
-        $configuration['menu'] = $menu;
+        $configuration['menu'] = VRMenusTranslations::where('languages_id', app()->getLocale())->get()->toArray();
         $configuration['pages'] = VRPages::with('translations')->where('pages_categories_id', 'vr_categories_id')->get()->toArray();
 
         return view('front-end.index', $configuration);
